@@ -1,0 +1,51 @@
+.modal {
+  border-radius: 5px;
+  &__header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    button {
+      border: none;
+      font-family: inherit;
+      background: transparent;
+      width: 100%;
+      padding: 25px;
+      font-size: 20px;
+      margin-top: -20px !important;
+      &:first-of-type {
+          border-top-left-radius: 10px;
+          margin-left: -25px;
+        }
+        &:last-of-type {
+            margin-right: -25px;
+          border-top-right-radius: 10px;
+      }
+    }
+    margin-bottom: 40px;
+  }
+  &__footer {
+    button {
+      background-color: $koyu_yesil;
+      position: relative;
+      color: #fff;
+      width: 100%;
+      border: none;
+      padding: 15px;
+      font-size: 20px;
+      font-weight: 500;
+      border-radius: 5px;
+      margin: 15px auto;
+      font-family: inherit;
+    }
+    a {
+      position: absolute;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      bottom: -25px;
+      left: 190px;
+      color: #fff;
+      text-decoration: underline;
+    }
+  }
+}
