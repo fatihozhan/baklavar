@@ -35,7 +35,7 @@ export default function Footer() {
           <h2>LOGO</h2>
           <p>
             Çevrimiçi market alışverişi ve teslimatı Baklavar'da. Meyve, ekmek,
-            tahıl, sebze satın alın.{" "}
+            tahıl, sebze satın alın.
           </p>
           <Image
             src={"/images/store.png"}

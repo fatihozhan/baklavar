@@ -32,6 +32,7 @@ export default function Top() {
             src={"/images/products/tomatoes.jpg"}
             width="100"
             height={100}
+            alt="domatesi resmi"
           />
         </div>
         <div>

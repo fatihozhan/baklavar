@@ -5,8 +5,8 @@ export default function AltKategori({ subCategories }) {
   return (
     <>
       <div className={styles.altKategori}>
-        {subCategories.map((category) => (
-          <div>
+        {subCategories.map((category, i) => (
+          <div key={i}>
             <Image
               src={`/images/subProducts/${category.img}`}
               height={100}
