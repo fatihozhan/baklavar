@@ -1,57 +1,368 @@
-import { Input, Select } from "antd";
-import Modal from './headerModal'
-import { BsSearch, BsHandbag } from "react-icons/bs";
+import { Input, Select, Popover } from "antd";
+import { useSpring, animated } from "@react-spring/web";
+import Image from "next/image";
+import Modal from "./headerModal";
+import { BsApple, BsHandbag } from "react-icons/bs";
+import { ImSpoonKnife } from "react-icons/im";
+import { FaRegEye, FaLeaf } from "react-icons/fa";
+import { IoIosArrowDown } from "react-icons/io";
+import AltKategori from "./altKategori/altKategori";
+import { MdPhone, MdOutlineKeyboardArrowRight } from "react-icons/md";
+import { GoThreeBars } from "react-icons/go";
+import { GiButterflyFlower, GiLindenLeaf, GiJellyBeans } from "react-icons/gi";
 import { CiUser } from "react-icons/ci";
 import styles from "./styles.module.scss";
 import { useState } from "react";
 const { Option } = Select;
 
 export default function Top() {
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  return (
-    <div className={styles.top}>
-      <Modal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
-      <div className={styles.top__logo}>
-        <h2>LOGO</h2>
-      </div>
-      <div className={styles.top__search}>
-        <Input.Group compact style={{ fontFamily: "Space Grotesk"}}>
-          <Select
-            bordered={false}
-            defaultValue="Kategori"
-            style={{ width: "30%" }}
-          >
-            <Option value="nohut">Nohut</Option>
-            <Option value="fasulye">Fasulye</Option>
-          </Select>
-          <Input.Search
-            bordered={false}
-            style={{ width: "70%" }}
-            placeholder="Ürün Ara.."
-            options={[{ value: "text 1" }, { value: "text 2" }]}
-            
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [open1, setOpen1] = useState(false);
+  const [open2, setOpen2] = useState(false);
+  const [open3, setOpen3] = useState(false);
+  const [toggle, setToggle] = useState(false);
+
+  const content = (
+    <div className={styles.popover}>
+      <div className={styles.popover__wrapper}>
+        <div>
+          <FaRegEye />
+          <Image
+            src={"/images/products/tomatoes.jpg"}
+            width="100"
+            height={100}
           />
-        </Input.Group>
-      </div>
-      <div className={styles.top__user}>
-        <div className={styles.top__user_icon}>
-          <CiUser />
-        </div>
-        <div className={styles.top__user_infos}>
-          <p>Hoş Geldin.. Giriş Yap</p>
-          <p onClick={()=> setIsModalOpen(true)} style={{cursor : "pointer"}}>Hesap & Listeler</p>
-        </div>
-      </div>
-      <div className={styles.top__cart}>
-        <div className={styles.top__cart_icon}>
-          <span>0</span>
-          <BsHandbag />
         </div>
         <div>
-          <p>Sepetim</p>
-          <p>₺0.00</p>
+          <p>Domatesler Domatesler 10 Numara domatesler</p>
+          <p>
+            1 x <b> ₺80.00 </b>
+          </p>
         </div>
+      </div>
+      <div className={styles.popover__subtotal}>
+        SUBTOTAL : <b> ₺80.00</b>
+      </div>
+      <div className={styles.popover__buttons}>
+        <button className={styles.primary_button}>Sepete Git</button>
+        <button className={styles.primary_button}>Sipariş Ver</button>
       </div>
     </div>
   );
+
+  const kategoriyeGoreAl = (
+    <>
+      <div className={styles.byCategories}>
+        <ul>
+          <li
+            onMouseOver={() => setOpen(true)}
+            onMouseLeave={() => setOpen(false)}
+          >
+            <div>
+              <BsApple /> Taze Sebzeler
+            </div>
+            <div>
+              <MdOutlineKeyboardArrowRight />
+            </div>
+            {open && <AltKategori subCategories={tazeSebzeler} />}
+          </li>
+          <li
+            onMouseOver={() => setOpen1(true)}
+            onMouseLeave={() => setOpen1(false)}
+          >
+            <div>
+              <ImSpoonKnife />
+              Et Ürünleri
+            </div>
+            <div>
+              <MdOutlineKeyboardArrowRight />
+            </div>
+            {open1 && <AltKategori subCategories={etUrunleri} />}
+          </li>
+          <li>
+            <div>
+              <GiJellyBeans />
+              Kiler Ürünleri
+            </div>
+          </li>
+          <li
+            onMouseOver={() => setOpen2(true)}
+            onMouseLeave={() => setOpen2(false)}
+          >
+            <div>
+              <FaLeaf /> Sezonluk Kutu
+            </div>
+            <div>
+              <MdOutlineKeyboardArrowRight />
+            </div>
+            {open2 && <AltKategori subCategories={sezonlukKutu} />}
+          </li>
+          <li>
+            <GiLindenLeaf />
+            Günlük Ürünler & Yumurta
+          </li>
+          <li
+            onMouseOver={() => setOpen3(true)}
+            onMouseLeave={() => setOpen3(false)}
+          >
+            <div>
+              <GiButterflyFlower />
+              Ekmek & Yağ
+            </div>
+            <div>
+              <MdOutlineKeyboardArrowRight />
+            </div>
+            {open3 && <AltKategori subCategories={ekmekYag} />}
+          </li>
+        </ul>
+      </div>
+    </>
+  );
+  const alisveris = (
+    <div className={styles.navbar__left_popover}>
+      <ul>
+        <li>Ana Alışveriş</li>
+        <li>Tekli Ürün</li>
+        <li>Hesabım</li>
+        <li>Sepetim</li>
+        <li>Siparişlerim</li>
+      </ul>
+    </div>
+  );
+  const blog = (
+    <div className={styles.navbar__left_popover}>
+      <li>Blog</li>
+      <li>Makale</li>
+    </div>
+  );
+  const pages = (
+    <div className={styles.navbar__left_popover}>
+      <ul>
+        <li>İletişim</li>
+        <li>Wishlist</li>
+      </ul>
+    </div>
+  );
+  const menuAnimation = useSpring({
+    height: toggle ? "200px" : "0px",
+    opacity: toggle ? 1 : 0,
+  });
+
+  return (
+    <>
+      <div className={styles.mobileTop}>
+        <div className={styles.mobileTop__logo}>
+          <h2 className={styles.top__logo}>LOGO</h2>
+          <GoThreeBars onClick={() => setToggle((prev) => !prev)} />
+        </div>
+        {toggle && (
+          <div className={`${styles.mobileTop__navbar}`}>
+            <animated.div style={menuAnimation}>
+              <ul>
+                <li>Anasayfa</li>
+                <li>Hakkımızda</li>
+                <li>Alışveriş</li>
+                <li>Blog</li>
+                <li>Medya</li>
+                <li>Sayfalar</li>
+              </ul>
+            </animated.div>
+          </div>
+        )}
+      </div>
+      <div className={styles.container}>
+        <div className={styles.top}>
+          <Modal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
+          <div className={styles.top__logo}>
+            <h2>LOGO</h2>
+          </div>
+          <div className={styles.top__search}>
+            <Input.Group compact style={{ fontFamily: "Space Grotesk" }}>
+              <Select
+                bordered={false}
+                defaultValue="Kategori"
+                style={{ width: "30%" }}
+              >
+                <Option value="nohut">Nohut</Option>
+                <Option value="fasulye">Fasulye</Option>
+              </Select>
+              <Input.Search
+                bordered={false}
+                style={{ width: "70%" }}
+                placeholder="Ürün Ara.."
+                options={[{ value: "text 1" }, { value: "text 2" }]}
+              />
+            </Input.Group>
+          </div>
+          <div className={styles.top__user}>
+            <div className={styles.top__user_icon}>
+              <CiUser />
+            </div>
+            <div className={styles.top__user_infos}>
+              <p>Hoş Geldin.. Giriş Yap</p>
+              <p
+                onClick={() => setIsModalOpen(true)}
+                style={{ cursor: "pointer" }}
+              >
+                Hesap & Listeler
+              </p>
+            </div>
+          </div>
+          <div className={styles.top__cart}>
+            <div className={styles.top__cart_icon}>
+              <span>1</span>
+              <BsHandbag />
+            </div>
+            <Popover content={content}>
+              <div style={{ cursor: "pointer" }}>
+                <p>Sepetim</p>
+                <p>₺0.00</p>
+              </div>
+            </Popover>
+          </div>
+        </div>
+      </div>
+      <div className={styles.container}>
+        <div className={styles.navbar}>
+          <div className={styles.navbar__left}>
+            <div>
+              <Popover content={kategoriyeGoreAl}>
+                <div>
+                  <GoThreeBars />
+                  Kategoriye Göre Al
+                  <IoIosArrowDown />
+                </div>
+              </Popover>
+              <ul>
+                <li>Anasayfa</li>
+                <li>Hakkımızda</li>
+                <Popover content={alisveris}>
+                  <li>
+                    Alışveriş <span>Yeni</span>
+                  </li>
+                </Popover>
+                <Popover content={blog}>
+                  <li>Blog</li>
+                </Popover>
+                <li>Medya</li>
+                <Popover content={pages}>
+                  <li>Sayfalar</li>
+                </Popover>
+              </ul>
+            </div>
+          </div>
+          <div className={styles.navbar__right}>
+            <MdPhone /> <a href="tel: +905367701238">+90536 770 12 38 </a>
+            <button className={styles.secondary_button}>Teklif Al</button>
+          </div>
+        </div>
+      </div>
+    </>
+  );
 }
+
+const tazeSebzeler = [
+  {
+    title: "Meyveler",
+    sub1: "Zeytinler",
+    sub2: "Mantarlar",
+    sub3: "Kivi",
+    sub4: "Kirazlar",
+    img: "lemon.jpg",
+  },
+  {
+    title: "Sebzeler",
+    sub1: "Yeşil Fasulye",
+    sub2: "Brokoli",
+    sub3: "Brüksel Lahanası",
+    sub4: "Patates",
+    img: "vegetables.jpg",
+  },
+  {
+    title: "Organik",
+    sub1: "Ispanak",
+    sub2: "Avakado",
+    sub3: "Çilek",
+    sub4: "Kereviz",
+    img: "tomatoes.jpg",
+  },
+];
+const etUrunleri = [
+  {
+    title: "Meyveler",
+    sub1: "Zeytinler",
+    sub2: "Mantarlar",
+    sub3: "Kivi",
+    sub4: "Kirazlar",
+    img: "lemon.jpg",
+  },
+  {
+    title: "Sebzeler",
+    sub1: "Yeşil Fasulye",
+    sub2: "Brokoli",
+    sub3: "Brüksel Lahanası",
+    sub4: "Patates",
+    img: "vegetables.jpg",
+  },
+  {
+    title: "Organik",
+    sub1: "Ispanak",
+    sub2: "Avakado",
+    sub3: "Çilek",
+    sub4: "Kereviz",
+    img: "tomatoes.jpg",
+  },
+];
+const sezonlukKutu = [
+  {
+    title: "Meyveler",
+    sub1: "Zeytinler",
+    sub2: "Mantarlar",
+    sub3: "Kivi",
+    sub4: "Kirazlar",
+    img: "lemon.jpg",
+  },
+  {
+    title: "Sebzeler",
+    sub1: "Yeşil Fasulye",
+    sub2: "Brokoli",
+    sub3: "Brüksel Lahanası",
+    sub4: "Patates",
+    img: "vegetables.jpg",
+  },
+  {
+    title: "Organik",
+    sub1: "Ispanak",
+    sub2: "Avakado",
+    sub3: "Çilek",
+    sub4: "Kereviz",
+    img: "tomatoes.jpg",
+  },
+];
+const ekmekYag = [
+  {
+    title: "Meyveler",
+    sub1: "Zeytinler",
+    sub2: "Mantarlar",
+    sub3: "Kivi",
+    sub4: "Kirazlar",
+    img: "lemon.jpg",
+  },
+  {
+    title: "Sebzeler",
+    sub1: "Yeşil Fasulye",
+    sub2: "Brokoli",
+    sub3: "Brüksel Lahanası",
+    sub4: "Patates",
+    img: "vegetables.jpg",
+  },
+  {
+    title: "Organik",
+    sub1: "Ispanak",
+    sub2: "Avakado",
+    sub3: "Çilek",
+    sub4: "Kereviz",
+    img: "tomatoes.jpg",
+  },
+];

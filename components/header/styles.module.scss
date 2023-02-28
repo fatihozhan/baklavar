@@ -1,21 +1,73 @@
 .navbar {
   display: flex;
   justify-content: space-between;
-  font-size: 14px;
-  border-bottom: 1px solid $fistik_yesili;
+  font-size: 17px;
+  border-top: 1px solid $smoke_gri;
+  margin: 1px auto;
+  font-weight: 500;
+  padding: 5px;
+  box-shadow: 0 16px 29px 0 rgb(0 0 0 / 4%);
   &__left {
-    ul {
+    display: flex;
+    gap: 10px;
+    div {
+      gap: 7px;
       display: flex;
-      gap: 3px;
+      justify-content: center;
+      align-items: center;
+      padding: 10px;
+      div {
+        border-right: 1px solid $silik_gri;
+        margin: auto 10px;
+        svg {
+          &:first-of-type {
+            color: $koyu_yesil;
+            font-size: 19px;
+          }
+        }
+      }
+    }
+    ul {
+      gap: 20px;
+      display: flex;
       li {
-        padding: 0 7px;
+        cursor: pointer;
+        &:hover {
+          color: $koyu_yesil;
+        }
+        &:nth-of-type(3) {
+          position: relative;
+          span {
+            position: absolute;
+            font-size: 12px;
+            top: -22px;
+            right: -12px;
+            background: $portakal_sarisi;
+            padding: 5px;
+            border-radius: 15px;
+          }
+        }
+      }
+    }
+    &_popover {
+      li {
+        font-size: 16px;
+        padding: 10px;
+        font-weight: 500;
+        width: 150px;
+        cursor: pointer;
       }
     }
   }
   &__right {
-    ul {
-      display: flex;
-      gap: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    a {
+      text-decoration: none;
+      color: #000;
     }
   }
 }
@@ -31,6 +83,7 @@
   &__logo {
     font-weight: 600;
     font-size: 30px;
+    cursor: pointer;
   }
   &__search {
     position: relative;
@@ -45,7 +98,7 @@
     button {
       border: none;
       background: none;
-      font-family:  "Space Grotesk";
+      font-family: "Space Grotesk";
     }
     span {
       div {
@@ -107,6 +160,8 @@
       align-items: center;
       span {
         position: absolute;
+        display: grid;
+        place-items: center;
         font-size: 12px;
         padding: 4px;
         border-radius: 50%;
@@ -129,5 +184,139 @@
         font-size: 15px;
       }
     }
+  }
+}
+
+.popover {
+  font-family: "Space Grotesk" !important;
+  max-width: 230px;
+  &__wrapper {
+    display: flex;
+    gap: 10px;
+    div:first-of-type {
+      border: 1px solid $silik_gri;
+      position: relative;
+      cursor: pointer;
+      svg {
+        display: none;
+      }
+      &:hover {
+        svg {
+          display: block;
+          background-color: #fff;
+          border-radius: 20%;
+          position: absolute;
+          top: 30%;
+          right: 30%;
+          color: #000;
+          stroke: #000;
+          padding: 8px;
+        }
+      }
+    }
+    div:last-of-type {
+      font-weight: 600;
+      font-size: 15px;
+      display: flex;
+      flex-direction: column;
+      flex-basis: 150px;
+      &:hover {
+        color: $koyu_yesil;
+      }
+      p:last-of-type {
+        font-size: 14px;
+      }
+    }
+  }
+  &__subtotal {
+    border-top: 1px solid $silik_gri;
+    border-bottom: 1px solid $silik_gri;
+    display: flex;
+    padding: 10px;
+    margin: 10px auto;
+    justify-content: center;
+    align-items: center;
+    b {
+      font-weight: 600;
+    }
+  }
+  &__buttons {
+    button {
+      font-size: 16px;
+      margin-bottom: -3px;
+      padding: 15px;
+      &:hover {
+        transform: scale3d(50%);
+      }
+    }
+  }
+}
+
+.byCategories {
+  position: relative;
+  li {
+    padding: 20px;
+    border-bottom: 1px solid $silik_gri;
+    cursor: pointer;
+    &:last-of-type {
+      border-bottom: none;
+    }
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    &:hover {
+      div:nth-of-type(2) {
+        svg {
+          transform: rotateZ(180deg);
+          transition: 0.4s;
+        }
+      }
+    }
+    justify-content: space-between;
+    font-family: "Space Grotesk";
+    svg {
+      margin-right: 5px;
+    }
+  }
+}
+
+.mobileTop {
+  padding: 30px;
+
+  &__logo {
+    display: flex;
+    justify-content: space-between;
+    svg {
+      color: $koyu_yesil;
+      font-size: 28px;
+      cursor: pointer;
+    }
+    padding-bottom: 20px;
+  }
+  &__navbar {
+    ul {
+      li {
+        cursor: pointer;
+        font-weight: 500;
+        padding-top: 15px;
+        padding-left: 8px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid $silik_gri;
+      }
+    }
+  }
+}
+
+@media (max-width: 890px) {
+  .top {
+    display: none;
+  }
+  .navbar {
+    display: none;
+  }
+}
+@media (min-width: 890px) {
+  .mobileTop {
+    display: none;
   }
 }

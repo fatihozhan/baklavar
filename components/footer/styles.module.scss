@@ -1,0 +1,118 @@
+.footer {
+  background-image: url("/images/footerbg.png");
+  background-position: left;
+  background-size: cover;
+  background-repeat: no-repeat;
+  // max-width: 1400px;
+  // margin: 10px auto;
+  &__top {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid $silik_gri;
+    padding-top: 25px;
+    padding-bottom: 25px;
+    &_left {
+      ul {
+        display: flex;
+        gap: 25px;
+        font-size: 1rem;
+        li {
+          cursor: pointer;
+          &:hover {
+            color: $fistik_yesili;
+            transition: all 0.3s;
+          }
+          padding-top: 25px;
+          padding-bottom: 25px;
+          font-weight: 500;
+        }
+      }
+    }
+    &_right {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      svg {
+        &:hover {
+          color: $fistik_yesili;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+  &__main {
+    display: flex;
+    justify-content: center;
+    // align-items: center;
+    gap: 20px;
+    margin: 50px auto;
+    margin-bottom: 150px;
+    &_left {
+      display: flex;
+      gap: 20px;
+      flex-direction: column;
+      margin: 20px auto;
+      h2 {
+        font-size: 2.5rem;
+        font-weight: 600;
+      }
+      p {
+        font-size: 1rem;
+        color: #4c4b4d;
+        line-height: 40px;
+      }
+    }
+    &_middle {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      h2 {
+        font-size: 1.4rem;
+        font-weight: 500;
+      }
+      div {
+        a {
+          text-decoration: none;
+          color: #4c4b4d;
+          font-size: 1rem;
+          &:hover {
+            color: $fistik_yesili;
+          }
+        }
+        display: flex;
+        flex-direction: column;
+        width: 200px;
+        gap: 30px;
+      }
+    }
+    &_right {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      h1 {
+        font-size: 2rem;
+        font-weight: 500;
+        color: #4c4b4d;
+      }
+      p {
+        svg {
+          color: $koyu_yesil;
+          font-size: 1.3rem;
+        }
+        font-size: 1rem;
+        line-height: 1.5rem;
+        color: #4c4b4d;
+      }
+    }
+  }
+  &__bottom {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30px;
+    // padding-bottom: 30px;
+    border-top: 1px solid $silik_gri;
+    font-size: 1rem;
+  }
+}

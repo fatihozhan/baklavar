@@ -13,12 +13,12 @@
       font-size: 20px;
       margin-top: -20px !important;
       &:first-of-type {
-          border-top-left-radius: 10px;
-          margin-left: -25px;
-        }
-        &:last-of-type {
-            margin-right: -25px;
-          border-top-right-radius: 10px;
+        border-top-left-radius: 10px;
+        margin-left: -25px;
+      }
+      &:last-of-type {
+        margin-right: -25px;
+        border-top-right-radius: 10px;
       }
     }
     margin-bottom: 40px;
@@ -29,13 +29,19 @@
       position: relative;
       color: #fff;
       width: 100%;
-      border: none;
+      border: 2px solid $koyu_yesil;
       padding: 15px;
       font-size: 20px;
       font-weight: 500;
       border-radius: 5px;
       margin: 15px auto;
       font-family: inherit;
+      cursor: pointer;
+      &:hover{
+        color: $koyu_yesil;
+        background-color: #fff;
+        transition: all 0.3s;
+      }
     }
     a {
       position: absolute;
@@ -47,5 +53,41 @@
       color: #fff;
       text-decoration: underline;
     }
+  }
+  &__input {
+    svg {
+      color: $silik_gri;
+      font-size: 25px;
+      border: none !important;
+    }
+    span {
+      color: gray !important;
+      border: 1px solid $silik_gri;
+      border-radius: 5px !important;
+      padding: 10px !important;
+      background-color: $smoke_gri;
+      span {
+        border: none;
+      }
+    }
+    &:hover {
+      svg {
+        color: $silik_gri;
+        font-size: 25px;
+        border: none !important;
+      }
+      span {
+        border-color: $koyu_yesil !important;
+        color: gray !important;
+        border: 1px solid $silik_gri;
+        border-radius: 5px !important;
+        padding: 10px !important;
+        background-color: $smoke_gri;
+        span {
+          border: none;
+        }
+      }
+    }
+    margin-bottom: 20px;
   }
 }

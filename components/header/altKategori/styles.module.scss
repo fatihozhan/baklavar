@@ -1,0 +1,22 @@
+.altKategori{
+    position: absolute;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    left: 256px;
+    padding: 15px;
+    top: -10px;
+    background: #fff;
+    transition: ease-in-out 0.3s;
+    box-shadow: 0 0 20px 16px rgb(0 0 0 / 4%);
+    font-family: "Space Grotesk";
+    
+    b{
+      font-weight: 600;
+    }
+    div{
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      padding: 10px;
+    }
+  }

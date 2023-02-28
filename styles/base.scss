@@ -1,10 +1,56 @@
 $fistik_yesili: #95a83f;
-$koyu_yesil : #136450;
+$koyu_yesil: #136450;
+$silik_gri: #d2d8d8;
+$smoke_gri: #f7f7f7;
+$portakal_sarisi : #ffba41;
+
 .ant-modal-close {
   top: -27px !important;
-  span{
-      color: #fff;
-      font-size: 24px;
-
+  span {
+    color: #fff;
+    font-size: 24px;
   }
+}
+
+.primary_button {
+  background-color: $koyu_yesil;
+  position: relative;
+  color: #fff;
+  width: 100%;
+  border: 2px solid $koyu_yesil;
+  padding: 15px;
+  font-size: 20px;
+  font-weight: 500;
+  border-radius: 5px;
+  margin: 15px auto;
+  font-family: inherit;
+  cursor: pointer;
+  &:hover {
+    color: $koyu_yesil;
+    background-color: #fff;
+    transition: all 0.3s;
+  }
+}
+.secondary_button{
+  padding: 10px;
+  font-weight: 600;
+  background-color: $portakal_sarisi;
+  border: 2px solid $portakal_sarisi;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  font-family: "Space Grotesk";
+  border-color: $portakal_sarisi;
+  &:hover{
+    color: $koyu_yesil;
+    background: #fff;
+    border-color: $koyu_yesil;
+    transition: all 0.3s;
+  }
+
+}
+
+.container{
+  max-width: 1200px;
+  margin: 10px auto;
 }
