@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@next/font": "^13.1.6",
+    "@react-spring/web": "^9.7.0",
     "antd": "^5.2.2",
     "eslint": "8.34.0",
     "eslint-config-next": "13.1.6",
