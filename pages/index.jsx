@@ -171,7 +171,7 @@ export default function Home() {
           </div>
           <div className={styles.bestSelling__body}>
             {products.map((product, i) => {
-              return i > 4 ? <ProductCard product={product} /> : "";
+              return i > 4 ? <ProductCard key={i} product={product} /> : "";
             })}
           </div>
         </div>
@@ -192,7 +192,7 @@ export default function Home() {
           </div>
           <div className={styles.bestSelling__body}>
             {products.map((product, i) => {
-              return i > 4 ? <ProductCard product={product} /> : "";
+              return i > 4 ? <ProductCard key={i} product={product} /> : "";
             })}
           </div>
         </div>
@@ -204,7 +204,7 @@ export default function Home() {
           </div>
           <div className={styles.lifestyle__body}>
             {lifestyle.map((style, i) => (
-              <LifeStyleCard data={style} />
+              <LifeStyleCard key={i} data={style} />
             ))}
           </div>
         </div>
