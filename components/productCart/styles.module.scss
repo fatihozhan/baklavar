@@ -1,0 +1,93 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  // align-items: center;
+  box-shadow: 0 0 20px 16px rgb(0 0 0 / 4%);
+  border-top-left-radius: 20px;
+  padding: 20px;
+  border-bottom-right-radius: 20px;
+  width: 200px;
+  cursor: pointer;
+  border: 1px solid white;
+
+  &:hover {
+    border: 1px solid $portakal_sarisi;
+    transition: 0.3s;
+    .card__img_svg1,
+    .card__img_svg2 {
+      display: block!important;
+      transition: 0.3s;
+    }
+  }
+  &__img {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    &_cartIcon {
+      position: absolute;
+      top: -22px;
+      right: -22px;
+      font-size: 1.4rem;
+      border-bottom-left-radius: 40%;
+      background-color: $portakal_sarisi;
+      padding: 15px;
+      overflow: hidden;
+      &:hover {
+        background-color: $koyu_yesil;
+        color: #fff;
+        transition: 0.3s;
+        cursor: pointer;
+      }
+    }
+
+    &_svg1 {
+      position: absolute;
+      color: $silik_gri;
+      right: 1px;
+      stroke-width: 4px;
+      cursor: pointer;
+      display: none;
+      &:hover {
+        color: #000;
+        transition: 0.3s;
+      }
+    }
+    &_svg2 {
+      position: absolute;
+      color: $silik_gri;
+      right: 1px;
+      top: 50px;
+      stroke-width: 4px;
+      cursor: pointer;
+      display: none;
+      &:hover {
+        color: #000;
+        transition: 0.3s;
+      }
+    }
+  }
+  &__infos {
+    line-height: 35px;
+    h4 {
+      font-weight: 500;
+      font-size: 1.2rem;
+      cursor: pointer;
+      &:hover {
+        color: $koyu_yesil;
+      }
+    }
+    svg {
+      font-size: 1.2rem;
+    }
+    p:first-of-type {
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: $koyu_yesil;
+    }
+    p:last-of-type {
+      color: $silik_yazi_rengi;
+    }
+  }
+}

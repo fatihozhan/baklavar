@@ -158,7 +158,7 @@ export default function Top() {
           <GoThreeBars onClick={() => setToggle((prev) => !prev)} />
         </div>
         {toggle && (
-          <div className={`${styles.mobileTop__navbar}`}>
+          <div className={`${styles.mobileTop__navbar}`} style={{marginBottom : "40px"}}>
             <animated.div style={menuAnimation}>
               <ul>
                 <li>Anasayfa</li>

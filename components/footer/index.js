@@ -29,6 +29,7 @@ export default function Footer() {
           <GrSkype />
           <GrInstagram />
         </div>
+
       </div>
       <div className={styles.footer__main}>
         <div className={styles.footer__main_left}>

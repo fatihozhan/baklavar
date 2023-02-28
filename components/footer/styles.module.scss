@@ -5,12 +5,16 @@
   background-repeat: no-repeat;
   // max-width: 1400px;
   // margin: 10px auto;
+
   &__top {
     display: flex;
     justify-content: space-between;
     border-bottom: 1px solid $silik_gri;
     padding-top: 25px;
     padding-bottom: 25px;
+    @media (max-width : 890px) {
+      margin: 30px;
+    }
     &_left {
       ul {
         display: flex;
@@ -42,6 +46,11 @@
     }
   }
   &__main {
+    @media (max-width : 1224px) {
+      flex-direction: column;
+      gap: 40px;
+      margin: 30px;
+    }
     display: flex;
     justify-content: center;
     // align-items: center;

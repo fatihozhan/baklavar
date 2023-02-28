@@ -1,0 +1,321 @@
+.main {
+  background-image: url("/images/bg.jpg");
+  height: 668px;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.containers {
+  display: flex;
+  padding: 40px;
+  @media (max-width: 890px) {
+    flex-direction: column;
+    img:nth-child(1) {
+      display: none;
+    }
+    h1 {
+      color: #392c2b !important;
+      font-size: 4rem !important;
+    }
+  }
+  &__left {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 20px;
+    // align-items: center;
+    justify-content: center;
+    h4 {
+      font-weight: 500;
+      font-size: 2rem;
+    }
+    h1 {
+      color: #fff;
+      font-weight: 600;
+      font-size: 5rem;
+    }
+    p {
+      color: #fff;
+    }
+    .secondary_button {
+      &:hover {
+        background-color: #443538;
+        color: #fff;
+        border-color: #fff;
+      }
+      width: 130px;
+      align-self: flex-start;
+      margin-top: 50px;
+    }
+    &_bottom {
+      position: relative;
+      img {
+        &:first-of-type {
+          position: absolute;
+          left: 161px;
+          top: 46px;
+        }
+        &:last-of-type {
+          position: absolute;
+          left: 160px;
+        }
+      }
+    }
+  }
+  &__right {
+    display: flex;
+    flex: 1;
+    justify-content: flex-end;
+  }
+}
+.about {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  max-width: 1200px;
+  margin: 30px auto;
+  border-bottom: 1px solid $silik_gri;
+  @media (max-width: 750px) {
+    grid-template-columns: 1fr;
+  }
+  div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    // justify-content: center;
+    padding: 50px;
+    gap: 20px;
+    h2 {
+      font-weight: 600;
+      font-size: 1.5rem;
+      text-align: center;
+    }
+    p {
+      text-align: center;
+      line-height: 2rem;
+      color: $silik_yazi_rengi;
+    }
+  }
+}
+.topCategories {
+  max-width: 1200px;
+  margin: 30px auto;
+  &__title {
+    display: flex;
+    justify-content: center;
+    margin-top: 70px;
+    font-size: 2.2rem;
+    font-weight: 600;
+  }
+  &__body {
+    margin-top: 80px;
+    display: grid;
+    gap: 20px;
+    padding: 20px;
+    grid-template-columns: repeat(5, 1fr);
+    @media (max-width: 1400px) {
+      grid-template-columns: repeat(4, 1fr);
+    }
+    @media (max-width: 1050px) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    @media (max-width: 768px) {
+      grid-template-columns: repeat(2, 1fr);
+      margin: 40px auto;
+      max-width: 500px;
+    }
+  }
+}
+.flashDeal {
+  .container {
+    display: flex;
+    gap: 40px;
+    @media (max-width: 890px) {
+      flex-direction: column;
+    }
+    @media (max-width: 1077px) {
+      img {
+        height: 405px;
+        width: 512px;
+      }
+    }
+    @media (max-width: 768px) {
+      img {
+        height: 305px;
+        width: 412px;
+        margin-top: 275px;
+      }
+    }
+  }
+  background-image: url("/images/flashdealbg.jpg");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  &__kasa {
+    margin-top: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+  }
+  &__infos {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    flex-direction: column;
+    padding: 40px;
+    margin-top: 90px;
+    h4 {
+      color: #dea455;
+      font-size: 1.3rem;
+      font-weight: 500;
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+    h2 {
+      font-size: 2.6rem;
+      font-weight: 600;
+      margin-top: 10px;
+      margin-bottom: 30px;
+    }
+    p {
+      font-size: 1.2rem;
+      color: $silik_yazi_rengi;
+      margin-top: 10px;
+      margin-bottom: 30px;
+      word-spacing: 10px;
+      line-height: 30px;
+      text-align: center;
+    }
+    span {
+      color: $koyu_yesil;
+      font-size: 3rem;
+      font-weight: 700;
+      letter-spacing: 7px;
+      margin-top: 10px;
+      margin-bottom: 30px;
+    }
+  }
+}
+.bestSelling {
+  margin: 60px auto;
+  padding: 30px;
+
+  &__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 30px auto;
+    border-bottom: 1px solid $silik_gri;
+    &_left {
+      font-size: 2.5rem;
+      font-weight: 600;
+      margin-bottom: 30px;
+    }
+    &_right {
+      ul {
+        display: flex;
+        gap: 30px;
+        li {
+          padding: 15px;
+          font-weight: 500;
+          cursor: pointer;
+          text-transform: uppercase;
+          &:hover {
+            transform: scale(1.5);
+            transition: ease-in-out 0.3s;
+          }
+        }
+      }
+      .active {
+        background-color: $koyu-yesil;
+        color: #fff;
+        border-radius: 8px;
+      }
+    }
+  }
+  &__body {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 20px;
+    @media (max-width: 1400px) {
+      grid-template-columns: repeat(4, 1fr);
+    }
+    @media (max-width: 1050px) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    @media (max-width: 768px) {
+      grid-template-columns: repeat(2, 1fr);
+      margin: 40px auto;
+      max-width: 500px;
+    }
+  }
+}
+.lifestyle {
+  padding-top: 50px;
+  background-image: url("/images/lifestylebg.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 514px;
+  &__title {
+    display: flex;
+    align-items: center;
+    padding-top: 50px;
+    justify-content: center;
+    font-size: 2.2rem;
+    color: #fff;
+    font-weight: 600;
+    margin: 30px auto;
+  }
+  &__body {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 30px;
+    padding: 40px;
+    margin-top: 40px;
+  }
+  @media (max-width: 1400px) {
+    height: 800px;
+    &__body {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+  @media (max-width: 1050px) {
+    &__body {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  @media (max-width: 768px) {
+    &__body {
+      grid-template-columns: repeat(2, 1fr);
+      margin: 40px auto;
+      max-width: 500px;
+    }
+  }
+}
+.services {
+  .container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 40px;
+    margin: 100px auto;
+  }
+  &__service{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap:25px;
+    text-align: center;
+    h3{
+        font-size: 1.5rem;
+        font-weight: 600;
+    }
+    p{
+        line-height: 1.5rem;
+        color: $silik_yazi_rengi;
+    }
+  }
+}
