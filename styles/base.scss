@@ -55,3 +55,21 @@ $silik_yazi_rengi : #4c4b4d;
   max-width: 1200px;
   margin: 10px auto;
 }
+
+.swiper-pagination {
+  top: 384px !important;
+  @media (max-width : 550px) {
+    text-align: left!important;
+    max-width: 100px!important;
+  }
+  @media (max-width : 550px) {
+    text-align: left!important;
+    max-width: 100px!important;
+  }
+}
+.swiper-wrapper{
+  @media (max-width : 550px) {
+   width: 374px!important;
+  }
+
+}

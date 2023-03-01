@@ -12,7 +12,8 @@ import "swiper/css";
 import "swiper/css/free-mode";
 import "swiper/css/pagination";
 // import "./styles.css";
-import { FreeMode, Pagination } from "swiper";
+import { FreeMode, Pagination, breakpoints } from "swiper";
+import FromPeopleCard from "@/components/frompeopleCard";
 
 export default function Home() {
   const [load, setLoad] = useState(false);
@@ -230,20 +231,47 @@ export default function Home() {
           <div className={styles.frompeople__title}>
             <h5>Sizden Gelenler</h5>
           </div>
+          <div className={styles.frompeople__titles}>
+            <h5>Sizden Gelenler</h5>
+          </div>
           <div className={styles.frompeople__body}>
             <Swiper
-              slidesPerView={2}
-              spaceBetween={30}
+              slidesPerView={3}
+              spaceBetween={2}
               freeMode={true}
               pagination={{
                 clickable: true,
               }}
+              breakpoints={{
+                400: {
+                  slidesPerView: 1,
+                  spaceBetween: 20,
+                },
+                500: {
+                  slidesPerView: 1,
+                  spaceBetween: 20,
+                },
+                640: {
+                  slidesPerView: 1,
+                  spaceBetween: 20,
+                },
+                768: {
+                  slidesPerView: 2,
+                  spaceBetween: 40,
+                },
+                1024: {
+                  slidesPerView: 5,
+                  spaceBetween: 50,
+                },
+              }}
               modules={[FreeMode, Pagination]}
               className="mySwiper"
             >
-              <SwiperSlide>Slide 1</SwiperSlide>
-              <SwiperSlide>Slide 1</SwiperSlide>
-              <SwiperSlide>Slide 1</SwiperSlide>
+              {frompeople.map((comment, i) => (
+                <SwiperSlide key={i}>
+                  <FromPeopleCard comment={comment} />
+                </SwiperSlide>
+              ))}
             </Swiper>
           </div>
         </div>
@@ -360,6 +388,26 @@ const services = [
 const frompeople = [
   {
     fullName: "Resul ÖZTÜRK",
-    comment: "",
+    comment:
+      "Şiddetle tavsiye ediyorum! Baklavar kapıya teslim ediliyor ve dürüst olmak gerekirse, mağazaya kıyasla daha ucuz görünüyor.",
+    img: "/images/frompeople/people1.jpg",
+  },
+  {
+    fullName: "Cevher KARAMAN",
+    comment:
+      "Baklavar her zaman normalde mağazada görmediğim benzersiz bir ürün yelpazesine sahip. Ürünleri birinci sınıf.",
+    img: "/images/frompeople/people2.jpg",
+  },
+  {
+    fullName: "Cüneyt BAYAR",
+    comment:
+      "Baklavar Market haftasından ne güzel bir vurgun! Tam anlamıyla bir şefin rüyası. Kesinlikle çalışacak çok şey var.",
+    img: "/images/frompeople/people3.jpg",
+  },
+  {
+    fullName: "Hanife YÜCE",
+    comment:
+      "Şiddetle tavsiye ediyorum! Baklavar kapıya teslim ediliyor ve dürüst olmak gerekirse, mağazaya kıyasla daha ucuz görünüyor.",
+    img: "/images/frompeople/people4.jpg",
   },
 ];
