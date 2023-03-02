@@ -2,8 +2,10 @@ $fistik_yesili: #95a83f;
 $koyu_yesil: #136450;
 $silik_gri: #d2d8d8;
 $smoke_gri: #f7f7f7;
-$portakal_sarisi : #ffba41;
-$silik_yazi_rengi : #4c4b4d;
+$smoke_white: #f9f9f9;
+$portakal_sarisi: #ffba41;
+$silik_yazi_rengi: #4c4b4d;
+$box-shadow: 0 0 20px 16px rgb(0 0 0 / 4%);
 
 .ant-modal-close {
   top: -27px !important;
@@ -32,7 +34,7 @@ $silik_yazi_rengi : #4c4b4d;
     transition: all 0.3s;
   }
 }
-.secondary_button{
+.secondary_button {
   padding: 10px;
   font-weight: 600;
   background-color: $portakal_sarisi;
@@ -42,34 +44,52 @@ $silik_yazi_rengi : #4c4b4d;
   font-size: 16px;
   font-family: "Space Grotesk";
   border-color: $portakal_sarisi;
-  &:hover{
+  &:hover {
     color: $koyu_yesil;
     background: #fff;
     border-color: $koyu_yesil;
     transition: all 0.3s;
   }
-
 }
 
-.container{
+.container {
   max-width: 1200px;
   margin: 10px auto;
 }
 
 .swiper-pagination {
   top: 384px !important;
-  @media (max-width : 550px) {
-    text-align: left!important;
-    max-width: 100px!important;
+  @media (max-width: 550px) {
+    text-align: left !important;
+    max-width: 100px !important;
   }
-  @media (max-width : 550px) {
-    text-align: left!important;
-    max-width: 100px!important;
+  @media (max-width: 550px) {
+    text-align: left !important;
+    max-width: 100px !important;
   }
 }
-.swiper-wrapper{
-  @media (max-width : 550px) {
-   width: 374px!important;
+.swiper-wrapper {
+  @media (max-width: 550px) {
+    width: 374px !important;
   }
+  @media (min-width: 550px) {
+    width: 1200px !important;
+  }
+}
 
+.ant-slider .ant-slider-handle::after {
+  box-shadow: 0 0 0 4px $koyu_yesil !important;
+}
+
+.ant-select-selector {
+  height: 40px;
+}
+
+.select{
+  li{
+      &:focus{
+          background-color: #fff;
+      }
+
+  }
 }

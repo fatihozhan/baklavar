@@ -12,7 +12,7 @@ import "swiper/css";
 import "swiper/css/free-mode";
 import "swiper/css/pagination";
 // import "./styles.css";
-import { FreeMode, Pagination, breakpoints } from "swiper";
+import { FreeMode, Pagination } from "swiper";
 import FromPeopleCard from "@/components/frompeopleCard";
 
 export default function Home() {
@@ -260,7 +260,7 @@ export default function Home() {
                   spaceBetween: 40,
                 },
                 1024: {
-                  slidesPerView: 5,
+                  slidesPerView: 3,
                   spaceBetween: 50,
                 },
               }}
@@ -280,7 +280,7 @@ export default function Home() {
   );
 }
 
-const products = [
+export const products = [
   {
     title: "Kuru Üzüm ve Karışık Mix",
     price: "12.00",
@@ -385,7 +385,7 @@ const services = [
     img: "/images/services/service4.png",
   },
 ];
-const frompeople = [
+export const frompeople = [
   {
     fullName: "Resul ÖZTÜRK",
     comment:

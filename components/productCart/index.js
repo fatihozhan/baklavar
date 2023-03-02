@@ -2,11 +2,10 @@ import styles from "./styles.module.scss";
 import { BsHandbag } from "react-icons/bs";
 import { FiHeart } from "react-icons/fi";
 import { HiOutlineMagnifyingGlass } from "react-icons/hi2";
-import { Rate } from "antd";
+import { Rate, Tooltip } from "antd";
 import Image from "next/image";
 
-export default function ProductCard({product}) {
-
+export default function ProductCard({ product }) {
   return (
     <div className={styles.card}>
       <div className={styles.card__img}>
@@ -17,8 +16,14 @@ export default function ProductCard({product}) {
           alt="product resmi"
         />
         <BsHandbag className={styles.card__img_cartIcon} />
-        <FiHeart className={styles.card__img_svg1}/>
-        <HiOutlineMagnifyingGlass className={styles.card__img_svg2}/>
+        <Tooltip title="İstek Listesine Ekle">
+          
+        <FiHeart className={styles.card__img_svg1} />
+        </Tooltip>
+        <Tooltip title="İncele">
+          
+        <HiOutlineMagnifyingGlass className={styles.card__img_svg2} />
+        </Tooltip>
       </div>
       <div className={styles.card__infos}>
         <Rate defaultValue={product.rate} disabled allowHalf />

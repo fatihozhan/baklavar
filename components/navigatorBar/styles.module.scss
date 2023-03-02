@@ -1,0 +1,14 @@
+.bar{
+    padding: 30px;
+    border-bottom: 1px solid $silik_gri;
+    &__top{
+        color: $silik_yazi_rengi;
+        margin: 15px auto;
+    }
+    &__title{
+        h2{
+            font-size: 2rem;
+            font-weight: 600;
+        }
+    }
+}

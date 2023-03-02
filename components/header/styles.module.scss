@@ -35,6 +35,12 @@
         &:hover {
           color: $koyu_yesil;
         }
+        a {
+          cursor: pointer;
+          &:hover {
+            color: $koyu_yesil;
+          }
+        }
         &:nth-of-type(3) {
           position: relative;
           span {

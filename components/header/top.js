@@ -1,4 +1,5 @@
 import { Input, Select, Popover } from "antd";
+import Link from "next/link";
 import { useSpring, animated } from "@react-spring/web";
 import Image from "next/image";
 import Modal from "./headerModal";
@@ -123,7 +124,9 @@ export default function Top() {
   const alisveris = (
     <div className={styles.navbar__left_popover}>
       <ul>
-        <li>Ana Alışveriş</li>
+        <li>
+          <Link href={"/shop"}>Ana Alışveriş</Link>
+        </li>
         <li>Tekli Ürün</li>
         <li>Hesabım</li>
         <li>Sepetim</li>
@@ -158,12 +161,21 @@ export default function Top() {
           <GoThreeBars onClick={() => setToggle((prev) => !prev)} />
         </div>
         {toggle && (
-          <div className={`${styles.mobileTop__navbar}`} style={{marginBottom : "40px"}}>
+          <div
+            className={`${styles.mobileTop__navbar}`}
+            style={{ marginBottom: "40px" }}
+          >
             <animated.div style={menuAnimation}>
               <ul>
-                <li>Anasayfa</li>
-                <li>Hakkımızda</li>
-                <li>Alışveriş</li>
+                <li>
+                  <Link href={"/"}>Anasayfa</Link>
+                </li>
+                <li>
+                  <Link href={"/about"}>Hakkımızda</Link>
+                </li>
+                <li>
+                  <Link href={"/shop"}>Alışveriş</Link>
+                </li>
                 <li>Blog</li>
                 <li>Medya</li>
                 <li>Sayfalar</li>
@@ -236,11 +248,20 @@ export default function Top() {
                 </div>
               </Popover>
               <ul>
-                <li>Anasayfa</li>
-                <li>Hakkımızda</li>
+                <li>
+                  <Link href={"/"}>
+
+                  Anasayfa
+                  </Link>
+                  </li>
+                <li>
+                  <Link href={"/about"}>Hakkımızda</Link>
+                </li>
                 <Popover content={alisveris}>
                   <li>
-                    Alışveriş <span>Yeni</span>
+                    <Link href={"/shop"}>
+                      Alışveriş <span>Yeni</span>
+                    </Link>
                   </li>
                 </Popover>
                 <Popover content={blog}>

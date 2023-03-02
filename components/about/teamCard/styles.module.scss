@@ -1,0 +1,29 @@
+.person {
+  display: flex;
+  gap: 20px;
+  position: relative;
+  img {
+    border-radius: 10px;
+  }
+  &__infos {
+    position: absolute;
+    background-color: #fff;
+    bottom: -50px;
+    text-align: center;
+    left: calc(50% - 137px);
+    width: 268px;
+    border: 1px solid #fff;
+    border-radius: 7px;
+    padding-top: 20px;
+    padding-bottom: 40px;
+    box-shadow: 0 0 20px 16px rgb(0 0 0 / 4%);
+    h3{
+        font-weight: 600;font-size: 1.3rem;
+    }
+    p{
+        color: $silik_yazi_rengi;
+        margin-top: 15px;
+        font-size: 1rem;
+    }
+  }
+}
