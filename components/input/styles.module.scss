@@ -1,0 +1,14 @@
+.customInput {
+  input {
+    background-color: $smoke_gri;
+    padding: 15px;
+    color: $silik_yazi_rengi!important;
+    &:focus{
+        border: 1px solid $silik_gri;
+        box-shadow: none;
+    }
+    &:hover{
+        border-color:$silik_gri ;
+    }
+  }
+}

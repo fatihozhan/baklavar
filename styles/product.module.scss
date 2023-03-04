@@ -1,0 +1,292 @@
+.product {
+  &__general {
+    display: flex;
+    margin: 40px auto;
+    padding: 10px;
+    @media (max-width : 956px) {
+      flex-direction: column;
+    }
+  }
+  &__img {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    &_bottom {
+      display: flex;
+      gap: 10px;
+      img {
+        cursor: pointer;
+        border: 1px solid $silik_gri;
+        padding: 5px;
+      }
+    }
+  }
+  &__infos {
+    padding: 30px;
+    &_title {
+      margin-bottom: 20px;
+      border-bottom: 1px solid $silik_gri;
+      padding-bottom: 20px;
+      h2 {
+        font-size: 2rem;
+        font-weight: 600;
+        margin-bottom: 20px;
+      }
+      b:last-of-type {
+        color: $silik_yazi_rengi;
+        font-size: 0.8rem;
+      }
+    }
+    &_content {
+      line-height: 24px;
+      color: $silik_yazi_rengi;
+      p {
+        &:nth-child(1) {
+          color: $koyu_yesil;
+          font-weight: 600;
+          font-size: 1.4rem;
+          margin-bottom: 20px;
+        }
+        &:nth-child(2) {
+          margin-bottom: 20px;
+        }
+      }
+      ul {
+        &:first-of-type {
+          padding-left: 20px;
+          margin-bottom: 20px;
+          li {
+            list-style: outside !important;
+          }
+        }
+        &:last-of-type {
+          display: flex;
+          gap: 20px;
+          li {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2px;
+          }
+        }
+      }
+      h5 {
+        font-weight: 600;
+        font-size: 1.3rem;
+        color: #000;
+        margin-bottom: 20px;
+      }
+      span {
+        color: $fistik_yesili;
+        margin-bottom: 20px;
+      }
+      &_footer {
+        display: flex;
+        align-items: baseline;
+        gap: 20px;
+        border-bottom: 1px solid $silik_gri;
+        &_quantity {
+          display: flex;
+          // align-items: center;
+          span {
+            padding: 12px;
+            background-color: $smoke_gri;
+            color: #000;
+            &:first-of-type {
+              cursor: pointer;
+              border-top-left-radius: 10px;
+              border-bottom-left-radius: 10px;
+            }
+            &:last-of-type {
+              border-top-right-radius: 10px;
+              border-bottom-right-radius: 10px;
+              cursor: pointer;
+            }
+          }
+        }
+        &_buttons {
+          display: flex;
+          align-items: center;
+          gap: 20px;
+          button {
+            padding-top: 7px;
+            padding-bottom: 7px;
+          }
+          svg {
+            padding: 10px;
+            border: 1px solid $silik_gri;
+            border-radius: 7px;
+            font-size: 1.4rem;
+            stroke: $koyu_yesil;
+            color: $koyu_yesil;
+          }
+        }
+      }
+    }
+    &_footer {
+      margin-top: 20px;
+      h4 {
+        font-weight: 500;
+      }
+      b {
+        font-weight: 500;
+      }
+      p {
+        line-height: 30px;
+      }
+    }
+  }
+  &__details {
+    border: 2px solid #f0f0f0;
+    padding: 40px;
+    margin: 40px auto;
+    box-sizing: border-box;
+    position: relative;
+    padding-top: 50px;
+    &_buttons {
+      position: absolute;
+      width: 94%;
+      top: -28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-evenly;
+      background-color: #f0f0f0;
+      border-radius: 3px;
+      button {
+        border: none;
+        outline: none;
+        font-size: 1.2rem;
+        font-family: inherit;
+        color: #000;
+        font-weight: 600;
+        padding-bottom: 15px;
+        padding-top: 15px;
+        cursor: pointer;
+        &:hover {
+          transition: 0.3s;
+          color: $koyu_yesil;
+        }
+      }
+    }
+    &_description {
+      line-height: 25px;
+      color: $silik_yazi_rengi;
+    }
+    &_additional {
+      table,
+      th,
+      td {
+        border: 1px solid $silik_gri;
+        padding: 20px;
+      }
+      td {
+        width: 100%;
+        font-style: italic;
+        color: $silik_yazi_rengi;
+      }
+      th {
+        font-weight: 600;
+      }
+    }
+    &_reviews {
+      &_comment {
+        display: flex;
+        gap: 20px;
+        &_info {
+          display: flex;
+          position: relative;
+          flex-direction: column;
+          border: 1px solid $silik_gri;
+          width: 100%;
+          padding: 20px;
+          line-height: 30px;
+          border-radius: 10px;
+          &::before {
+            background: #fff;
+            border-bottom: 1px solid $silik_gri;
+            border-left: 1px solid $silik_gri;
+            content: "";
+            display: block;
+            height: 10px;
+            left: -5.5px;
+            position: absolute;
+            top: 10px;
+            -webkit-transform: rotate(45deg);
+            transform: rotate(45deg);
+            width: 10px;
+          }
+          div:last-of-type {
+            display: flex;
+            gap: 10px;
+          }
+          h4 {
+            font-weight: 600;
+            font-size: 1.2rem;
+          }
+        }
+      }
+      &_form {
+        margin: 40px auto;
+        font-family: "Space Grotesk";
+        line-height: 35px;
+        b {
+          color: red;
+        }
+        h4 {
+          font-weight: 600;
+          font-size: 1.3rem;
+        }
+        p {
+          color: $silik_yazi_rengi;
+        }
+        textarea {
+          background-color: $smoke_gri;
+          padding: 10px;
+          &:focus {
+            box-shadow: none;
+            border: 1px solid $silik_gri;
+          }
+          &:hover {
+            border-color: $silik_gri;
+          }
+        }
+        &_button {
+          width: 200px;
+        }
+      }
+    }
+  }
+  &__related {
+    &_title {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 40px auto;
+      h2 {
+        font-size: 3rem;
+        font-weight: 600;
+      }
+    }
+    &_content {
+      display: grid;
+      justify-items: center;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      row-gap: 40px;
+      @media (max-width : 1048px) {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      @media (max-width : 780px) {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      @media (max-width : 510px) {
+        grid-template-columns: repeat(1, 1fr);
+      }
+    }
+  }
+}
+
+.activeTab {
+  color: $koyu-yesil !important;
+}

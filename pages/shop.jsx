@@ -148,7 +148,7 @@ export default function Shop() {
             </div>
             <div className={styles.shop__content_body_pagination}>
 
-            <Pagination itemRender={(page => console.log(page) )} defaultCurrent={1} total={50} />
+            <Pagination defaultCurrent={1} className={styles.paginationAvtive} total={60} />
             </div>
           </div>
         </div>
