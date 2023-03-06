@@ -1,0 +1,27 @@
+.cart {
+  .container {
+    padding: 40px auto;
+  }
+  &__content {
+    &_empty{
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        background-color: $smoke_gri;
+        padding: 20px;
+        border-top: 2px solid $koyu_yesil;
+        margin-top: 30px;
+        margin: 20px auto;
+        svg{
+            color: $koyu_yesil;
+        }
+    }
+    &_button{
+        button{
+            font-size: 1rem;
+            justify-self: flex-start;
+            width: 200px;
+        }
+    }
+  }
+}

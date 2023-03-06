@@ -4,6 +4,16 @@ import { useRouter } from "next/router";
 
 export default function NavigatorBar() {
   const router = useRouter();
+  const capitalizeFirtLetters = (str) => {
+    if (!str) return str;
+    let words = str.split(" ");
+
+    // Her kelimenin ilk harfini büyük yap
+    words = words.map(word => word.charAt(0).toUpperCase() + word.substring(1));
+  
+    // Kelimeleri birleştirerek büyük harflendirilmiş metni oluştur
+    return words.join(" ");
+  };
   return (
     <div className={styles.bar}>
       <div className={styles.container}>
@@ -13,7 +23,8 @@ export default function NavigatorBar() {
             `${router.pathname.split("/")[1]?.substring(1)} `}
           /
           {router.query["slug"]
-            ? router.query["slug"] : router.pathname.split("/")[2]?.charAt(0).toUpperCase()
+            ? ` ${ capitalizeFirtLetters(router.query["slug"][0].replaceAll("-", " ")) }`
+            : router.pathname.split("/")[2]?.charAt(0).toUpperCase()
             ? router.pathname.split("/")[2]?.charAt(0).toUpperCase() +
               router.pathname.split("/")[2]?.substring(1)
             : ""}
@@ -27,7 +38,7 @@ export default function NavigatorBar() {
         <div className={styles.bar__title}>
           <h2>
             {router.query["slug"]
-              ? router.query["slug"]
+              ? capitalizeFirtLetters(router.query["slug"][0].replaceAll("-", " "))
               : router.pathname.split("/")[3]
               ? router.pathname.split("/")[3].charAt(0).toUpperCase() +
                 router.pathname.split("/")[3].substring(1)

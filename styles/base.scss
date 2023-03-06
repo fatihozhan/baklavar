@@ -56,6 +56,11 @@ $box-shadow: 0 0 20px 16px rgb(0 0 0 / 4%);
   max-width: 1200px;
   margin: 10px auto;
 }
+.title{
+  font-size: 3rem;
+  font-weight: 600;
+
+}
 
 .swiper-pagination {
   top: 384px !important;
@@ -85,18 +90,31 @@ $box-shadow: 0 0 20px 16px rgb(0 0 0 / 4%);
   height: 40px;
 }
 
-.select{
-  li{
-      &:focus{
-          background-color: #fff;
-      }
-
+.select {
+  li {
+    &:focus {
+      background-color: #fff;
+    }
   }
 }
 
-.ant-form *{
-  font-family: "Space Grotesk"!important;
-  .ant-form-item-label{
+.ant-form * {
+  font-family: "Space Grotesk" !important;
+  .ant-form-item-label {
     font-size: 1.4rem;
   }
+}
+.ant-pagination-item, .ant-pagination-prev, .ant-pagination-next {
+  a {
+    font-family: "Space Grotesk" !important;
+  }
+  background-color: $smoke_gri !important;
+}
+
+.ant-pagination-item-active {
+  background-color: $koyu_yesil !important;
+  a {
+    color: #fff !important;
+  }
+  border-color: $koyu_yesil !important;
 }

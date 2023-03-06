@@ -47,7 +47,9 @@ export default function Top() {
         SUBTOTAL : <b> ₺80.00</b>
       </div>
       <div className={styles.popover__buttons}>
-        <button className={styles.primary_button}>Sepete Git</button>
+        <Link href="/cart">
+          <button className={styles.primary_button}>Sepete Git</button>
+        </Link>
         <button className={styles.primary_button}>Sipariş Ver</button>
       </div>
     </div>
@@ -129,21 +131,21 @@ export default function Top() {
         </li>
         <li>Tekli Ürün</li>
         <li>Hesabım</li>
-        <li>Sepetim</li>
+        <Link href="/cart">
+          <li>Sepetim</li>
+        </Link>
         <li>Siparişlerim</li>
       </ul>
     </div>
   );
-  const blog = (
-    <div className={styles.navbar__left_popover}>
-      <li>Blog</li>
-      <li>Makale</li>
-    </div>
-  );
+
   const pages = (
     <div className={styles.navbar__left_popover}>
       <ul>
+        <Link href={"/iletisim"}>
+
         <li>İletişim</li>
+        </Link>
         <li>Wishlist</li>
       </ul>
     </div>
@@ -176,8 +178,12 @@ export default function Top() {
                 <li>
                   <Link href={"/shop"}>Alışveriş</Link>
                 </li>
-                <li>Blog</li>
-                <li>Medya</li>
+                <Link href="/blog">
+                  <li>Blog</li>
+                </Link>
+                <Link href={"/media"}>
+                  <li>Medya</li>
+                </Link>
                 <li>Sayfalar</li>
               </ul>
             </animated.div>
@@ -228,10 +234,12 @@ export default function Top() {
               <BsHandbag />
             </div>
             <Popover content={content}>
-              <div style={{ cursor: "pointer" }}>
-                <p>Sepetim</p>
-                <p>₺0.00</p>
-              </div>
+              <Link href="/cart">
+                <div style={{ cursor: "pointer" }}>
+                  <p>Sepetim</p>
+                  <p>₺0.00</p>
+                </div>
+              </Link>
             </Popover>
           </div>
         </div>
@@ -249,11 +257,8 @@ export default function Top() {
               </Popover>
               <ul>
                 <li>
-                  <Link href={"/"}>
-
-                  Anasayfa
-                  </Link>
-                  </li>
+                  <Link href={"/"}>Anasayfa</Link>
+                </li>
                 <li>
                   <Link href={"/about"}>Hakkımızda</Link>
                 </li>
@@ -264,10 +269,12 @@ export default function Top() {
                     </Link>
                   </li>
                 </Popover>
-                <Popover content={blog}>
+                <Link href="/blog">
                   <li>Blog</li>
-                </Popover>
-                <li>Medya</li>
+                </Link>
+                <Link href={"/media"}>
+                  <li>Medya</li>
+                </Link>
                 <Popover content={pages}>
                   <li>Sayfalar</li>
                 </Popover>

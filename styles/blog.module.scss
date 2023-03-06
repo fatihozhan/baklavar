@@ -1,0 +1,80 @@
+.blog {
+  &__grid {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: 40px;
+    @media (max-width: 960px) {
+      grid-template-columns: 1fr;
+      .blog__pagination{
+        padding: 30px;
+    }
+    }
+  }
+  &__search {
+    margin-top: 40px;
+    line-height: 30px;
+    display: flex;
+    flex-direction: column;
+    padding: 30px;
+    img {
+      height: 200px;
+      width: 300px;
+    }
+    h3 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-top: 20px;
+      margin-bottom: 20px;
+      text-align: left;
+    }
+    p {
+      color: $silik_yazi_rengi;
+      margin-bottom: 30px;
+    }
+    input {
+      padding: 10px;
+    }
+    &_card {
+      &_s {
+        display: flex;
+        gap: 20px;
+        &_l {
+          display: flex;
+          flex-direction: column;
+          line-height: 25px;
+          h6 {
+            font-weight: 600;
+            cursor: pointer;
+            &:hover {
+              color: $koyu_yesil;
+            }
+            font-size: 0.8rem;
+          }
+          p {
+            font-weight: 600;
+            font-size: 0.8rem;
+            color: $koyu_yesil;
+          }
+        }
+      }
+      img {
+        height: 60px;
+        width: 60px;
+        background-size: cover;
+      }
+    }
+    &_buttons {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      button {
+        padding: 7px;
+        border: 1px solid #83ada3;
+        border-radius: 5px;
+        background-color: #f0fcf9;
+
+        color: $koyu_yesil;
+      }
+    }
+  }
+}

@@ -1,0 +1,30 @@
+.card {
+  padding: 30px;
+  &__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px auto;
+    &_l {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      h5 {
+        font-weight: 600;
+      }
+      span {
+        color: $koyu_yesil;
+      }
+    }
+    &_r {
+      button {
+        color: #fff;
+        background: #000;
+        cursor: pointer;
+      }
+    }
+  }
+  &__bottom {
+    color: $silik_yazi_rengi;
+  }
+}

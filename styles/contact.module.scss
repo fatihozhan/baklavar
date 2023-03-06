@@ -1,0 +1,33 @@
+.contact {
+/*   .background {
+    background-image: url("/images/map.jpeg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 400px;
+    position: relative;
+  } */
+  .container {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    margin: 40px auto;
+    // justify-items: center;
+    // place-items : center;
+    box-shadow: $box-shadow;
+  }
+  &__left{
+    background: #fff;
+    padding: 40px;
+    &_top{
+        width: 100%;
+        &_first{
+            display: flex;
+            gap: 20px;
+        }
+        &_second{
+            display: flex;
+            gap: 20px;
+        }
+    }
+  }
+}

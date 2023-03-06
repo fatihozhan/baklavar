@@ -1,0 +1,17 @@
+.media {
+  .container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    @media (max-width: 980px) {
+      grid-template-columns: repeat(1, 1fr);
+    }
+    gap: 20px;
+    justify-items: center;
+    padding: 30px;
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+}

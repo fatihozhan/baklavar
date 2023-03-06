@@ -1,0 +1,52 @@
+.blogCard {
+  border: 1px solid $silik_gri;
+  margin: 30px auto;
+  &__content {
+    padding: 30px;
+    line-height: 25px;
+    a{
+      color: #fff;
+      /* &:hover{
+        color: $koyu_yesil!important;
+      } */
+    }
+    p:first-of-type {
+      color: $koyu_yesil;
+      margin: 7px auto;
+      font-weight: 500;
+    }
+    h3 {
+      font-size: 2rem;
+      font-weight: 600;
+      margin: 10px auto;
+      line-height: 35px;
+    }
+    p:last-of-type {
+      color: $silik_yazi_rengi;
+    }
+    button {
+      width: 200px;
+      padding: 10px;
+    }
+  }
+  &__img {
+    @media (max-width: 1200px) {
+      img {
+        height: 200px;
+        width: 600px;
+      }
+    }
+    @media (max-width: 620px) {
+      img {
+        height: 150px;
+        width: 480px;
+      }
+    }
+  }
+  @media (max-width: 1200px) {
+    width: 600px;
+  }
+  @media (max-width: 620px) {
+    width: 480px;
+  }
+}
