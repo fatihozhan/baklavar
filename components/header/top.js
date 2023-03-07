@@ -279,7 +279,7 @@ export default function Top() {
           </div>
         </div>
       </div>
-      <div className={styles.container}>
+      <div className={`${styles.container} ${styles.sticky}`}>
         <div className={styles.navbar}>
           <div className={styles.navbar__left}>
             <div>
@@ -318,7 +318,9 @@ export default function Top() {
           </div>
           <div className={styles.navbar__right}>
             <MdPhone /> <a href="tel: +905367701238">+90536 770 12 38 </a>
-            <button className={styles.secondary_button}>Teklif Al</button>
+            <Link href="/iletisim">
+              <button className={styles.secondary_button}>Teklif Al</button>
+            </Link>
           </div>
         </div>
       </div>

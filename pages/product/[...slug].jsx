@@ -1,15 +1,13 @@
 import NavigatorBar from "@/components/navigatorBar";
-import { TiTick } from "react-icons/ti";
 import { products } from "../../pages/index";
-import { AiOutlineHeart } from "react-icons/ai";
-import { IoIosArrowBack } from "react-icons/io";
 import { Rate } from "antd";
 import Image from "next/image";
 import styles from "../../styles/product.module.scss";
 import { useState } from "react";
 import { Input, Form } from "antd";
 import Inputs from "@/components/input";
-import ProductCard from "@/components/productCart";
+import ProductCard from "@/components/product/productCart";
+import ProductInfos from "@/components/product/productPageInfos";
 
 export default function Product() {
   const [tab, setTab] = useState(1);
@@ -56,63 +54,7 @@ export default function Product() {
               />
             </div>
           </div>
-          <div className={styles.product__infos}>
-            <div className={styles.product__infos_title}>
-              <h2>Kuru Üzüm Kurusunun Paketlenmişi</h2>
-              <Rate defaultValue={3.4} disabled /> <b> (1 Değerlendirme)</b>
-            </div>
-            <div className={styles.product__infos_content}>
-              <p>13.00₺</p>
-              <p>
-                Üzümler çok faydalı çok çok faydalı Lorem ipsum dolor sit amet
-                consectetur adipisicing elit. Nostrum tempore vero ab!
-              </p>
-              <ul>
-                <li>A Vitamini</li>
-                <li>D3 Vitamini</li>
-                <li>Kalsiyum</li>
-                <li>Magnezyum</li>
-                <li>K Vitamini</li>
-              </ul>
-              <h5>Alergenik</h5>
-              <ul>
-                <li>
-                  <TiTick />
-                  Glutensiz
-                </li>
-                <li>
-                  <TiTick />
-                  Sütsüz
-                </li>
-                <li>
-                  <TiTick />
-                  Yumurtasız
-                </li>
-              </ul>
-              <span>200 Adet Stokta</span>
-              <div className={styles.product__infos_content_footer}>
-                <div className={styles.product__infos_content_footer_quantity}>
-                  <span>-</span>
-                  <span>1</span>
-                  <span>+</span>
-                </div>
-                <div className={styles.product__infos_content_footer_buttons}>
-                  <button className={styles.primary_button}>Sepete Ekle</button>
-
-                  <AiOutlineHeart />
-                </div>
-              </div>
-            </div>
-            <div className={styles.product__infos_footer}>
-              <h4>SKU : BAK-025</h4>
-              <p>
-                <b>Kategori : </b> Baklagil
-              </p>
-              <p>
-                <b>Etiket : </b> Baklagil, sağlık, organik
-              </p>
-            </div>
-          </div>
+          <ProductInfos />
         </div>
         <div className={styles.product__details}>
           <div className={styles.product__details_buttons}>

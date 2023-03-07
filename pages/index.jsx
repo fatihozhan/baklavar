@@ -3,7 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import styles from "../styles/Home.module.scss";
 import { Inter } from "@next/font/google";
-import ProductCard from "@/components/productCart";
+import ProductCard from "@/components/product/productCart";
 import { useEffect, useState } from "react";
 import Countdown from "react-countdown";
 import LifeStyleCard from "@/components/lifestyleCard";
@@ -15,8 +15,10 @@ import "swiper/css/pagination";
 // import "./styles.css";
 import { FreeMode, Pagination } from "swiper";
 import FromPeopleCard from "@/components/frompeopleCard";
+import ProductModal from "@/components/product/productModal";
 
 export default function Home() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [load, setLoad] = useState(false);
   useEffect(() => {
     setLoad(true);
@@ -39,6 +41,11 @@ export default function Home() {
     }
   };
 
+  const handleModal = (slug) => {
+    console.log(slug);
+    setIsModalOpen(true)
+  };
+
   return (
     <>
       <Head>
@@ -47,6 +54,7 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <div className={styles.main}>
+        <ProductModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
         <div className={styles.containers}>
           <div className={styles.containers__left}>
             <h4>22₺'den Başlayan Fiyatlarla</h4>
@@ -137,7 +145,7 @@ export default function Home() {
         </div>
         <div className={styles.topCategories__body}>
           {products.map((product, i) => (
-            <ProductCard key={i} product={product} />
+            <ProductCard key={i} product={product} handleModal={handleModal} />
           ))}
         </div>
       </div>
@@ -160,9 +168,12 @@ export default function Home() {
               tarafından tüketilmelidir.
             </p>
             {load && <Countdown date={new Date(2023, 2, 27)} />}
+            <Link href="/shop">
+
             <button className={styles.secondary_button}>
               Tüm İndirimleri Göster
             </button>
+            </Link>
           </div>
         </div>
       </div>

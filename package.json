@@ -17,6 +17,7 @@
     "mongodb": "^5.1.0",
     "mongoose": "^7.0.0",
     "next": "13.1.6",
+    "nprogress": "^0.2.0",
     "react": "18.2.0",
     "react-back-to-top-button": "^0.0.14",
     "react-countdown": "^2.3.5",

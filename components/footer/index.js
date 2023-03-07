@@ -53,11 +53,11 @@ export default function Footer() {
           <div className={styles.footer__main_middle}>
             <div>
               <h2>Hızlı Linkler</h2>
-              <Link href="">Servislerimiz</Link>
-              <Link href="">Firmamız Hakkında</Link>
-              <Link href="">En Son Haberler</Link>
-              <Link href="">Takımımızla Tanışın</Link>
-              <Link href="">Ürünlerimiz</Link>
+              <Link href="/about">Servislerimiz</Link>
+              <Link href="/about">Firmamız Hakkında</Link>
+              <Link href="/blog">En Son Haberler</Link>
+              <Link href="/about">Takımımızla Tanışın</Link>
+              <Link href="/shop">Ürünlerimiz</Link>
             </div>
             <div>
               <h2>Hesap</h2>
@@ -68,11 +68,10 @@ export default function Footer() {
             </div>
             <div>
               <h2>Hakkımızda</h2>
-              <Link href="">Firmamız Hakkında</Link>
-              <Link href="">Takımımız</Link>
-              <Link href="">İletişim</Link>
-              <Link href="">Haberler ve Etkinlikler</Link>
-              <Link href="">Sipariş Takibi</Link>
+              <Link href="/about">Firmamız Hakkında</Link>
+              <Link href="/about">Takımımız</Link>
+              <Link href="/iletisim">İletişim</Link>
+              <Link href="/blog">Haberler ve Etkinlikler</Link>
             </div>
           </div>
           <div className={styles.footer__main_right}>

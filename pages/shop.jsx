@@ -4,7 +4,7 @@ import { BsFillGrid1X2Fill, BsListTask } from "react-icons/bs";
 import { Input, Slider, Select, Tag, Pagination } from "antd";
 import NavigatorBar from "../components/navigatorBar";
 import { useEffect, useState } from "react";
-import ProductCard from "@/components/productCart";
+import ProductCard from "@/components/product/productCart";
 export default function Shop() {
   const [load, setLoad] = useState(false);
   useEffect(() => {

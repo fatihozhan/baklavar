@@ -1,8 +1,15 @@
+.sticky{
+  position: sticky;
+  top: 0;
+  z-index: 99;
+}
+
 .navbar {
   display: flex;
   justify-content: space-between;
   font-size: 17px;
   border-top: 1px solid $smoke_gri;
+  background-color: #fff;
   margin: 1px auto;
   font-weight: 500;
   padding: 5px;
@@ -287,7 +294,10 @@
 }
 
 .mobileTop {
-  padding: 30px;
+  padding-top: 30px;
+  padding-right: 30px;
+  padding-left: 30px;
+  background-color: #fff;
 
   &__logo {
     display: flex;
