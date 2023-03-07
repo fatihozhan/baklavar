@@ -118,3 +118,14 @@ $box-shadow: 0 0 20px 16px rgb(0 0 0 / 4%);
   }
   border-color: $koyu_yesil !important;
 }
+
+.ant-collapse{
+  background: none!important;
+}
+.ant-collapse-header{
+  padding-inline-start: 0!important;
+  padding: 0!important;
+  span{
+    font-size: 1rem;
+  }
+}

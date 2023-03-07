@@ -1,33 +1,90 @@
 .contact {
-/*   .background {
-    background-image: url("/images/map.jpeg");
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    height: 400px;
-    position: relative;
-  } */
+  position: relative;
+  padding: 70px;
+  @media (max-width : 800px) {
+    padding: 30px;
+    
+  }
+  &:after {
+    content: " ";
+    display: block;
+    position: absolute;
+    top: 0;
+    bottom: 500px;
+    @media (max-width : 800px) {
+      height: 100vh;
+    }
+    right: 0;
+    width: 100vw; //icon width
+    z-index: -1; //makes it act sort of like a background
+    background: url("/images/map.jpeg") no-repeat right 50%;
+  }
   .container {
     display: grid;
-    grid-template-columns: 1fr 400px;
-    margin: 40px auto;
-    // justify-items: center;
-    // place-items : center;
+    grid-template-columns: 1fr 450px;
+    margin: 50px auto;
     box-shadow: $box-shadow;
+    @media (max-width: 1000px) {
+      grid-template-columns: 1fr 350px;
+    }
+    @media (max-width: 850px) {
+      grid-template-columns: 1fr;
+    }
   }
-  &__left{
+  &__left {
     background: #fff;
-    padding: 40px;
-    &_top{
+    padding: 50px;
+    &_top {
+      @media (max-width : 550px) {
+        flex-direction: column;
+      }
+      display: flex;
+      gap: 30px;
+      width: 100%;
+      input {
         width: 100%;
-        &_first{
-            display: flex;
-            gap: 20px;
-        }
-        &_second{
-            display: flex;
-            gap: 20px;
-        }
+      }
+      &_first {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+      &_second {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+    }
+    &_bottom {
+      textarea {
+        background-color: $smoke_gri;
+        padding: 10px;
+      }
+      button {
+        width: 130px;
+        padding: 5px;
+      }
+    }
+  }
+  &__right {
+    background-color: $koyu_yesil;
+    color: #fff;
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    justify-content: space-between;
+    line-height: 30px;
+    div {
+      svg {
+        font-size: 3rem;
+      }
+      h4 {
+        font-size: 2rem;
+        font-weight: 600;
+      }
     }
   }
 }

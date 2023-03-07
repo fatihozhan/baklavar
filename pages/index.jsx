@@ -1,4 +1,5 @@
 import Head from "next/head";
+import Link from "next/link";
 import Image from "next/image";
 import styles from "../styles/Home.module.scss";
 import { Inter } from "@next/font/google";
@@ -55,7 +56,9 @@ export default function Home() {
             </h1>
             <p>Sadece bu haftasonu, ayın geri kalanında.</p>
             <div className={styles.containers__left_bottom}>
-              <button className={styles.secondary_button}>Satın Al</button>
+              <Link href="/shop">
+                <button className={styles.secondary_button}>Satın Al</button>
+              </Link>
               <Image
                 src={"/images/arrow.svg"}
                 height={40}
@@ -81,45 +84,52 @@ export default function Home() {
         </div>
       </div>
       <div className={styles.about}>
-        <div>
-          <Image
-            src={"/images/about/about1.svg"}
-            height={100}
-            width={100}
-            alt="about resmi 1"
-          />
-          <h2>Bugün Yetiştirilir, Yarın Teslim Edilir</h2>
-          <p>
-            Organik meyve ve sebzelerimiz, kendi topraklarında sadece doğal
-            gübre kullanan çiftçiler tarafından yetiştirilmektedir.
-          </p>
-        </div>
-        <div>
-          <Image
-            src={"/images/about/about2.svg"}
-            height={100}
-            width={100}
-            alt="about resmi 1"
-          />
-          <h2>Teslimat Hızımız Çok Hızlı</h2>
-          <p>
-            Bu kolay ve uygun fiyatlı market teslimat hizmetleriyle zamandan,
-            paradan ve biraz da akıl sağlığından tasarruf edin.
-          </p>
-        </div>
-        <div>
-          <Image
-            src={"/images/about/about3.svg"}
-            height={100}
-            width={100}
-            alt="about resmi 1"
-          />
-          <h2>%100 Tamamen Organik</h2>
-          <p>
-            %100 tamamen kendi üretimimiz olan ürünlerimizi sizlerle
-            buluşturuyoruz.
-          </p>
-        </div>
+        <Link href="/about">
+          <div>
+            <Image
+              src={"/images/about/about1.svg"}
+              height={100}
+              width={100}
+              alt="about resmi 1"
+            />
+            <h2>Bugün Yetiştirilir, Yarın Teslim Edilir</h2>
+            <p>
+              Organik meyve ve sebzelerimiz, kendi topraklarında sadece doğal
+              gübre kullanan çiftçiler tarafından yetiştirilmektedir.
+            </p>
+          </div>
+        </Link>
+
+        <Link href="/about">
+          <div>
+            <Image
+              src={"/images/about/about2.svg"}
+              height={100}
+              width={100}
+              alt="about resmi 1"
+            />
+            <h2>Teslimat Hızımız Çok Hızlı</h2>
+            <p>
+              Bu kolay ve uygun fiyatlı market teslimat hizmetleriyle zamandan,
+              paradan ve biraz da akıl sağlığından tasarruf edin.
+            </p>
+          </div>
+        </Link>
+        <Link href="/about">
+          <div>
+            <Image
+              src={"/images/about/about3.svg"}
+              height={100}
+              width={100}
+              alt="about resmi 1"
+            />
+            <h2>%100 Tamamen Organik</h2>
+            <p>
+              %100 tamamen kendi üretimimiz olan ürünlerimizi sizlerle
+              buluşturuyoruz.
+            </p>
+          </div>
+        </Link>
       </div>
       <div className={styles.topCategories}>
         <div className={styles.topCategories__title}>

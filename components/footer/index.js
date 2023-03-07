@@ -10,7 +10,7 @@ import {
 import { HiMapPin } from "react-icons/hi2";
 import Image from "next/image";
 import BackToTop from "react-back-to-top-button";
-import {IoIosArrowUp} from 'react-icons/io'
+import { IoIosArrowUp } from "react-icons/io";
 
 export default function Footer() {
   return (
@@ -20,9 +20,13 @@ export default function Footer() {
           <div className={styles.footer__top_left}>
             <ul>
               <li>Hesabım</li>
-              <li>Sepetim</li>
+              <Link href={"/cart"}>
+                <li>Sepetim</li>
+              </Link>
               <li>Kişisel Bilgiler</li>
-              <li>Wishlist</li>
+              <Link href={"/wishlist"}>
+                <li>Wishlist</li>
+              </Link>
             </ul>
           </div>
           <div className={styles.footer__top_right}>
@@ -91,10 +95,10 @@ export default function Footer() {
         showAt={100}
         speed={1500}
         easing="easeInOutQuint"
-      > 
-      <span className={styles.backToTop}>
-        <IoIosArrowUp/>
-      </span>
+      >
+        <span className={styles.backToTop}>
+          <IoIosArrowUp />
+        </span>
       </BackToTop>
     </div>
   );

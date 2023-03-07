@@ -1,0 +1,13 @@
+.wishlist{
+    &__content{
+        height: 50vh;
+        padding: 30px;
+        &_empty{
+            padding: 20px;
+            box-shadow: $box-shadow;
+            margin: 40px auto;
+            text-align: center;
+            color: $silik_yazi_rengi;
+        }
+    }
+}

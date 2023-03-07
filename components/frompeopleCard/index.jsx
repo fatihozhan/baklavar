@@ -8,7 +8,7 @@ export default function FromPeopleCard({ comment }) {
         src={comment.img}
         width="150"
         height={150}
-        alt={comment.FullName}
+        alt="From People Card"
       />
       <p>{comment.comment}</p>
       <h4>{comment.fullName}</h4>

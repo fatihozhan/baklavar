@@ -1,4 +1,5 @@
-import { Input, Select, Popover } from "antd";
+import { Input, Select, Popover, Collapse } from "antd";
+import { useRouter } from "next/router";
 import Link from "next/link";
 import { useSpring, animated } from "@react-spring/web";
 import Image from "next/image";
@@ -13,8 +14,9 @@ import { GoThreeBars } from "react-icons/go";
 import { GiButterflyFlower, GiLindenLeaf, GiJellyBeans } from "react-icons/gi";
 import { CiUser } from "react-icons/ci";
 import styles from "./styles.module.scss";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 const { Option } = Select;
+const { Panel } = Collapse;
 
 export default function Top() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -23,6 +25,12 @@ export default function Top() {
   const [open2, setOpen2] = useState(false);
   const [open3, setOpen3] = useState(false);
   const [toggle, setToggle] = useState(false);
+  const router = useRouter();
+
+  const onChange = (key) => {};
+  useEffect(() => {
+    setToggle(false);
+  }, [router.pathname]);
 
   const content = (
     <div className={styles.popover}>
@@ -143,15 +151,16 @@ export default function Top() {
     <div className={styles.navbar__left_popover}>
       <ul>
         <Link href={"/iletisim"}>
-
-        <li>İletişim</li>
+          <li>İletişim</li>
         </Link>
-        <li>Wishlist</li>
+        <Link href={"/wishlist"}>
+          <li>Wishlist</li>
+        </Link>
       </ul>
     </div>
   );
   const menuAnimation = useSpring({
-    height: toggle ? "200px" : "0px",
+    height: toggle ? "400px" : "0px",
     opacity: toggle ? 1 : 0,
   });
 
@@ -159,7 +168,9 @@ export default function Top() {
     <>
       <div className={styles.mobileTop}>
         <div className={styles.mobileTop__logo}>
-          <h2 className={styles.top__logo}>LOGO</h2>
+          <h2 className={styles.top__logo}>
+            <Link href={"/"}>LOGO</Link>
+          </h2>
           <GoThreeBars onClick={() => setToggle((prev) => !prev)} />
         </div>
         {toggle && (
@@ -176,7 +187,18 @@ export default function Top() {
                   <Link href={"/about"}>Hakkımızda</Link>
                 </li>
                 <li>
-                  <Link href={"/shop"}>Alışveriş</Link>
+                  <Collapse onChange={onChange} bordered={false}>
+                    <Panel showArrow={false} header="Alışveriş" key="1">
+                      <li>
+                        <Link href={"/shop"}>Alışveriş</Link>
+                      </li>
+                      <li>Hesabım</li>
+                      <Link href="/cart">
+                        <li>Sepetim</li>
+                      </Link>
+                      <li>Siparişlerim</li>
+                    </Panel>
+                  </Collapse>
                 </li>
                 <Link href="/blog">
                   <li>Blog</li>
@@ -184,7 +206,18 @@ export default function Top() {
                 <Link href={"/media"}>
                   <li>Medya</li>
                 </Link>
-                <li>Sayfalar</li>
+                <li>
+                  <Collapse bordered={false} onChange={onChange}>
+                    <Panel showArrow={false} header="Sayfalar" key="2">
+                      <Link href={"/iletisim"}>
+                        <li>İletişim</li>
+                      </Link>
+                      <Link href={"/wishlist"}>
+                        <li>Wishlist</li>
+                      </Link>
+                    </Panel>
+                  </Collapse>
+                </li>
               </ul>
             </animated.div>
           </div>
@@ -194,7 +227,9 @@ export default function Top() {
         <div className={styles.top}>
           <Modal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
           <div className={styles.top__logo}>
-            <h2>LOGO</h2>
+            <h2>
+              <Link href={"/"}>LOGO</Link>
+            </h2>
           </div>
           <div className={styles.top__search}>
             <Input.Group compact style={{ fontFamily: "Space Grotesk" }}>

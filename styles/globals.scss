@@ -131,3 +131,14 @@ a{
     color: $koyu_yesil;
   }
 }
+
+textarea{
+  &:hover{
+    border: 1px solid $silik_gri!important;
+  }
+  &:focus{
+    box-shadow: none!important;
+    border: 1px solid $silik_gri!important;
+
+  }
+}
