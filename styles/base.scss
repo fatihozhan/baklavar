@@ -6,6 +6,15 @@ $smoke_white: #f9f9f9;
 $portakal_sarisi: #ffba41;
 $silik_yazi_rengi: #4c4b4d;
 $box-shadow: 0 0 20px 16px rgb(0 0 0 / 4%);
+$admin_gray : #bec3cc;
+$admin_black : #343a40;
+$admin_blue : #007bff;
+$admin_red : #dc3545;
+$admin_yellow : #ffc107;
+$admin_green : #28a745;
+$admin_open_blue : #17a2b8 ;
+$admin_smoke_black : #17a2b8  ;
+
 
 .ant-modal-close {
   top: -27px !important;
@@ -142,6 +151,19 @@ $box-shadow: 0 0 20px 16px rgb(0 0 0 / 4%);
   }
 }
 
+.ant-select-selection-item{
+  top: -25px!important;
+  height: 50px;
+}
+.ant-select-selection-placeholder{
+  position: absolute;
+  top: 0!important;
+}
+
 .ant-radio-wrapper{
   font-family: "Space Grotesk"!important;
+}
+
+.ant-input-group-wrapper * {
+  font-family: "Space Grotesk";
 }

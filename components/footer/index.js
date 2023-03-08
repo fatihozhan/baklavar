@@ -61,7 +61,7 @@ export default function Footer() {
             </div>
             <div>
               <h2>Hesap</h2>
-              <Link href="">Hesabınız</Link>
+              <Link href="/my-account">Hesabınız</Link>
               <Link href="">Kargo Değerlendirmeleri</Link>
               <Link href="">Bağışlar</Link>
               <Link href="">Kargo Bilgileri</Link>

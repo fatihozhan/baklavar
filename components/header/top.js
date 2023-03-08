@@ -236,7 +236,7 @@ export default function Top() {
               <Select
                 bordered={false}
                 defaultValue="Kategori"
-                style={{ width: "30%" }}
+                style={{ width: "30%", height : "25px" }}
               >
                 <Option value="nohut">Nohut</Option>
                 <Option value="fasulye">Fasulye</Option>
@@ -297,7 +297,7 @@ export default function Top() {
                 <li>
                   <Link href={"/about"}>Hakkımızda</Link>
                 </li>
-                <Popover content={alisveris}>
+                <Popover placement="bottom" content={alisveris}>
                   <li>
                     <Link href={"/shop"}>
                       Alışveriş <span>Yeni</span>
@@ -310,7 +310,7 @@ export default function Top() {
                 <Link href={"/media"}>
                   <li>Medya</li>
                 </Link>
-                <Popover content={pages}>
+                <Popover placement="bottom" content={pages}>
                   <li>Sayfalar</li>
                 </Popover>
               </ul>
