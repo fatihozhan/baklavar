@@ -1,0 +1,69 @@
+.card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: $box-shadow;
+  padding: 10px;
+  @media (max-width: 800px) {
+    flex-direction: column;
+    gap: 30px;
+    padding: 30px;
+    &__left {
+      position: relative;
+      gap: 10px!important;
+      svg {
+        top: -15px;
+        right: 15px;
+        position: absolute;
+        font-size: 0.9rem!important;
+      }
+    }
+  }
+  @media (max-width: 380px) {
+
+    &__left {
+    flex-direction: column; 
+    }
+  }
+  &__left {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    svg {
+      color: $koyu_yesil !important;
+      fill: $koyu_yesil !important;
+      stroke: $koyu_yesil;
+      font-size: 1.6rem;
+      margin-left: 20px;
+      cursor: pointer;
+    }
+    h4 {
+      font-weight: 500;
+      width: 250px;
+    }
+  }
+  &__right {
+    display: flex;
+    gap: 30px;
+    p {
+      &:last-of-type {
+        font-weight: 500;
+      }
+    }
+    div {
+      span {
+        background-color: $smoke_gri;
+        padding: 10px;
+        cursor: pointer;
+        &:first-of-type {
+          border-bottom-left-radius: 5px;
+          border-top-left-radius: 5px;
+        }
+        &:last-of-type {
+          border-bottom-right-radius: 5px;
+          border-top-right-radius: 5px;
+        }
+      }
+    }
+  }
+}

@@ -129,3 +129,19 @@ $box-shadow: 0 0 20px 16px rgb(0 0 0 / 4%);
     font-size: 1rem;
   }
 }
+
+.ant-select-selector{
+  padding: 25px!important;
+  background-color: $smoke_gri!important;
+  &:hover{
+    border: 1px solid $silik_gri!important;
+  }
+  &:focus{
+    border: 1px solid $silik_gri!important;
+    box-shadow: 0 0 0!important;
+  }
+}
+
+.ant-radio-wrapper{
+  font-family: "Space Grotesk"!important;
+}

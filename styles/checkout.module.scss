@@ -1,0 +1,96 @@
+.checkout {
+  padding: 30px;
+  line-height: 30px;
+  &__coupon {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin: 30px auto;
+    background-color: $smoke_gri;
+    padding: 20px;
+    border-top: 2px solid $koyu_yesil;
+    span {
+      color: $koyu_yesil;
+      cursor: pointer;
+    }
+  }
+  &__couponContent {
+    border: 1px solid $silik_gri;
+    padding: 20px;
+    margin-bottom: 20px;
+    div {
+      &:last-of-type {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        @media (max-width: 500px) {
+          margin-top: 10px;
+          flex-direction: column;
+          div {
+            width: 100%;
+          }
+        }
+        div {
+          flex: 1;
+        }
+        button {
+          width: 200px;
+          padding: 10px;
+        }
+      }
+    }
+  }
+  &__wrapper {
+    display: flex;
+    gap: 40px;
+    h3 {
+      font-size: 2rem;
+      font-weight: 600;
+      margin: 20px auto;
+    }
+    @media (max-width : 600px) {
+        flex-direction: column;
+    }
+  }
+  &__billing {
+    flex: 1;
+  }
+  &__address {
+    flex: 1;
+    textarea {
+      background-color: $smoke_gri;
+      padding: 10px;
+    }
+  }
+  &__summary {
+    h3 {
+      font-size: 2rem;
+      font-weight: 600;
+      margin: 20px auto;
+    }
+    table,
+    th,
+    tr,
+    td {
+      border: 1px solid $silik_gri;
+      padding: 10px;
+    }
+    table {
+      width: 100%;
+      margin: 20px auto;
+    }
+    th {
+      font-weight: 500;
+    }
+  }
+  &__payment {
+    border: 1px solid $silik_gri;
+    padding: 20px;
+    div {
+      border-bottom: 1px solid $silik_gri;
+      width: 100%;
+      padding-top: 20px;
+      padding-bottom: 20px;
+    }
+  }
+}
