@@ -167,3 +167,16 @@ $admin_smoke_black : #17a2b8  ;
 .ant-input-group-wrapper * {
   font-family: "Space Grotesk";
 }
+
+.ant-table-cell{
+  img{
+      border-radius: 20px!important;
+  }
+  vertical-align: middle!important;
+}
+.ant-table *{
+font-family: "Space Grotesk";
+}
+.ant-table-bordered{
+  border: 1px solid $admin_open_blue;
+}

@@ -1,4 +1,5 @@
 import styles from "./styles.module.scss";
+import Link from "next/link";
 import {
   AiFillDashboard,
   AiFillPlusCircle,
@@ -56,43 +57,76 @@ export default function AdminLayout({ children }) {
         <div className={styles.adminLayout__sidebar_search}>
           <Input.Search placeholder="Ara..." />
         </div>
-        <div className={styles.adminLayout__sidebar_menu}>
+        <div title="Dashboard" className={styles.adminLayout__sidebar_menu}>
           <div className={styles.adminLayout__sidebar_menu_item}>
             <AiFillDashboard /> <b> Dashboard</b>
           </div>
-          <div className={styles.adminLayout__sidebar_menu_item}>
+          <div
+            title="Satışlar"
+            className={styles.adminLayout__sidebar_menu_item}
+          >
             <FcSalesPerformance /> <b> Satışlar</b>
           </div>
-          <div className={styles.adminLayout__sidebar_menu_item}>
-            <IoReorderFour /> <b> Siparişler</b>
-          </div>
-          <div className={styles.adminLayout__sidebar_menu_item}>
-            <ImUsers /> <b> Kullanıcılar</b>
-          </div>
-          <div className={styles.adminLayout__sidebar_menu_item}>
+          <Link href="/admin/siparisler">
+            <div
+              title="Siparişler"
+              className={styles.adminLayout__sidebar_menu_item}
+            >
+              <IoReorderFour /> <b> Siparişler</b>
+            </div>
+          </Link>
+          <Link href={"/admin/users"}>
+            <div
+              title="Kullanıcılar"
+              className={styles.adminLayout__sidebar_menu_item}
+            >
+              <ImUsers /> <b> Kullanıcılar</b>
+            </div>
+          </Link>
+          <div
+            title="Mesajlar"
+            className={styles.adminLayout__sidebar_menu_item}
+          >
             <AiFillMessage /> <b> Mesajlar</b>
           </div>
           <h5>Ürünler</h5>
-          <div className={styles.adminLayout__sidebar_menu_item}>
+          <div
+            title="Tüm Ürünler"
+            className={styles.adminLayout__sidebar_menu_item}
+          >
             <FaThList /> <b> Tüm Ürünler</b>
           </div>
-          <div className={styles.adminLayout__sidebar_menu_item}>
+          <div
+            title="Yeni Ürün"
+            className={styles.adminLayout__sidebar_menu_item}
+          >
             <AiFillPlusCircle /> <b> Yeni Ürün</b>
           </div>
           <h5>Kategoriler</h5>
-          <div className={styles.adminLayout__sidebar_menu_item}>
+          <div
+            title="Kategoriler"
+            className={styles.adminLayout__sidebar_menu_item}
+          >
             <MdCategory /> <b> Kategoriler </b>
           </div>
-          <div className={styles.adminLayout__sidebar_menu_item}>
+          <div
+            title="Alt Kategoriler1"
+            className={styles.adminLayout__sidebar_menu_item}
+          >
             <MdCategory /> <b> Alt Kategoriler</b>
           </div>
           <h5>Kuponlar</h5>
-          <div className={styles.adminLayout__sidebar_menu_item}>
+          <div
+            title="Kuponlar"
+            className={styles.adminLayout__sidebar_menu_item}
+          >
             <RiCoupon5Fill /> <b> Kuponlar</b>
           </div>
         </div>
       </div>
-      <main style={expand ? { marginLeft : "70px"}: { marginLeft : "270px"}} >{children}</main>
+      <main style={expand ? { marginLeft: "70px" } : { marginLeft: "270px" }}>
+        {children}
+      </main>
     </div>
   );
 }
