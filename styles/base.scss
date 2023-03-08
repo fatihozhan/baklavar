@@ -6,15 +6,14 @@ $smoke_white: #f9f9f9;
 $portakal_sarisi: #ffba41;
 $silik_yazi_rengi: #4c4b4d;
 $box-shadow: 0 0 20px 16px rgb(0 0 0 / 4%);
-$admin_gray : #bec3cc;
-$admin_black : #343a40;
-$admin_blue : #007bff;
-$admin_red : #dc3545;
-$admin_yellow : #ffc107;
-$admin_green : #28a745;
-$admin_open_blue : #17a2b8 ;
-$admin_smoke_black : #17a2b8  ;
-
+$admin_gray: #bec3cc;
+$admin_black: #343a40;
+$admin_blue: #007bff;
+$admin_red: #dc3545;
+$admin_yellow: #ffc107;
+$admin_green: #28a745;
+$admin_open_blue: #17a2b8;
+$admin_smoke_black: #17a2b8;
 
 .ant-modal-close {
   top: -27px !important;
@@ -65,10 +64,9 @@ $admin_smoke_black : #17a2b8  ;
   max-width: 1200px;
   margin: 10px auto;
 }
-.title{
+.title {
   font-size: 3rem;
   font-weight: 600;
-
 }
 
 .swiper-pagination {
@@ -113,7 +111,9 @@ $admin_smoke_black : #17a2b8  ;
     font-size: 1.4rem;
   }
 }
-.ant-pagination-item, .ant-pagination-prev, .ant-pagination-next {
+.ant-pagination-item,
+.ant-pagination-prev,
+.ant-pagination-next {
   a {
     font-family: "Space Grotesk" !important;
   }
@@ -128,55 +128,55 @@ $admin_smoke_black : #17a2b8  ;
   border-color: $koyu_yesil !important;
 }
 
-.ant-collapse{
-  background: none!important;
+.ant-collapse {
+  background: none !important;
 }
-.ant-collapse-header{
-  padding-inline-start: 0!important;
-  padding: 0!important;
-  span{
+.ant-collapse-header {
+  padding-inline-start: 0 !important;
+  padding: 0 !important;
+  span {
     font-size: 1rem;
   }
 }
 
-.ant-select-selector{
-  padding: 25px!important;
-  background-color: $smoke_gri!important;
-  &:hover{
-    border: 1px solid $silik_gri!important;
+.ant-select-selector {
+  padding: 25px !important;
+  background-color: $smoke_gri !important;
+  &:hover {
+    border: 1px solid $silik_gri !important;
   }
-  &:focus{
-    border: 1px solid $silik_gri!important;
-    box-shadow: 0 0 0!important;
+  &:focus {
+    border: 1px solid $silik_gri !important;
+    box-shadow: 0 0 0 !important;
   }
 }
 
-.ant-select-selection-item{
-  top: -25px!important;
+.ant-select-selection-item {
+  top: -25px !important;
   height: 50px;
 }
-.ant-select-selection-placeholder{
+.ant-select-selection-placeholder {
   position: absolute;
-  top: 0!important;
+  top: 0 !important;
 }
 
-.ant-radio-wrapper{
-  font-family: "Space Grotesk"!important;
+.ant-radio-wrapper {
+  font-family: "Space Grotesk" !important;
 }
 
 .ant-input-group-wrapper * {
   font-family: "Space Grotesk";
 }
 
-.ant-table-cell{
-  img{
-      border-radius: 20px!important;
+.ant-table-cell {
+  img {
+    border-radius: 20px !important;
   }
-  vertical-align: middle!important;
+  vertical-align: middle !important;
 }
-.ant-table *{
-font-family: "Space Grotesk";
+.ant-table * {
+  font-family: "Space Grotesk";
 }
-.ant-table-bordered{
+.ant-table-bordered {
   border: 1px solid $admin_open_blue;
 }

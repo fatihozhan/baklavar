@@ -103,18 +103,22 @@ export default function AdminLayout({ children }) {
             <AiFillPlusCircle /> <b> Yeni Ürün</b>
           </div>
           <h5>Kategoriler</h5>
-          <div
-            title="Kategoriler"
-            className={styles.adminLayout__sidebar_menu_item}
-          >
-            <MdCategory /> <b> Kategoriler </b>
-          </div>
-          <div
-            title="Alt Kategoriler1"
-            className={styles.adminLayout__sidebar_menu_item}
-          >
-            <MdCategory /> <b> Alt Kategoriler</b>
-          </div>
+          <Link href={"/admin/categories"}>
+            <div
+              title="Kategoriler"
+              className={styles.adminLayout__sidebar_menu_item}
+            >
+              <MdCategory /> <b> Kategoriler </b>
+            </div>
+          </Link>
+          <Link href={"/admin/subcategories"}>
+            <div
+              title="Alt Kategoriler1"
+              className={styles.adminLayout__sidebar_menu_item}
+            >
+              <MdCategory /> <b> Alt Kategoriler</b>
+            </div>
+          </Link>
           <h5>Kuponlar</h5>
           <div
             title="Kuponlar"

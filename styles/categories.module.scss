@@ -1,0 +1,30 @@
+.categories{
+    &__top{
+        button{
+            background-color: $admin_smoke_black;
+            position: relative;
+            color: #fff;
+            width: 100%;
+            border: 2px solid $admin_smoke_black;
+            padding: 15px;
+            font-size: 20px;
+            font-weight: 500;
+            border-radius: 5px;
+            font-family: inherit;
+            cursor: pointer;
+            &:hover {
+              color: $admin_smoke_black!important;
+              background-color: #fff!important;
+              transition: all 0.3s;
+            }
+        }
+        input{
+            &:hover{
+                border: 1px solid $admin_smoke_black!important;
+            }
+            &:focus{
+                border: 1px solid $admin_smoke_black!important;
+            }
+        }
+    }
+}
