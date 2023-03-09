@@ -1,0 +1,24 @@
+.categories{
+    &__top{
+        div{
+            div{
+                padding: 20px!important;
+                top: -11px;
+                span{
+                    &:last-of-type{
+                        margin-top: 10px;
+                    }
+                }
+            }
+            span{
+                span{
+                        svg{
+                            position: absolute!important;
+                            right: 22px;
+                            top: -4px;
+                    }
+                }
+            }
+        }
+    }
+}

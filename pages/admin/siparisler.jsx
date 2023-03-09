@@ -1,7 +1,6 @@
 import styles from "@/styles/siparisler.module.scss";
 import Image from 'next/image'
-import { DownOutlined } from "@ant-design/icons";
-import { Badge, Dropdown, Space, Table } from "antd";
+import {Table } from "antd";
 
 const expandedRowRender = () => {
   const columns = [
@@ -9,6 +8,7 @@ const expandedRowRender = () => {
       title: "Fotoğraf",
       dataIndex: "fotograf",
       key: "fotograf",
+    responsive : ["lg"],
     },
     {
       title: "Kullanıcı",
@@ -87,6 +87,7 @@ const columns = [
     title: "Ödeme Yöntemi",
     dataIndex: "odeme",
     key: "odeme",
+    responsive : ["lg"],
   },
   {
     title: "Ödeme Durumu",
@@ -102,6 +103,7 @@ const columns = [
     title: "Kupon",
     dataIndex: "kupon",
     key: "kupon",
+    responsive : ["lg"],
   },
   {
     title: "Total",

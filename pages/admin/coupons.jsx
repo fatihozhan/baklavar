@@ -1,21 +1,16 @@
-import {
-  Form,
-  InputNumber,
-  Popconfirm,
-  Table,
-  Typography,
-  Input,
-  Select,
-} from "antd";
-import styles from "@/styles/subcategories.module.scss";
+import styles from "@/styles/coupons.module.scss";
+import { DatePicker } from "antd";
+import { Form, InputNumber, Popconfirm, Table, Typography, Input } from "antd";
 import { useState } from "react";
-
+const { Search } = Input;
+const { RangePicker } = DatePicker;
 const originData = [];
-for (let i = 0; i < 10; i++) {
+for (let i = 0; i < 5; i++) {
   originData.push({
     key: i.toString(),
-    name: "Fasulle",
-    parentName: "Baklagil",
+    coupon: "FARECE",
+    discount: 45,
+    dates: "Fri Mar 10 2023 12:13:45 - Fri Mar 17 2023 11:12:51",
   });
 }
 const EditableCell = ({
@@ -28,14 +23,7 @@ const EditableCell = ({
   children,
   ...restProps
 }) => {
-  const inputNode =
-    dataIndex == "parentName" ? (
-      <Select options={[{ value: "nohut", label: "Nohut" }]} />
-    ) : inputType === "text" ? (
-      <Input />
-    ) : (
-      <InputNumber />
-    );
+  const inputNode = inputType === "number" ? <InputNumber /> : <Input />;
   return (
     <td {...restProps}>
       {editing ? (
@@ -47,7 +35,7 @@ const EditableCell = ({
           rules={[
             {
               required: true,
-              message: `Lütfen ${title} Giriniz!`,
+              message: `Lütfen Kategori Adı Giriniz!`,
             },
           ]}
         >
@@ -59,24 +47,21 @@ const EditableCell = ({
     </td>
   );
 };
-export default function SubCategories() {
+
+export default function Coupons() {
+  const handleChange = (e) => console.log(e);
+
   const [form] = Form.useForm();
   const [data, setData] = useState(originData);
-  const [addItem , setAddItem] = useState({});
   const [editingKey, setEditingKey] = useState("");
   const isEditing = (record) => record.key === editingKey;
   const { Search } = Input;
   const edit = (record) => {
     form.setFieldsValue({
       name: "",
-      parentName: "",
       ...record,
     });
     setEditingKey(record.key);
-  };
-  const handleDelete = (key) => {
-    const newData = data.filter((item) => item.key !== key);
-    setData(newData);
   };
   const cancel = () => {
     setEditingKey("");
@@ -93,7 +78,6 @@ export default function SubCategories() {
           ...row,
         });
         setData(newData);
-        console.log(newData);
         setEditingKey("");
       } else {
         newData.push(row);
@@ -106,15 +90,21 @@ export default function SubCategories() {
   };
   const columns = [
     {
-      title: "Kategori Adı",
-      dataIndex: "name",
-      width: "40%",
+      title: "Kupon",
+      dataIndex: "coupon",
+      width: "25%",
       editable: true,
     },
     {
-      title: "Üst Kategori Adı",
-      dataIndex: "parentName",
-      width: "40%",
+      title: "İndirim Miktarı",
+      dataIndex: "discount",
+      width: "25%",
+      editable: true,
+    },
+    {
+      title: "Tarihler",
+      dataIndex: "dates",
+      width: "25%",
       editable: true,
     },
     {
@@ -133,7 +123,8 @@ export default function SubCategories() {
               Kaydet
             </Typography.Link>
             <Popconfirm
-              title="Çıkmak İstemediğine Emin Misin?"
+              style={{ fontFamily: "Space Grotesk" }}
+              title="Çıkmak İstediğinize Emin Misiniz?"
               onConfirm={cancel}
               okText="Evet"
               cancelText="Hayır"
@@ -149,22 +140,23 @@ export default function SubCategories() {
             >
               Düzenle
             </Typography.Link>
-            <Typography.Link
-              disabled={editingKey !== ""}
-              style={{
-                marginLeft: "10px",
-                color: `${editingKey !== "" ? "#d4d4e8" : "red"} `,
-              }}
+            <Popconfirm
+              style={{ fontFamily: "Space Grotesk" }}
+              title="Silmek İstedinize Emin Misiniz?"
+              onConfirm={() => console.log("first")}
+              okText="Evet"
+              cancelText="Hayır"
             >
-              <Popconfirm
-                title="Silmek İstediğine Emin Misiniz?"
-                onConfirm={() => handleDelete(record.key)}
-                okText="Evet"
-                cancelText="Hayır"
+              <Typography.Link
+                disabled={editingKey !== ""}
+                style={{
+                  marginLeft: "10px",
+                  color: `${editingKey !== "" ? "" : "red"}`,
+                }}
               >
                 Sil
-              </Popconfirm>
-            </Typography.Link>
+              </Typography.Link>
+            </Popconfirm>
           </>
         );
       },
@@ -185,58 +177,52 @@ export default function SubCategories() {
       }),
     };
   });
-  const handleAdd = (e) => {
-   console.log(e)
-  };
 
   return (
-    <div className={styles.categories}>
-      <div className={styles.categories__top}>
-        <h3>Alt Kategoriler</h3>
-        <div
-          style={{
-            marginBottom: "20px",
-            display: "flex",
-            alignItems: "center",
-            gap: "20px",
-            justifyContent: "space-between",
-          }}
-        >
-          <Select
-            defaultValue={"Fasulye"}
-            style={{ width: "33%", height: "41px" }}
-            name="parentCategory"
-            onChange={(e) => handleAdd(e)}
-            options={[
-              { value: "nohut", label: "Nohut" },
-              { value: "fasulle", label: "Fasulle" },
-            ]}
-          />
-          <Search
-            placeholder="Alt Kategori Ekle..."
-            enterButton="Kaydet"
-            size="large"
-            onChange={(e) => handleAdd(e)}
-            style={{ width: "66%" }}
-          />
-        </div>
-      </div>
-      <Form form={form} component={false}>
-        <Table
-          components={{
-            body: {
-              cell: EditableCell,
-            },
-          }}
-          bordered
-          dataSource={data}
-          columns={mergedColumns}
-          rowClassName="editable-row"
-          pagination={{
-            onChange: cancel,
-          }}
+    <div className={styles.coupons}>
+      <h3>Kuponlar</h3>
+      <div
+        className={styles.coupons__entry}
+        style={{ display: "flex", gap: "20px", flexDirection: "column" }}
+      >
+        <Search placeholder="Kupon Kodu..." enterButton="Kupon" size="large" />
+        <Search
+          placeholder="İndirim Miktarı..."
+          enterButton="İndirim"
+          size="large"
+          type="number"
+          min={0}
+          max={100}
         />
-      </Form>
+      </div>
+      <div className={styles.coupons__dates} style={{ marginTop: "20px" }}>
+        <h6>Başlama ve Bitiş Tarihlerini Seçiniz</h6>
+        <RangePicker
+          onChange={(e) => handleChange(e)}
+          format={"DD-MM-YYYY:hh-mm"}
+          showTime
+          size="large"
+          placeholder={["Başlama Tarihi", "Bitiş Tarihi"]}
+        />
+      </div>
+      <div className={styles.coupons__table}>
+        <Form form={form} component={false}>
+          <Table
+            components={{
+              body: {
+                cell: EditableCell,
+              },
+            }}
+            bordered
+            dataSource={data}
+            columns={mergedColumns}
+            rowClassName="editable-row"
+            pagination={{
+              onChange: cancel,
+            }}
+          />
+        </Form>
+      </div>
     </div>
   );
 }

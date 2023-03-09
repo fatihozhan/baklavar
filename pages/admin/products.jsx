@@ -1,21 +1,20 @@
-import {
-  Form,
-  InputNumber,
-  Popconfirm,
-  Table,
-  Typography,
-  Input,
-  Select,
-} from "antd";
-import styles from "@/styles/subcategories.module.scss";
+import styles from "@/styles/adminProducts.module.scss";
+import Image from 'next/image'
+import { Form, InputNumber, Popconfirm, Table, Typography, Input } from "antd";
 import { useState } from "react";
-
 const originData = [];
-for (let i = 0; i < 10; i++) {
+for (let i = 0; i < 5; i++) {
   originData.push({
     key: i.toString(),
-    name: "Fasulle",
-    parentName: "Baklagil",
+    fotograf: <img src={"/images/products/grapes.jpg"} alt="Ürün Resmi" width={50} height="50" />,
+    urunAdi : "Dünyanın En İyi Fasullesi",
+    urunKodu : "SKU-OKD9384",
+    aciklama : "Lorem Ipsum Doler Set",
+    fiyat : 12,
+    indirim : 45,
+    stok : 45,
+    kategori : "Baklagil",
+    etiketler : "bakla, fasulle, iyi",
   });
 }
 const EditableCell = ({
@@ -28,14 +27,7 @@ const EditableCell = ({
   children,
   ...restProps
 }) => {
-  const inputNode =
-    dataIndex == "parentName" ? (
-      <Select options={[{ value: "nohut", label: "Nohut" }]} />
-    ) : inputType === "text" ? (
-      <Input />
-    ) : (
-      <InputNumber />
-    );
+  const inputNode = inputType === "number" ? <InputNumber /> : <Input />;
   return (
     <td {...restProps}>
       {editing ? (
@@ -59,24 +51,21 @@ const EditableCell = ({
     </td>
   );
 };
-export default function SubCategories() {
+
+export default function Products() {
+  const handleChange = (e) => console.log(e);
+
   const [form] = Form.useForm();
   const [data, setData] = useState(originData);
-  const [addItem , setAddItem] = useState({});
   const [editingKey, setEditingKey] = useState("");
   const isEditing = (record) => record.key === editingKey;
   const { Search } = Input;
   const edit = (record) => {
     form.setFieldsValue({
       name: "",
-      parentName: "",
       ...record,
     });
     setEditingKey(record.key);
-  };
-  const handleDelete = (key) => {
-    const newData = data.filter((item) => item.key !== key);
-    setData(newData);
   };
   const cancel = () => {
     setEditingKey("");
@@ -93,7 +82,6 @@ export default function SubCategories() {
           ...row,
         });
         setData(newData);
-        console.log(newData);
         setEditingKey("");
       } else {
         newData.push(row);
@@ -106,15 +94,57 @@ export default function SubCategories() {
   };
   const columns = [
     {
-      title: "Kategori Adı",
-      dataIndex: "name",
-      width: "40%",
+      title: "Fotoğraf" ,
+      dataIndex: "fotograf",
+      width: "25%",
       editable: true,
     },
     {
-      title: "Üst Kategori Adı",
-      dataIndex: "parentName",
-      width: "40%",
+      title: "Ürün Adı",
+      dataIndex: "urunAdi",
+      width: "25%",
+      editable: true,
+    },
+    {
+      title: "Ürün Kodu",
+      dataIndex: "urunKodu",
+      width: "25%",
+      editable: true,
+    },
+    {
+      title: "Açıklama",
+      dataIndex: "aciklama",
+      width: "25%",
+      editable: true,
+    },
+    {
+      title: "Fiyat",
+      dataIndex: "fiyat",
+      width: "25%",
+      editable: true,
+    },
+    {
+      title: "İndirim",
+      dataIndex: "indirim",
+      width: "25%",
+      editable: true,
+    },
+    {
+      title: "Stok Durumu",
+      dataIndex: "stok",
+      width: "25%",
+      editable: true,
+    },
+    {
+      title: "Kategori",
+      dataIndex: "kategori",
+      width: "25%",
+      editable: true,
+    },
+    {
+      title: "Etiketler",
+      dataIndex: "etiketler",
+      width: "25%",
       editable: true,
     },
     {
@@ -133,7 +163,8 @@ export default function SubCategories() {
               Kaydet
             </Typography.Link>
             <Popconfirm
-              title="Çıkmak İstemediğine Emin Misin?"
+              style={{ fontFamily: "Space Grotesk" }}
+              title="Çıkmak İstediğinize Emin Misiniz?"
               onConfirm={cancel}
               okText="Evet"
               cancelText="Hayır"
@@ -149,22 +180,23 @@ export default function SubCategories() {
             >
               Düzenle
             </Typography.Link>
-            <Typography.Link
-              disabled={editingKey !== ""}
-              style={{
-                marginLeft: "10px",
-                color: `${editingKey !== "" ? "#d4d4e8" : "red"} `,
-              }}
+            <Popconfirm
+              style={{ fontFamily: "Space Grotesk" }}
+              title="Silmek İstedinize Emin Misiniz?"
+              onConfirm={() => console.log("first")}
+              okText="Evet"
+              cancelText="Hayır"
             >
-              <Popconfirm
-                title="Silmek İstediğine Emin Misiniz?"
-                onConfirm={() => handleDelete(record.key)}
-                okText="Evet"
-                cancelText="Hayır"
+              <Typography.Link
+                disabled={editingKey !== ""}
+                style={{
+                  marginLeft: "10px",
+                  color: `${editingKey !== "" ? "" : "red"}`,
+                }}
               >
                 Sil
-              </Popconfirm>
-            </Typography.Link>
+              </Typography.Link>
+            </Popconfirm>
           </>
         );
       },
@@ -185,58 +217,29 @@ export default function SubCategories() {
       }),
     };
   });
-  const handleAdd = (e) => {
-   console.log(e)
-  };
 
   return (
-    <div className={styles.categories}>
-      <div className={styles.categories__top}>
-        <h3>Alt Kategoriler</h3>
-        <div
-          style={{
-            marginBottom: "20px",
-            display: "flex",
-            alignItems: "center",
-            gap: "20px",
-            justifyContent: "space-between",
-          }}
-        >
-          <Select
-            defaultValue={"Fasulye"}
-            style={{ width: "33%", height: "41px" }}
-            name="parentCategory"
-            onChange={(e) => handleAdd(e)}
-            options={[
-              { value: "nohut", label: "Nohut" },
-              { value: "fasulle", label: "Fasulle" },
-            ]}
+    <div className={styles.coupons}>
+      <h3>Ürünler</h3>
+ 
+      <div className={styles.coupons__table}>
+        <Form form={form} component={false}>
+          <Table
+            components={{
+              body: {
+                cell: EditableCell,
+              },
+            }}
+            bordered
+            dataSource={data}
+            columns={mergedColumns}
+            rowClassName="editable-row"
+            pagination={{
+              onChange: cancel,
+            }}
           />
-          <Search
-            placeholder="Alt Kategori Ekle..."
-            enterButton="Kaydet"
-            size="large"
-            onChange={(e) => handleAdd(e)}
-            style={{ width: "66%" }}
-          />
-        </div>
+        </Form>
       </div>
-      <Form form={form} component={false}>
-        <Table
-          components={{
-            body: {
-              cell: EditableCell,
-            },
-          }}
-          bordered
-          dataSource={data}
-          columns={mergedColumns}
-          rowClassName="editable-row"
-          pagination={{
-            onChange: cancel,
-          }}
-        />
-      </Form>
     </div>
   );
 }

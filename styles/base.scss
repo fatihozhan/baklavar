@@ -173,8 +173,16 @@ $admin_smoke_black: #17a2b8;
     border-radius: 20px !important;
   }
   vertical-align: middle !important;
+  text-align: center;
 }
-.ant-table * {
+.ant,
+.ant-table,
+.ant-picker-dropdown,
+.ant-table-wrapper,
+.ant-popover .ant-popconfirm,
+.ant-typography,
+.ant-table-cell,
+.ant-picker * {
   font-family: "Space Grotesk";
 }
 .ant-table-bordered {

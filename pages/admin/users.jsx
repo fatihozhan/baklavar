@@ -77,6 +77,7 @@ export default function Users() {
       dataIndex: "fotograf",
       width: "10%",
       editable: false,
+      responsive : ["lg"],
     },
     {
       title: "Ad Soyad",
