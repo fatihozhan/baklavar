@@ -15,10 +15,12 @@ import { GiButterflyFlower, GiLindenLeaf, GiJellyBeans } from "react-icons/gi";
 import { CiUser } from "react-icons/ci";
 import styles from "./styles.module.scss";
 import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 const { Option } = Select;
 const { Panel } = Collapse;
 
 export default function Top() {
+  const cart = useSelector((state) => state.cartSlice.cart);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [open, setOpen] = useState(false);
   const [open1, setOpen1] = useState(false);
@@ -34,32 +36,48 @@ export default function Top() {
 
   const content = (
     <div className={styles.popover}>
-      <div className={styles.popover__wrapper}>
-        <div>
-          <FaRegEye />
-          <Image
-            src={"/images/products/tomatoes.jpg"}
-            width="100"
-            height={100}
-            alt="domatesi resmi"
-          />
-        </div>
-        <div>
-          <p>Domatesler Domatesler 10 Numara domatesler</p>
-          <p>
-            1 x <b> ₺80.00 </b>
-          </p>
-        </div>
-      </div>
-      <div className={styles.popover__subtotal}>
-        SUBTOTAL : <b> ₺80.00</b>
-      </div>
-      <div className={styles.popover__buttons}>
-        <Link href="/cart">
-          <button className={styles.primary_button}>Sepete Git</button>
-        </Link>
-        <button className={styles.primary_button}>Sipariş Ver</button>
-      </div>
+      {cart.length == 0 ? (
+        <p> Sepeniz Boş! </p>
+      ) : (
+        <>
+          {cart.map((product, i) => {
+            return (
+              <div className={styles.popover__wrapper}>
+                <div key={i}>
+                  <FaRegEye />
+                  <Image
+                    src={product.images[0]}
+                    width="100"
+                    height={100}
+                    alt="domatesi resmi"
+                  />
+                </div>
+                <div>
+                  <p>{product.description}</p>
+                  <p>
+                    {product.qty} x <b> ₺{product.price} </b>
+                  </p>
+                </div>
+              </div>
+            );
+          })}
+        </>
+      )}
+      {cart.length == 0 ? (
+        ""
+      ) : (
+        <>
+          <div className={styles.popover__subtotal}>
+            SUBTOTAL : <b> ₺80.00</b>
+          </div>
+          <div className={styles.popover__buttons}>
+            <Link href="/cart">
+              <button className={styles.primary_button}>Sepete Git</button>
+            </Link>
+            <button className={styles.primary_button}>Sipariş Ver</button>
+          </div>
+        </>
+      )}
     </div>
   );
 
@@ -236,7 +254,7 @@ export default function Top() {
               <Select
                 bordered={false}
                 defaultValue="Kategori"
-                style={{ width: "30%", height : "25px" }}
+                style={{ width: "30%", height: "25px" }}
               >
                 <Option value="nohut">Nohut</Option>
                 <Option value="fasulye">Fasulye</Option>
@@ -265,14 +283,20 @@ export default function Top() {
           </div>
           <div className={styles.top__cart}>
             <div className={styles.top__cart_icon}>
-              <span>1</span>
+              <span> {cart.length} </span>
               <BsHandbag />
             </div>
             <Popover content={content}>
               <Link href="/cart">
                 <div style={{ cursor: "pointer" }}>
                   <p>Sepetim</p>
-                  <p>₺0.00</p>
+                  <p>
+                    {cart.reduce(
+                      (prev, item) => prev + item.qty * item.price,
+                      0
+                    )}
+                    ₺
+                  </p>
                 </div>
               </Link>
             </Popover>

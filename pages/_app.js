@@ -1,11 +1,13 @@
 import "@/styles/globals.scss";
 import Layout from "../components/layout";
 import { Space_Grotesk } from "@next/font/google";
-import { useSpring, animated } from '@react-spring/web'
+import { useSpring, animated } from "@react-spring/web";
 import Head from "next/head";
 import "@/styles/nprogress.css";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+import { store } from "@/store/store";
+import { Provider } from "react-redux";
 
 import NProgress from "nprogress";
 import AdminLayout from "@/components/adminLayout";
@@ -26,17 +28,19 @@ export default function App({ Component, pageProps }) {
   return (
     <>
       <Head></Head>
-      {router.pathname.includes("/admin") ? (
-        <>
-          <AdminLayout>
+      <Provider store={store}>
+        {router.pathname.includes("/admin") ? (
+          <>
+            <AdminLayout>
+              <Component {...pageProps} />
+            </AdminLayout>
+          </>
+        ) : (
+          <Layout>
             <Component {...pageProps} />
-          </AdminLayout>
-        </>
-      ) : (
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
-      )}
+          </Layout>
+        )}
+      </Provider>
     </>
   );
 }

@@ -19,22 +19,24 @@ import { Input } from "antd";
 import Image from "next/image";
 import { useState } from "react";
 import { useRouter } from "next/router";
+import { useDispatch, useSelector } from "react-redux";
+import { change } from "@/store/expandSlice";
 
 export default function AdminLayout({ children }) {
-  const [expand, setExpand] = useState(false);
   const { pathname } = useRouter();
-
+  const isExpanded = useSelector((state) => state.expandSlice.value);
+  const dispatch = useDispatch();
   return (
     <div className={styles.adminLayout}>
       <div
-        onClick={() => setExpand(!expand)}
-        className={expand ? styles.arrowShort : styles.arrow}
+        onClick={() => dispatch(change())}
+        className={isExpanded ? styles.arrowShort : styles.arrow}
       >
-        {expand ? <MdArrowForwardIos /> : <MdArrowBackIosNew />}
+        {isExpanded ? <MdArrowForwardIos /> : <MdArrowBackIosNew />}
       </div>
       <div
         className={`${styles.adminLayout__sidebar} ${
-          expand ? styles.short : ""
+          isExpanded ? styles.short : ""
         }`}
       >
         <div className={styles.adminLayout__sidebar_top}>
@@ -62,12 +64,18 @@ export default function AdminLayout({ children }) {
         </div>
 
         <div title="Dashboard" className={styles.adminLayout__sidebar_menu}>
-          <Link href={"/admin/dashboard"} className={`${pathname.includes("dashboard") ? styles.active : ""}`}>
+          <Link
+            href={"/admin/dashboard"}
+            className={`${pathname.includes("dashboard") ? styles.active : ""}`}
+          >
             <div className={styles.adminLayout__sidebar_menu_item}>
               <AiFillDashboard /> <b> Dashboard</b>
             </div>
           </Link>
-          <Link href="/admin/sales" className={`${pathname.includes("sales") ? styles.active : ""}`}>
+          <Link
+            href="/admin/sales"
+            className={`${pathname.includes("sales") ? styles.active : ""}`}
+          >
             <div
               title="Satışlar"
               className={styles.adminLayout__sidebar_menu_item}
@@ -75,7 +83,12 @@ export default function AdminLayout({ children }) {
               <FcSalesPerformance /> <b> Satışlar</b>
             </div>
           </Link>
-          <Link href="/admin/siparisler" className={`${pathname.includes("siparisler") ? styles.active : ""}`}>
+          <Link
+            href="/admin/siparisler"
+            className={`${
+              pathname.includes("siparisler") ? styles.active : ""
+            }`}
+          >
             <div
               title="Siparişler"
               className={styles.adminLayout__sidebar_menu_item}
@@ -83,7 +96,10 @@ export default function AdminLayout({ children }) {
               <IoReorderFour /> <b> Siparişler</b>
             </div>
           </Link>
-          <Link href={"/admin/users"} className={`${pathname.includes("users") ? styles.active : ""}`}>
+          <Link
+            href={"/admin/users"}
+            className={`${pathname.includes("users") ? styles.active : ""}`}
+          >
             <div
               title="Kullanıcılar"
               className={styles.adminLayout__sidebar_menu_item}
@@ -91,7 +107,10 @@ export default function AdminLayout({ children }) {
               <ImUsers /> <b> Kullanıcılar</b>
             </div>
           </Link>
-          <Link href={"/admin/messages"} className={`${pathname.includes("messages") ? styles.active : ""}`}>
+          <Link
+            href={"/admin/messages"}
+            className={`${pathname.includes("messages") ? styles.active : ""}`}
+          >
             <div
               title="Mesajlar"
               className={styles.adminLayout__sidebar_menu_item}
@@ -100,7 +119,10 @@ export default function AdminLayout({ children }) {
             </div>
           </Link>
           <h5>Ürünler</h5>
-          <Link href={"/admin/products"} className={`${pathname.includes("products") ? styles.active : ""}`}>
+          <Link
+            href={"/admin/products"}
+            className={`${pathname.includes("products") ? styles.active : ""}`}
+          >
             <div
               title="Tüm Ürünler"
               className={styles.adminLayout__sidebar_menu_item}
@@ -108,7 +130,12 @@ export default function AdminLayout({ children }) {
               <FaThList /> <b> Tüm Ürünler</b>
             </div>
           </Link>
-          <Link href={"/admin/createProduct"} className={`${pathname.includes("createProduct") ? styles.active : ""}`}>
+          <Link
+            href={"/admin/createProduct"}
+            className={`${
+              pathname.includes("createProduct") ? styles.active : ""
+            }`}
+          >
             <div
               title="Yeni Ürün"
               className={styles.adminLayout__sidebar_menu_item}
@@ -117,7 +144,12 @@ export default function AdminLayout({ children }) {
             </div>
           </Link>
           <h5>Kategoriler</h5>
-          <Link href={"/admin/categories"} className={`${pathname == "/admin/categories" ? styles.active : ""}`}>
+          <Link
+            href={"/admin/categories"}
+            className={`${
+              pathname == "/admin/categories" ? styles.active : ""
+            }`}
+          >
             <div
               title="Kategoriler"
               className={styles.adminLayout__sidebar_menu_item}
@@ -125,7 +157,12 @@ export default function AdminLayout({ children }) {
               <MdCategory /> <b> Kategoriler </b>
             </div>
           </Link>
-          <Link href={"/admin/subcategories"} className={`${pathname.includes("subcategories") ? styles.active : ""}`}>
+          <Link
+            href={"/admin/subcategories"}
+            className={`${
+              pathname.includes("subcategories") ? styles.active : ""
+            }`}
+          >
             <div
               title="Alt Kategoriler1"
               className={styles.adminLayout__sidebar_menu_item}
@@ -134,7 +171,10 @@ export default function AdminLayout({ children }) {
             </div>
           </Link>
           <h5>Kuponlar</h5>
-          <Link href={"/admin/coupons"} className={`${pathname.includes("coupons") ? styles.active : ""}`}>
+          <Link
+            href={"/admin/coupons"}
+            className={`${pathname.includes("coupons") ? styles.active : ""}`}
+          >
             <div
               title="Kuponlar"
               className={styles.adminLayout__sidebar_menu_item}
@@ -144,7 +184,9 @@ export default function AdminLayout({ children }) {
           </Link>
         </div>
       </div>
-      <main style={expand ? { marginLeft: "70px" } : { marginLeft: "270px" }}>
+      <main
+        style={isExpanded ? { marginLeft: "70px" } : { marginLeft: "270px" }}
+      >
         {children}
       </main>
     </div>

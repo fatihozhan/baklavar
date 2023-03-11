@@ -1,4 +1,4 @@
-.sticky{
+.sticky {
   position: sticky;
   top: 0;
   z-index: 99;
@@ -203,9 +203,17 @@
 .popover {
   font-family: "Space Grotesk" !important;
   max-width: 230px;
+  height: 300px;
+  overflow-y: auto;
+  &::-webkit-scrollbar{
+    display: none;
+  }
   &__wrapper {
     display: flex;
     gap: 10px;
+    &:not(:first-of-type) {
+      margin-top: 10px;
+    }
     div:first-of-type {
       border: 1px solid $silik_gri;
       position: relative;
