@@ -43,7 +43,7 @@ export default function Home() {
 
   const handleModal = (slug) => {
     console.log(slug);
-    setIsModalOpen(true)
+    setIsModalOpen(true);
   };
 
   return (
@@ -54,7 +54,10 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <div className={styles.main}>
-        <ProductModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
+        <ProductModal
+          isModalOpen={isModalOpen}
+          setIsModalOpen={setIsModalOpen}
+        />
         <div className={styles.containers}>
           <div className={styles.containers__left}>
             <h4>22₺'den Başlayan Fiyatlarla</h4>
@@ -169,10 +172,9 @@ export default function Home() {
             </p>
             {load && <Countdown date={new Date(2023, 2, 27)} />}
             <Link href="/shop">
-
-            <button className={styles.secondary_button}>
-              Tüm İndirimleri Göster
-            </button>
+              <button className={styles.secondary_button}>
+                Tüm İndirimleri Göster
+              </button>
             </Link>
           </div>
         </div>
@@ -193,7 +195,7 @@ export default function Home() {
           </div>
           <div className={styles.bestSelling__body}>
             {products.map((product, i) => {
-              return i > 4 ? <ProductCard key={i} product={product} /> : "";
+              return i > 4 ? <ProductCard key={i} handleModal={handleModal} product={product} /> : "";
             })}
           </div>
         </div>
@@ -214,7 +216,7 @@ export default function Home() {
           </div>
           <div className={styles.bestSelling__body}>
             {products.map((product, i) => {
-              return i > 4 ? <ProductCard key={i} product={product} /> : "";
+              return i > 4 ? <ProductCard key={i} handleModal={handleModal} product={product} /> : "";
             })}
           </div>
         </div>

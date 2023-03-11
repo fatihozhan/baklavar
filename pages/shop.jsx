@@ -5,15 +5,21 @@ import { Input, Slider, Select, Tag, Pagination } from "antd";
 import NavigatorBar from "../components/navigatorBar";
 import { useEffect, useState } from "react";
 import ProductCard from "@/components/product/productCart";
+import ProductModal from "@/components/product/productModal";
 export default function Shop() {
   const [load, setLoad] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   useEffect(() => {
     setLoad(true);
   }, []);
+  const handleModal = (slug) => {
+    setIsModalOpen(true);
+  };
 
   return (
     <div className={styles.shop}>
       <NavigatorBar />
+      <ProductModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
       <div className={styles.shop__wrapper}>
         <div className={styles.container}>
           <div className={styles.shop__search}>
@@ -39,7 +45,10 @@ export default function Shop() {
               <Select
                 placeholder="Bir Kategori Seçin..."
                 className={styles.shop__search_category_select}
-                dropdownStyle={{fontFamily : "Space Grotesk", backgroundColor : "#f7f7f7"}}
+                dropdownStyle={{
+                  fontFamily: "Space Grotesk",
+                  backgroundColor: "#f7f7f7",
+                }}
                 style={{
                   width: "100%",
                   fontFamily: "Space Grotesk",
@@ -79,7 +88,16 @@ export default function Shop() {
               <h3>Popular Etiketler</h3>
               <div>
                 {tags.map((tag, i) => (
-                  <Tag key={i} color="#f0fcf9" style={{ color: "#136450", fontWeight : "600", border : "1px solid #136450", fontSize : "0.8rem" }}>
+                  <Tag
+                    key={i}
+                    color="#f0fcf9"
+                    style={{
+                      color: "#136450",
+                      fontWeight: "600",
+                      border: "1px solid #136450",
+                      fontSize: "0.8rem",
+                    }}
+                  >
                     {tag}
                   </Tag>
                 ))}
@@ -90,22 +108,24 @@ export default function Shop() {
             <div className={styles.shop__content_top}>
               <div className={styles.shop__content_top_l}>
                 <div className={styles.shop__content_top_l_svgs}>
-
-                <BsFillGrid1X2Fill className="active" />
-                <BsListTask />
+                  <BsFillGrid1X2Fill className="active" />
+                  <BsListTask />
                 </div>
                 <p>30 Sonuçtan 1-12 Arası Gösteriliyor</p>
               </div>
               <div className={styles.shop__content_top_r}>
                 <Select
                   defaultValue="default"
-                  dropdownStyle={{backgroundColor : "#f7f7f7", fontFamily : "Space Grotesk"}}
+                  dropdownStyle={{
+                    backgroundColor: "#f7f7f7",
+                    fontFamily: "Space Grotesk",
+                  }}
                   popupClassName="select"
                   bordered="false"
                   style={{
                     width: 250,
                     fontFamily: "Space Grotesk",
-                    borderColor : "#f7f7f7"
+                    borderColor: "#f7f7f7",
                   }}
                   options={[
                     {
@@ -143,12 +163,19 @@ export default function Shop() {
             </div>
             <div className={styles.shop__content_body}>
               {products.map((product, i) => (
-                <ProductCard key={i} product={product} />
+                <ProductCard
+                  key={i}
+                  handleModal={handleModal}
+                  product={product}
+                />
               ))}
             </div>
             <div className={styles.shop__content_body_pagination}>
-
-            <Pagination defaultCurrent={1} className={styles.paginationAvtive} total={60} />
+              <Pagination
+                defaultCurrent={1}
+                className={styles.paginationAvtive}
+                total={60}
+              />
             </div>
           </div>
         </div>

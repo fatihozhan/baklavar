@@ -10,6 +10,7 @@ import ProductModal from "../productModal";
 export default function ProductCard({ product, handleModal }) {
   return (
     <div className={styles.card}>
+      {/* <ProductModal handleModal = {handleModal} /> */}
       <div className={styles.card__img}>
         <Image
           src={product.image}
