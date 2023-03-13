@@ -1,4 +1,5 @@
 import "@/styles/globals.scss";
+import { SessionProvider } from "next-auth/react";
 import Layout from "../components/layout";
 import { Space_Grotesk } from "@next/font/google";
 import { useSpring, animated } from "@react-spring/web";
@@ -12,6 +13,8 @@ import NProgress from "nprogress";
 import AdminLayout from "@/components/adminLayout";
 import { PersistGate } from "redux-persist/lib/integration/react";
 import { persistStore } from "redux-persist";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const space = Space_Grotesk({
   subsets: ["latin-ext"],
   weight: ["400", "500", "600", "700"],
@@ -19,7 +22,10 @@ const space = Space_Grotesk({
 
 let persistor = persistStore(store);
 
-export default function App({ Component, pageProps }) {
+export default function App({
+  Component,
+  pageProps: { session, ...pageProps },
+}) {
   const router = useRouter();
 
   useEffect(() => {
@@ -31,21 +37,24 @@ export default function App({ Component, pageProps }) {
   return (
     <>
       <Head></Head>
-      <Provider store={store}>
-        <PersistGate loading={null} persistor={persistor}>
-          {router.pathname.includes("/admin") ? (
-            <>
-              <AdminLayout>
+      <SessionProvider session={session}>
+        <Provider store={store}>
+          <ToastContainer/>
+          <PersistGate loading={null} persistor={persistor}>
+            {router.pathname.includes("/admin") ? (
+              <>
+                <AdminLayout>
+                  <Component {...pageProps} />
+                </AdminLayout>
+              </>
+            ) : (
+              <Layout>
                 <Component {...pageProps} />
-              </AdminLayout>
-            </>
-          ) : (
-            <Layout>
-              <Component {...pageProps} />
-            </Layout>
-          )}
-        </PersistGate>
-      </Provider>
+              </Layout>
+            )}
+          </PersistGate>
+        </Provider>
+      </SessionProvider>
     </>
   );
 }

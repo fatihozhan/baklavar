@@ -1,15 +1,54 @@
-import { Button, Modal, Checkbox } from "antd";
+import { Button, Modal, Checkbox, Form } from "antd";
+import { signIn, signOut } from "next-auth/react";
 import { AiOutlineMail, AiOutlineUser } from "react-icons/ai";
 import { IoKeyOutline } from "react-icons/io5";
 import Link from "next/link";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import ModalInput from "./modalInput";
 import styles from "./styles.module.scss";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 export default function HeaderModal({ setIsModalOpen, isModalOpen }) {
   const [tab, setTab] = useState(1);
+  const formRef = useRef(null);
 
   const changeHandler = (e) => {};
+  const handleSignIn = async (values) => {
+    let options = {
+      redirect: false,
+      email: values.email,
+      password: values.password,
+    };
+    try {
+      const res = await signIn("credentials", options);
+      console.log(res);
+      if (res.error) return toast.error(res.error);
+      toast.success("Giriş Başarılı...");
+      setTimeout(() => {
+        setIsModalOpen(false);
+      }, 1300);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const handleReset = () => {
+    formRef.current?.resetFields();
+  };
+  const handleSubmit = async (values) => {
+    try {
+      const { data } = await axios.post("/api/auth/signup", { values });
+      if (data.user) {
+        toast.success(data.message);
+        setTab(1);
+        handleReset();
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div>
       <Modal
@@ -42,63 +81,130 @@ export default function HeaderModal({ setIsModalOpen, isModalOpen }) {
           </button>
         </header>
         <div style={{ display: `${tab != 1 ? "none" : ""}` }}>
-          <ModalInput
-            icon={<AiOutlineMail />}
-            placeholder="Email veya Kullanıcı Adı"
-            name={"email"}
-            type="text"
-            onChange={changeHandler}
-          />
-          <ModalInput
-            name={"password"}
-            type="password"
-            onChange={changeHandler}
-            icon={<IoKeyOutline />}
-            placeholder="Parola"
-          />
-          <Checkbox onChange={changeHandler}>Beni Hatırla</Checkbox>
+          <Form layout="vertical" onFinish={handleSignIn}>
+            <Form.Item
+              rules={[
+                {
+                  type: "email",
+                  message: "Lütfen geçerli bir email giriniz",
+                  required: true,
+                },
+              ]}
+              label="Email"
+              name={"email"}
+            >
+              <ModalInput
+                icon={<AiOutlineMail />}
+                placeholder="Email veya Kullanıcı Adı"
+                type="text"
+              />
+            </Form.Item>
+            <Form.Item
+              rules={[
+                {
+                  required: true,
+                  message: "Zorunlu Alan",
+                },
+                {
+                  min: 6,
+                  message: "Şifreniz en az 6 karakter uzunluğunda olmalıdır.",
+                },
+              ]}
+              label="Şifre"
+              name={"password"}
+            >
+              <ModalInput
+                type="password"
+                icon={<IoKeyOutline />}
+                placeholder="Parola"
+              />
+            </Form.Item>
 
-          <footer className={styles.modal__footer}>
-            <button>Giriş Yap</button>
-            <Link href="">Şifreni mi unuttun?</Link>
-          </footer>
+            <Checkbox onChange={changeHandler}>Beni Hatırla</Checkbox>
+
+            <footer className={styles.modal__footer}>
+              <button
+                type="submit"
+              >
+                Giriş Yap
+              </button>
+              <Link href="">Şifreni mi unuttun?</Link>
+            </footer>
+          </Form>
         </div>
         <div style={{ display: `${tab == 1 ? "none" : ""}` }}>
-          <ModalInput
-            type={"text"}
-            icon={<AiOutlineUser />}
-            placeholder="Kullanıcı Adı"
-            name={"username"}
-            onChange={changeHandler}
-          />
-          <div style={{display : "flex", gap : "10px"}}>
-
-          <ModalInput
-            type={"text"}
-            icon={<AiOutlineUser />}
-            placeholder="İsim"
-            name={"firsname"}
-            onChange={changeHandler}
-          />
-          <ModalInput
-            type={"text"}
-            icon={<AiOutlineUser />}
-            placeholder="Soyisim"
-            name={"lastname"}
-            onChange={changeHandler}
-          />
-          </div>
-          <ModalInput
-            type={"text"}
-            icon={<AiOutlineMail />}
-            placeholder="Email"
-            name={"email"}
-            onChange={changeHandler}
-          />
-           <footer className={styles.modal__footer}>
-            <button>Kaydol</button>
-          </footer>
-
+          <Form
+            layout="vertical"
+            onReset={handleReset}
+            onFinish={handleSubmit}
+            ref={formRef}
+          >
+            <Form.Item
+              name={"username"}
+              label="Kullanıcı Adı"
+              rules={[
+                { required: true, message: "Kullancı Adı Alanı Zorunludur." },
+                {
+                  min: 4,
+                  message:
+                    "Kullanıcı Adınız En Az 4 Karakter Uzunluğunda Olmalıdır.",
+                },
+              ]}
+            >
+              <ModalInput
+                type={"text"}
+                icon={<AiOutlineUser />}
+                placeholder="Kullanıcı Adı"
+              />
+            </Form.Item>
+            <Form.Item
+              name={"name"}
+              rules={[{ required: true, message: "Zorunlu Alan" }]}
+              label="Ad Soyad"
+            >
+              <ModalInput
+                type={"text"}
+                icon={<AiOutlineUser />}
+                placeholder="İsim Soyisim"
+              />
+            </Form.Item>
+            <Form.Item
+              label="Email"
+              name={"email"}
+              rules={[
+                { required: true, message: "Zorunlu Alan" },
+                { type: "email", message: "Geçerli Bir Email Adresi Giriniz" },
+              ]}
+            >
+              <ModalInput
+                type={"text"}
+                icon={<AiOutlineMail />}
+                placeholder="Email"
+                name={"email"}
+              />
+            </Form.Item>
+            <Form.Item
+              label="Şifre"
+              name={"password"}
+              rules={[
+                { required: true, message: "Zorunlu Alan" },
+                { type: "password" },
+                {
+                  min: 6,
+                  message: "Parolanız en az 6 karakter uzunluğunda olmalıdır.",
+                },
+              ]}
+            >
+              <ModalInput
+                type={"password"}
+                icon={<IoKeyOutline />}
+                placeholder="Şifre"
+              />
+            </Form.Item>
+            <footer className={styles.modal__footer}>
+              <button>Kaydol</button>
+            </footer>
+          </Form>
         </div>
       </Modal>
     </div>

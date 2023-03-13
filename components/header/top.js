@@ -1,4 +1,5 @@
 import { Input, Select, Popover, Collapse } from "antd";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { useSpring, animated } from "@react-spring/web";
@@ -22,20 +23,21 @@ const { Panel } = Collapse;
 
 export default function Top() {
   const cart = useSelector((state) => state.cartSlice.cart);
+  const { data: session } = useSession();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isProductModalOpen, setIsProductModalOpen] = useState(false)
+  const [isProductModalOpen, setIsProductModalOpen] = useState(false);
   const [open, setOpen] = useState(false);
   const [open1, setOpen1] = useState(false);
   const [open2, setOpen2] = useState(false);
   const [open3, setOpen3] = useState(false);
   const [toggle, setToggle] = useState(false);
-  const [productId, setProductId] = useState(0)
+  const [productId, setProductId] = useState(0);
   const router = useRouter();
 
-  const handleModal = (id) =>{
-    setProductId(id)
-    setIsProductModalOpen(true)
-  }
+  const handleModal = (id) => {
+    setProductId(id);
+    setIsProductModalOpen(true);
+  };
 
   const onChange = (key) => {};
   useEffect(() => {
@@ -43,14 +45,17 @@ export default function Top() {
   }, [router.pathname]);
 
   const content = (
-    <div className={styles.popover} style={{height : `${cart?.length == 0 ? "50px" : ""}`}} >
+    <div
+      className={styles.popover}
+      style={{ height: `${cart?.length == 0 ? "50px" : ""}` }}
+    >
       {cart?.length == 0 ? (
         <p> Sepeniz Boş! </p>
       ) : (
         <>
           {cart?.map((product, i) => {
             return (
-              <div  key={i} className={styles.popover__wrapper}>
+              <div key={i} className={styles.popover__wrapper}>
                 <div>
                   <FaRegEye onClick={() => handleModal(product.id)} />
                   <Image
@@ -78,10 +83,7 @@ export default function Top() {
           <div className={styles.popover__subtotal}>
             SUBTOTAL :&nbsp;
             <b>
-              ₺{cart?.reduce(
-                (prev, item) => prev + item.qty * item.price,
-                0
-              )}
+              ₺{cart?.reduce((prev, item) => prev + item.qty * item.price, 0)}
             </b>
           </div>
           <div className={styles.popover__buttons}>
@@ -256,7 +258,13 @@ export default function Top() {
         )}
       </div>
       <div className={styles.container}>
-        <ProductModal isModalOpen={isProductModalOpen} setIsModalOpen={setIsProductModalOpen} handleModal = {handleModal} cart={cart} productId = {productId}/>
+        <ProductModal
+          isModalOpen={isProductModalOpen}
+          setIsModalOpen={setIsProductModalOpen}
+          handleModal={handleModal}
+          cart={cart}
+          productId={productId}
+        />
         <div className={styles.top}>
           <Modal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
           <div className={styles.top__logo}>
@@ -287,13 +295,18 @@ export default function Top() {
               <CiUser />
             </div>
             <div className={styles.top__user_infos}>
-              <p>Hoş Geldin.. Giriş Yap</p>
-              <p
-                onClick={() => setIsModalOpen(true)}
-                style={{ cursor: "pointer" }}
-              >
-                Hesap & Listeler
-              </p>
+              {session ? (
+                session.user.name
+              ) : (
+                <p
+                  onClick={() => setIsModalOpen(true)}
+                  style={{ cursor: "pointer" }}
+                >
+                  Hoş Geldin.. Giriş Yap
+                </p>
+              )}
+
+              <p>Hesap & Listeler</p>
             </div>
           </div>
           <div className={styles.top__cart}>
@@ -306,10 +319,9 @@ export default function Top() {
                 <div style={{ cursor: "pointer" }}>
                   <p>Sepetim</p>
                   <p>
-                    {cart?.reduce(
-                      (prev, item) => prev + item.qty * item.price,
-                      0
-                    ).toFixed(2)}
+                    {cart
+                      ?.reduce((prev, item) => prev + item.qty * item.price, 0)
+                      .toFixed(2)}
                     ₺
                   </p>
                 </div>
