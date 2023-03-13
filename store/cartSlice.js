@@ -1,56 +1,86 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  cart: [
+  /* [
     {
-        name : "Domatesin Kilosu 3 TL",
-        images : [
-            "/images/products/tomatoes.jpg",
-        ],
-        description : "Domatesler Domatesler 10 Numara domatesler",
-        price : 24,
-        qty : 2,
+      id: 1,
+      name: "Domatesin Kilosu 3 TL",
+      images: ["/images/products/tomatoes.jpg"],
+      description: "Domatesler Domatesler 10 Numara domatesler",
+      price: 24,
+      qty: 2,
     },
     {
-        name : "Domatesin Kilosu 3 TL",
-        images : [
-            "/images/products/tomatoes.jpg",
-        ],
-        description : "Domatesler Domatesler 10 Numara domatesler",
-        price : 24,
-        qty : 2,
+      id: 2,
+      name: "Domatesin Kilosu 3 TL",
+      images: ["/images/products/tomatoes.jpg"],
+      description: "Domatesler Domatesler 10 Numara domatesler",
+      price: 24,
+      qty: 2,
     },
     {
-        name : "Domatesin Kilosu 3 TL",
-        images : [
-            "/images/products/tomatoes.jpg",
-        ],
-        description : "Domatesler Domatesler 10 Numara domatesler",
-        price : 24,
-        qty : 2,
+      id: 3,
+      name: "Domatesin Kilosu 3 TL",
+      images: ["/images/products/tomatoes.jpg"],
+      description: "Domatesler Domatesler 10 Numara domatesler",
+      price: 24,
+      qty: 2,
     },
     {
-        name : "Domatesin Kilosu 3 TL",
-        images : [
-            "/images/products/tomatoes.jpg",
-        ],
-        description : "Domatesler Domatesler 10 Numara domatesler",
-        price : 24,
-        qty : 2,
+      id: 4,
+      name: "Domatesin Kilosu 3 TL",
+      images: ["/images/products/tomatoes.jpg"],
+      description: "Domatesler Domatesler 10 Numara domatesler",
+      price: 24,
+      qty: 2,
     },
-  ],
+  ], */
+  cart: [],
 };
 
 export const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
-    addToCart: (state, actions) => {
-      state.cart.push(actions.payload);
+    addToCart: (state, action) => {
+      if (action.payload.qty > 1) {
+        const control = state.cart.find(
+          (p) => p.id == action.payload.product.id
+        );
+        if (control) {
+          state.cart.map(
+            (p) =>
+              p.id == action.payload.product.id && (p.qty = action.payload.qty)
+          );
+          return;
+        }
+        state.cart.push({ ...action.payload.product, qty: action.payload.qty });
+      } else {
+        state.cart.push({ ...action.payload, qty: 1 });
+      }
+    },
+    deleteItem: (state, action) => {
+      state.cart = state.cart.filter((item) => item.id != action.payload);
+    },
+    increaseQty: (state, action) => {
+      state.cart.map(
+        (product) =>
+          product.id == action.payload && (product.qty = product.qty + 1)
+      );
+    },
+    descreaseQty: (state, action) => {
+      state.cart.map((product) => {
+        product.id == action.payload && product.qty > 0
+          ? product.qty - 1 == 0
+            ? state.cart.filter((p) => p.id != action.payload)
+            : (product.qty = product.qty - 1)
+          : "";
+      });
     },
   },
 });
 
-export const {} = cartSlice.actions;
+export const { increaseQty, descreaseQty, deleteItem, addToCart } =
+  cartSlice.actions;
 
 export default cartSlice.reducer;

@@ -4,16 +4,27 @@ import { Rate } from "antd";
 import { TiTick } from "react-icons/ti";
 import { AiOutlineHeart } from "react-icons/ai";
 import { IoIosArrowBack } from "react-icons/io";
-import { useState } from "react";
+import { addToCart } from "@/store/cartSlice";
+import { useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
 
-export default function ProductInfos() {
+export default function ProductInfos({ product, cart }) {
   const router = useRouter();
-  const [qty, setQty] = useState(1);
+  const dispatch = useDispatch();
+  const [qty, setQty] = useState(
+    cart.find((p) => p.id == product.id)
+      ? cart.find((p) => p.id == product.id).qty
+      : 1
+  );
+  useEffect(() => {
+    setQty(cart.find((p) => p.id == product.id)?.qty ? cart.find((p) => p.id == product.id).qty : 1);
+  }, [product]);
+
   return (
     <>
       <div className={styles.product__infos}>
         <div className={styles.product__infos_title}>
-          <h2>Kuru Üzüm Kurusunun Paketlenmişi</h2>
+          <h2>{product.name}</h2>
           {router.pathname.includes("/product") && (
             <>
               <Rate defaultValue={3.4} disabled /> <b> (1 Değerlendirme)</b>
@@ -21,11 +32,8 @@ export default function ProductInfos() {
           )}
         </div>
         <div className={styles.product__infos_content}>
-          <p>13.00₺</p>
-          <p>
-            Üzümler çok faydalı çok çok faydalı Lorem ipsum dolor sit amet
-            consectetur adipisicing elit. Nostrum tempore vero ab!
-          </p>
+          <p>{product.price.toFixed(2)}₺</p>
+          <p>{product.description}</p>
           <ul>
             <li>A Vitamini</li>
             <li>D3 Vitamini</li>
@@ -48,15 +56,22 @@ export default function ProductInfos() {
               Yumurtasız
             </li>
           </ul>
-          <span>200 Adet Stokta</span>
+          <span>{product.stock} Adet Stokta</span>
           <div className={styles.product__infos_content_footer}>
             <div className={styles.product__infos_content_footer_quantity}>
-              <span onClick={() => setQty((prev) => prev>1 ? prev - 1 : 1)}>-</span>
+              <span onClick={() => setQty((prev) => (prev > 1 ? prev - 1 : 1))}>
+                -
+              </span>
               <span> {qty} </span>
               <span onClick={() => setQty((prev) => prev + 1)}>+</span>
             </div>
             <div className={styles.product__infos_content_footer_buttons}>
-              <button className={styles.primary_button}>Sepete Ekle</button>
+              <button
+                onClick={() => dispatch(addToCart({ product, qty }))}
+                className={styles.primary_button}
+              >
+                Sepete Ekle
+              </button>
 
               <AiOutlineHeart />
             </div>

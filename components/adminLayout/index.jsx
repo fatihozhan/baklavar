@@ -47,7 +47,7 @@ export default function AdminLayout({ children }) {
               width={"50"}
               alt="site logosu"
             />
-            <h5> Baklavar</h5>
+            <h5> RFC Bakliyat</h5>
           </div>
           <div>
             <Image

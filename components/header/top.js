@@ -16,18 +16,26 @@ import { CiUser } from "react-icons/ci";
 import styles from "./styles.module.scss";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import ProductModal from "../product/productModal";
 const { Option } = Select;
 const { Panel } = Collapse;
 
 export default function Top() {
   const cart = useSelector((state) => state.cartSlice.cart);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isProductModalOpen, setIsProductModalOpen] = useState(false)
   const [open, setOpen] = useState(false);
   const [open1, setOpen1] = useState(false);
   const [open2, setOpen2] = useState(false);
   const [open3, setOpen3] = useState(false);
   const [toggle, setToggle] = useState(false);
+  const [productId, setProductId] = useState(0)
   const router = useRouter();
+
+  const handleModal = (id) =>{
+    setProductId(id)
+    setIsProductModalOpen(true)
+  }
 
   const onChange = (key) => {};
   useEffect(() => {
@@ -35,16 +43,16 @@ export default function Top() {
   }, [router.pathname]);
 
   const content = (
-    <div className={styles.popover}>
-      {cart.length == 0 ? (
+    <div className={styles.popover} style={{height : `${cart?.length == 0 ? "50px" : ""}`}} >
+      {cart?.length == 0 ? (
         <p> Sepeniz Boş! </p>
       ) : (
         <>
-          {cart.map((product, i) => {
+          {cart?.map((product, i) => {
             return (
-              <div className={styles.popover__wrapper}>
-                <div key={i}>
-                  <FaRegEye />
+              <div  key={i} className={styles.popover__wrapper}>
+                <div>
+                  <FaRegEye onClick={() => handleModal(product.id)} />
                   <Image
                     src={product.images[0]}
                     width="100"
@@ -53,7 +61,7 @@ export default function Top() {
                   />
                 </div>
                 <div>
-                  <p>{product.description}</p>
+                  <p>{product.name}</p>
                   <p>
                     {product.qty} x <b> ₺{product.price} </b>
                   </p>
@@ -63,12 +71,18 @@ export default function Top() {
           })}
         </>
       )}
-      {cart.length == 0 ? (
+      {cart?.length == 0 ? (
         ""
       ) : (
         <>
           <div className={styles.popover__subtotal}>
-            SUBTOTAL : <b> ₺80.00</b>
+            SUBTOTAL :&nbsp;
+            <b>
+              ₺{cart?.reduce(
+                (prev, item) => prev + item.qty * item.price,
+                0
+              )}
+            </b>
           </div>
           <div className={styles.popover__buttons}>
             <Link href="/cart">
@@ -187,7 +201,7 @@ export default function Top() {
       <div className={styles.mobileTop}>
         <div className={styles.mobileTop__logo}>
           <h2 className={styles.top__logo}>
-            <Link href={"/"}>LOGO</Link>
+            <Link href={"/"}>RFC Bakliyat</Link>
           </h2>
           <GoThreeBars onClick={() => setToggle((prev) => !prev)} />
         </div>
@@ -242,11 +256,12 @@ export default function Top() {
         )}
       </div>
       <div className={styles.container}>
+        <ProductModal isModalOpen={isProductModalOpen} setIsModalOpen={setIsProductModalOpen} handleModal = {handleModal} cart={cart} productId = {productId}/>
         <div className={styles.top}>
           <Modal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
           <div className={styles.top__logo}>
             <h2>
-              <Link href={"/"}>LOGO</Link>
+              <Link href={"/"}>RFC Bakliyat</Link>
             </h2>
           </div>
           <div className={styles.top__search}>
@@ -283,7 +298,7 @@ export default function Top() {
           </div>
           <div className={styles.top__cart}>
             <div className={styles.top__cart_icon}>
-              <span> {cart.length} </span>
+              <span> {cart?.length} </span>
               <BsHandbag />
             </div>
             <Popover content={content}>
@@ -291,10 +306,10 @@ export default function Top() {
                 <div style={{ cursor: "pointer" }}>
                   <p>Sepetim</p>
                   <p>
-                    {cart.reduce(
+                    {cart?.reduce(
                       (prev, item) => prev + item.qty * item.price,
                       0
-                    )}
+                    ).toFixed(2)}
                     ₺
                   </p>
                 </div>

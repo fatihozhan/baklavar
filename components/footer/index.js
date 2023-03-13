@@ -38,9 +38,9 @@ export default function Footer() {
         </div>
         <div className={styles.footer__main}>
           <div className={styles.footer__main_left}>
-            <h2>LOGO</h2>
+            <h2>RFC Bakliyat</h2>
             <p>
-              Çevrimiçi market alışverişi ve teslimatı Baklavar'da. Meyve,
+              Çevrimiçi market alışverişi ve teslimatı RFC Bakliyat Meyve,
               ekmek, tahıl, sebze satın alın.
             </p>
             <Image
@@ -81,7 +81,7 @@ export default function Footer() {
               ve Ticaret A.Ş. Nevşehir / Merkez / Türkiye 50000
             </p>
             <p>
-              <GrMail /> iletisim@baklavar.com
+              <GrMail /> iletisim@rfcbakliyat.com
             </p>
           </div>
         </div>

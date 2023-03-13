@@ -14,11 +14,11 @@ export default function About() {
       <div className={styles.about__greeting}>
         <div className={styles.container}>
           <div className={styles.about__greeting_content}>
-            <h2>Baklavar ile Biz Kimiz</h2>
+            <h2>RFC Bakliyat ile Biz Kimiz</h2>
             <p>
               Organik meyve ve sebzelerimiz, çiftçiler tarafından kendi
               arazilerinde doğal tarım yöntemleriyle yetiştirilmektedir.
-              Groffer'da organik gıdalar sentetik kimyasallar kullanılmadan
+              RFC Bakliyatta organik gıdalar sentetik kimyasallar kullanılmadan
               yetiştirilir.
             </p>
           </div>

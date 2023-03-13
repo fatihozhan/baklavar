@@ -99,7 +99,7 @@ export default function Contact() {
           <div>
             <GiLetterBomb />
             <h4>Email Adresimiz</h4>
-            <p>iletisim@baklavar.com</p>
+            <p>iletisim@rfcbakliyat.com</p>
             <p>fatihozhan27@gmail.com</p>
           </div>
           <div>

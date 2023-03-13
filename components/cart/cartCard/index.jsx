@@ -1,28 +1,31 @@
 import styles from "./styles.module.scss";
 import Image from "next/image";
 import { GrClose } from "react-icons/gr";
+import { useDispatch, useSelector } from "react-redux";
+import { increaseQty, descreaseQty, deleteItem } from "@/store/cartSlice";
 
-export default function CartCard() {
+export default function CartCard({ product }) {
+  const dispatch = useDispatch();
   return (
     <div className={styles.card}>
       <div className={styles.card__left}>
-        <GrClose />
+        <GrClose onClick={() => dispatch(deleteItem(product.id))} />
         <Image
-          src={"/images/products/tomatoes.jpg"}
+          src={product.images[0]}
           height="90"
           width={"90"}
           alt="ürün resmi"
         />
-        <h4>Domatesler, domatesler on numara domatesler</h4>
+        <h4>{product.name}</h4>
       </div>
       <div className={styles.card__right}>
-        <p> 12.00 ₺ / adet </p>
+        <p> {product.price.toFixed(2)} ₺ / adet </p>
         <div>
-          <span>-</span>
-          <span>2</span>
-          <span>+</span>
+          <span onClick={() => dispatch(descreaseQty(product.id))}>-</span>
+          <span> {product.qty} </span>
+          <span onClick={() => dispatch(increaseQty(product.id))}>+</span>
         </div>
-        <p> Total : 24.00 ₺ </p>
+        <p> Total : {(product.price * product.qty).toFixed(2)} ₺ </p>
       </div>
     </div>
   );

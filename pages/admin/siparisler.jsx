@@ -70,7 +70,7 @@ const expandedRowRender = () => {
       key: i.toString(),
       fotograf: <Image src="/images/customer/customer1.jpeg" height={50} width="50" alt="Kullanıcı Resmi" />,
       kullanici: "Cevher KARAMAN",
-      email: "Cevo123@baklavar.com",
+      email: "Cevo123@rfcbakliyat.com",
       kargoDetaylari: "Bekliyor",
     });
   }

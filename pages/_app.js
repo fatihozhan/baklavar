@@ -8,13 +8,16 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { store } from "@/store/store";
 import { Provider } from "react-redux";
-
 import NProgress from "nprogress";
 import AdminLayout from "@/components/adminLayout";
+import { PersistGate } from "redux-persist/lib/integration/react";
+import { persistStore } from "redux-persist";
 const space = Space_Grotesk({
   subsets: ["latin-ext"],
   weight: ["400", "500", "600", "700"],
 });
+
+let persistor = persistStore(store);
 
 export default function App({ Component, pageProps }) {
   const router = useRouter();
@@ -29,17 +32,19 @@ export default function App({ Component, pageProps }) {
     <>
       <Head></Head>
       <Provider store={store}>
-        {router.pathname.includes("/admin") ? (
-          <>
-            <AdminLayout>
+        <PersistGate loading={null} persistor={persistor}>
+          {router.pathname.includes("/admin") ? (
+            <>
+              <AdminLayout>
+                <Component {...pageProps} />
+              </AdminLayout>
+            </>
+          ) : (
+            <Layout>
               <Component {...pageProps} />
-            </AdminLayout>
-          </>
-        ) : (
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
-        )}
+            </Layout>
+          )}
+        </PersistGate>
       </Provider>
     </>
   );
