@@ -24,7 +24,7 @@ export default function AddressModal({
     city: currentAddress ? currentAddress.city : "",
     ilce: currentAddress ? currentAddress.state : "",
     mahalle: currentAddress ? currentAddress.mahalle : "",
-    zipCode: currentAddress ? currentAddress.postCode : "",
+    zipCode: currentAddress ? currentAddress.zipCode : "",
     adres: currentAddress ? currentAddress.address1 : "",
     baslik: currentAddress ? currentAddress.title : "",
   };

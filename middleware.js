@@ -6,7 +6,7 @@ export async function middleware(req) {
   const session = await getToken({
     req,
     secret: process.env.SECRET_KEY,
-    secureCookie : process.env.NODE_ENV === "production",
+    secureCookie : /* process.env.NODE_ENV === "production" */ false,
   });
   if (pathname == "/checkout") {
     if (!session) {

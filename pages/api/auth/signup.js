@@ -14,12 +14,14 @@ const handler = nc({
 }).post(async (req, res) => {
   const { username, password, email, name } = req.body.values;
   await db.connectDb();
- const user = await User.findOne({ email });
-  if (user)
+  const user = await User.findOne({ email });
+  if (user) {
+    await db.disconnectDb();
     return res.json({
       message:
         "Bu e posta adresiyle daha önceden kayıt yapılmış. Lütfen giriş yapınız.",
     });
+  }
   const newPassword = await bcrypt.hash(password, 8);
   const newUser = await new User({
     name,
@@ -31,7 +33,7 @@ const handler = nc({
   return res.json({
     user: newUser,
     message: "Kayıt başarılı bir şekilde oluşturuldu lütfen giriş yapınız.",
-  }); 
+  });
 });
 
 export default handler;

@@ -1,5 +1,4 @@
 import db from "@/utils/db";
-import bcrypt from "bcrypt";
 import User from "@/models/User";
 import nc from "next-connect";
 

@@ -2,7 +2,6 @@ import "@/styles/globals.scss";
 import { SessionProvider } from "next-auth/react";
 import Layout from "../components/layout";
 import { Space_Grotesk } from "@next/font/google";
-import { useSpring, animated } from "@react-spring/web";
 import Head from "next/head";
 import "@/styles/nprogress.css";
 import { useRouter } from "next/router";

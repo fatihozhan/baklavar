@@ -7,18 +7,18 @@ import styles from "../styles/cart.module.scss";
 import { useSelector } from "react-redux";
 import db from "@/utils/db";
 import User from "@/models/User";
-import { getSession } from "next-auth/react";
-import {useState } from "react";
-import {turkeyCities} from '@/data/cities'
-import axios from "axios";
+import { useState } from "react";
+import { turkeyCities } from "@/data/cities";
+import { authOptions } from "./api/auth/[...nextauth]";
+import { getServerSession } from "next-auth";
 
 export default function CartPage({ user }) {
   const cart = useSelector((state) => state.cartSlice.cart);
   const [cities, setCities] = useState(turkeyCities);
 
-  const currentAddress = user?.addresses.find((addr) => addr.active == true);
-  const city = cities?.find((city) => city.alan_kodu == currentAddress.city);
-  const state = city?.ilceler?.find(
+  const currentAddress = user?.addresses.length > 0 && user.addresses.find((addr) => addr.active == true);
+  const city = currentAddress && cities?.find((city) => city.alan_kodu == currentAddress.city);
+  const state = user && city?.ilceler?.find(
     (ilce) => ilce.ilce_kodu == currentAddress.state
   );
   return (
@@ -69,20 +69,20 @@ export default function CartPage({ user }) {
                   <th>Kargo</th>
                   <td>
                     <div>
-                        <p>Sabit Fiyat : 20.00₺ </p>
-                        <p>
-                          Adres :{" "}
-                          <b>
-                            {" "}
-                            {currentAddress
-                              ? currentAddress.address1 +
-                                " " +
-                                state?.ilce_adi +
-                                "/" +
-                                city?.il_adi
-                              : "Türkiye"}
-                          </b>
-                        </p>
+                      <p>Sabit Fiyat : 20.00₺ </p>
+                      <p>
+                        Adres :{" "}
+                        <b>
+                          {" "}
+                          {currentAddress
+                            ? currentAddress.address1 +
+                              " " +
+                              state?.ilce_adi +
+                              "/" +
+                              city?.il_adi
+                            : "Türkiye"}
+                        </b>
+                      </p>
 
                       <Link href={"/hesabim?address=1"}>
                         <button className={styles.secondary_button}>
@@ -119,11 +119,10 @@ export default function CartPage({ user }) {
   );
 }
 
-export async function getServerSideProps({ req }) {
-  await db.connectDb();
-  const session = await getSession({ req });
-  const user = await User.findById(session.user.id).lean();
-  await db.disconnectDb();
+export async function getServerSideProps(context) {
+  const session = await getServerSession(context.req, context.res, authOptions);
+  await db.connectDb()
+  const user = await User.findById(session?.user?.id).lean();
   return {
     props: {
       user: JSON.parse(JSON.stringify(user)),

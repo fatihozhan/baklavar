@@ -27,7 +27,7 @@ async function connectDb() {
 //Eğer production modda isek database connection işleminden sonra bağlantıyı kapatıyoruz ki databasede bağlantı sürekli açık kalarak sistemi yormasın.
 async function disconnectDb() {
   if (connection.isConnected) {
-    if (process.env.NODE_ENV === "production") {
+    if (process.env.NODE_ENV === "development") {
       mongoose.disconnect();
       connection.isConnected = false;
     } else {

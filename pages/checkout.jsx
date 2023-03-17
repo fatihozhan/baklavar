@@ -9,6 +9,8 @@ import { RiCoupon3Line } from "react-icons/ri";
 import { useSelector } from "react-redux";
 import {turkeyCities} from '@/data/cities'
 import {countries as allCountries} from '@/data/countries'
+import { getServerSession } from "next-auth";
+import { authOptions } from "./api/auth/[...nextauth]";
 
 
 export default function Checkout({ user }) {
@@ -386,8 +388,17 @@ export default function Checkout({ user }) {
   );
 }
 
-export async function getServerSideProps({ req }) {
-  const session = await getSession({ req });
+export async function getServerSideProps(context) {
+  const session = await getServerSession(context.req, context.res, authOptions)
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    }
+  }
   await db.connectDb();
   const user = await User.findById(session.user.id);
   await db.disconnectDb();

@@ -3,8 +3,8 @@ import Link from "next/link";
 import Image from "next/image";
 import NavigatorBar from "@/components/navigatorBar";
 import styles from "@/styles/hesabim.module.scss";
-import { useMemo, useState } from "react";
-import { getSession, signOut, useSession } from "next-auth/react";
+import { useState } from "react";
+import { signOut, useSession } from "next-auth/react";
 import { Form, Input, message, Radio, Upload } from "antd";
 import axios from "axios";
 import {
@@ -25,6 +25,8 @@ import AddressCard from "@/components/account/addressCard";
 import AddressModal from "@/components/account/addressModal";
 import { useRouter } from "next/router";
 import {turkeyCities} from '@/data/cities'
+import { getServerSession } from "next-auth";
+import { authOptions } from "./api/auth/[...nextauth]";
 
 export default function MyAccount({ user }) {
   const router = useRouter();
@@ -399,8 +401,17 @@ export default function MyAccount({ user }) {
   );
 }
 
-export async function getServerSideProps(ctx) {
-  const session = await getSession(ctx);
+export async function getServerSideProps(context) {
+  const session = await getServerSession(context.req, context.res, authOptions)
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    }
+  }
   await db.connectDb();
   const user = await User.findById(session?.user?.id).lean();
   await db.disconnectDb();
