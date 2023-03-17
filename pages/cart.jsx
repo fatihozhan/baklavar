@@ -4,10 +4,33 @@ import Inputs from "@/components/input";
 import NavigatorBar from "@/components/navigatorBar";
 import { AiOutlineMinusSquare } from "react-icons/ai";
 import styles from "../styles/cart.module.scss";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import db from "@/utils/db";
+import User from "@/models/User";
+import { getSession } from "next-auth/react";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
-export default function CartPage() {
+export default function CartPage({ user }) {
   const cart = useSelector((state) => state.cartSlice.cart);
+  const [cities, setCities] = useState([]);
+  useEffect(() => {
+    async function getData() {
+      const cities = await axios
+        .get(
+          "https://raw.githubusercontent.com/snrylmz/il-ilce-json/master/js/il-ilce.json"
+        )
+        .then(({ data: { data } }) => data);
+      setCities(cities);
+    }
+    getData();
+  }, []);
+
+  const currentAddress = user?.addresses.find((addr) => addr.active == true);
+  const city = cities?.find((city) => city.alan_kodu == currentAddress.city);
+  const state = city?.ilceler?.find(
+    (ilce) => ilce.ilce_kodu == currentAddress.state
+  );
   return (
     <div className={styles.cart}>
       <NavigatorBar />
@@ -45,24 +68,51 @@ export default function CartPage() {
                 <tr>
                   <th>Subtotal</th>
                   <td>
-                    {cart?.reduce((prev, item) => prev + item.price * item.qty , 0)}
+                    {cart?.reduce(
+                      (prev, item) => prev + item.price * item.qty,
+                      0
+                    )}
                     ₺
                   </td>
                 </tr>
                 <tr>
                   <th>Kargo</th>
                   <td>
-                    <p>Sabit Fiyat : 20.00₺ </p>
-                    <p>
-                      Adres : <b>Türkiye</b>
-                    </p>
-                    <button>Adresi Değiştir</button>
+                    <div>
+                        <p>Sabit Fiyat : 20.00₺ </p>
+                        <p>
+                          Adres :{" "}
+                          <b>
+                            {" "}
+                            {currentAddress
+                              ? currentAddress.address1 +
+                                " " +
+                                state?.ilce_adi +
+                                "/" +
+                                city?.il_adi
+                              : "Türkiye"}
+                          </b>
+                        </p>
+
+                      <Link href={"/hesabim?address=1"}>
+                        <button className={styles.secondary_button}>
+                          Adresi Değiştir
+                        </button>
+                      </Link>
+                    </div>
                   </td>
                 </tr>
                 <tr>
                   <th>Toplam</th>
                   <td>
-                    <b> {cart?.reduce((prev, item) => prev + item.price * item.qty , 0) + 20.00} ₺</b>
+                    <b>
+                      {" "}
+                      {cart?.reduce(
+                        (prev, item) => prev + item.price * item.qty,
+                        0
+                      ) + 20.0}{" "}
+                      ₺
+                    </b>
                   </td>
                 </tr>
               </tbody>
@@ -77,4 +127,16 @@ export default function CartPage() {
       </div>
     </div>
   );
+}
+
+export async function getServerSideProps({ req }) {
+  await db.connectDb();
+  const session = await getSession({ req });
+  const user = await User.findById(session.user.id).lean();
+  await db.disconnectDb();
+  return {
+    props: {
+      user: JSON.parse(JSON.stringify(user)),
+    },
+  };
 }

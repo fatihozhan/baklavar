@@ -6,20 +6,24 @@ import NavigatorBar from "../components/navigatorBar";
 import { useEffect, useState } from "react";
 import ProductCard from "@/components/product/productCart";
 import ProductModal from "@/components/product/productModal";
+import {useSelector} from 'react-redux/'
 export default function Shop() {
   const [load, setLoad] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [productId, setProductId] = useState(0)
   useEffect(() => {
     setLoad(true);
   }, []);
-  const handleModal = (slug) => {
+  const handleModal = (id) => {
+    setProductId(id)
     setIsModalOpen(true);
   };
+  const cart = useSelector((state) => state.cartSlice.cart)
 
   return (
     <div className={styles.shop}>
       <NavigatorBar />
-      <ProductModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
+      <ProductModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} productId={productId} cart={cart} />
       <div className={styles.shop__wrapper}>
         <div className={styles.container}>
           <div className={styles.shop__search}>
@@ -165,8 +169,9 @@ export default function Shop() {
               {products.map((product, i) => (
                 <ProductCard
                   key={i}
-                  handleModal={handleModal}
+                  handleModal={()=> handleModal(product.id)}
                   product={product}
+                  cart = {cart}
                 />
               ))}
             </div>

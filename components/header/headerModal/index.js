@@ -7,10 +7,12 @@ import { useRef, useState } from "react";
 import ModalInput from "./modalInput";
 import styles from "./styles.module.scss";
 import axios from "axios";
+import Loader from "@/components/loader";
 import { toast } from "react-toastify";
 
 export default function HeaderModal({ setIsModalOpen, isModalOpen }) {
   const [tab, setTab] = useState(1);
+  const [loading, setLoading] = useState(false);
   const formRef = useRef(null);
 
   const changeHandler = (e) => {};
@@ -21,14 +23,19 @@ export default function HeaderModal({ setIsModalOpen, isModalOpen }) {
       password: values.password,
     };
     try {
+      setLoading(true);
       const res = await signIn("credentials", options);
-      console.log(res);
-      if (res.error) return toast.error(res.error);
+      if (res.error) {
+        setLoading(false);
+        return toast.error(res.error);
+      }
+      setLoading(false);
       toast.success("Giriş Başarılı...");
       setTimeout(() => {
         setIsModalOpen(false);
       }, 1300);
     } catch (error) {
+      setLoading(false);
       console.log(error);
     }
   };
@@ -37,20 +44,25 @@ export default function HeaderModal({ setIsModalOpen, isModalOpen }) {
   };
   const handleSubmit = async (values) => {
     try {
+      setLoading(true);
       const { data } = await axios.post("/api/auth/signup", { values });
       if (data.user) {
+        setLoading(false);
         toast.success(data.message);
         setTab(1);
         handleReset();
       } else {
+        setLoading(false);
         toast.error(data.message);
       }
     } catch (error) {
+      setLoading(false);
       console.log(error);
     }
   };
   return (
     <div>
+      {loading && <Loader />}
       <Modal
         className={styles.modal}
         title=""
@@ -85,7 +97,6 @@ export default function HeaderModal({ setIsModalOpen, isModalOpen }) {
             <Form.Item
               rules={[
                 {
-                  type: "email",
                   message: "Lütfen geçerli bir email giriniz",
                   required: true,
                 },
@@ -123,11 +134,7 @@ export default function HeaderModal({ setIsModalOpen, isModalOpen }) {
             <Checkbox onChange={changeHandler}>Beni Hatırla</Checkbox>
 
             <footer className={styles.modal__footer}>
-              <button
-                type="submit"
-              >
-                Giriş Yap
-              </button>
+              <button type="submit">Giriş Yap</button>
               <Link href="">Şifreni mi unuttun?</Link>
             </footer>
           </Form>

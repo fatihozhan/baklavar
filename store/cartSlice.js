@@ -56,7 +56,12 @@ export const cartSlice = createSlice({
         }
         state.cart.push({ ...action.payload.product, qty: action.payload.qty });
       } else {
-        state.cart.push({ ...action.payload, qty: 1 });
+        const control = state.cart.find(
+          (product) => product.id == action.payload.product.id
+        );
+        if (!control) {
+          state.cart.push({ ...action.payload.product, qty: 1 });
+        }
       }
     },
     deleteItem: (state, action) => {

@@ -48,8 +48,8 @@
       font-weight: 600;
       margin: 20px auto;
     }
-    @media (max-width : 600px) {
-        flex-direction: column;
+    @media (max-width: 600px) {
+      flex-direction: column;
     }
   }
   &__billing {
@@ -94,3 +94,4 @@
     }
   }
 }
+

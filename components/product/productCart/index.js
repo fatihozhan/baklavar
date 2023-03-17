@@ -29,7 +29,7 @@ export default function ProductCard({ product, handleModal, cart }) {
         ) : (
           <BsHandbag
             className={styles.card__img_cartIcon}
-            onClick={() => dispatch(addToCart(product))}
+            onClick={() => dispatch(addToCart({product}))}
           />
         )}
 

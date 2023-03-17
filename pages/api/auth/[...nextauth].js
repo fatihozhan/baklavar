@@ -21,16 +21,24 @@ export const authOptions = {
         // You can also use the `req` object to obtain additional parameters
         // (i.e., the request IP address)
         const { email, password } = credentials;
-        const test = await User.findOne({ email });
+        await db.connectDb();
+        const test =
+          (await User.findOne({ email })) ||
+          (await User.findOne({ username: email }));
         if (!test) {
+          await db.disconnectDb();
           throw new Error(
             "Bu email adresiyle kayıtlı kullanıcı bulunamamıştır."
           );
         } else {
           const testPassword = await bcrypt.compare(password, test.password);
           if (!testPassword) {
-            throw new Error("Kullanıcı adı ve parola yanlış.");
+            await db.disconnectDb();
+
+            throw new Error("Kullanıcı adı veya parola yanlış.");
           } else {
+            await db.disconnectDb();
+
             return test;
           }
         }
@@ -41,18 +49,18 @@ export const authOptions = {
 
   callbacks: {
     async session({ session, token }) {
+      await db.connectDb();
       const user = await User.findById(token.sub);
       session.user.id = token.sub;
-      session.user.name = user.name;
+      session.user.role = user.role || "user";
+      token.role = user.role || "user";
+      await db.disconnectDb();
       return session;
     },
   },
-  secret: process.env.NEXT_PUBLIC_SECRET,
+  secret: process.env.SECRET_KEY,
   session: {
     strategy: "jwt",
-  },
-  pages: {
-    singIn: "/my-account",
   },
 };
 export default NextAuth(authOptions);

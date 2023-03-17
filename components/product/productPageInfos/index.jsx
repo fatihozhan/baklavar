@@ -7,6 +7,7 @@ import { IoIosArrowBack } from "react-icons/io";
 import { addToCart } from "@/store/cartSlice";
 import { useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 export default function ProductInfos({ product, cart }) {
   const router = useRouter();
@@ -17,8 +18,16 @@ export default function ProductInfos({ product, cart }) {
       : 1
   );
   useEffect(() => {
-    setQty(cart.find((p) => p.id == product.id)?.qty ? cart.find((p) => p.id == product.id).qty : 1);
+    setQty(
+      cart.find((p) => p.id == product.id)?.qty
+        ? cart.find((p) => p.id == product.id).qty
+        : 1
+    );
   }, [product]);
+  const addToCartHandler = (product, qty) => {
+    const res = dispatch(addToCart({ product, qty }));
+    res && toast.success("Sepet güncelleme başarılı")
+  };
 
   return (
     <>
@@ -67,7 +76,7 @@ export default function ProductInfos({ product, cart }) {
             </div>
             <div className={styles.product__infos_content_footer_buttons}>
               <button
-                onClick={() => dispatch(addToCart({ product, qty }))}
+                onClick={() => addToCartHandler(product, qty)}
                 className={styles.primary_button}
               >
                 Sepete Ekle

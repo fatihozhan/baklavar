@@ -22,6 +22,9 @@ $admin_smoke_black: #17a2b8;
     font-size: 24px;
   }
 }
+.ant-modal * {
+  font-family: "Space Grotesk"!important;
+}
 
 .primary_button {
   background-color: $koyu_yesil;
@@ -107,9 +110,9 @@ $admin_smoke_black: #17a2b8;
 
 .ant-form * {
   font-family: "Space Grotesk" !important;
-  .ant-form-item-label {
+  /*   .ant-form-item-label {
     font-size: 1.4rem;
-  }
+  } */
 }
 .ant-pagination-item,
 .ant-pagination-prev,
@@ -193,4 +196,30 @@ $admin_smoke_black: #17a2b8;
   font-family: "Space Grotesk" !important;
   line-height: 25px;
   font-size: 1rem;
+}
+
+.ant-upload-drag {
+  padding-right: 10px;
+  padding-left: 10px;
+  &:hover {
+    border-color: $koyu_yesil !important;
+  }
+}
+.spinner {
+  position: absolute;
+  left: 50vw;
+  top: 50vh;
+}
+
+.ant-select-item-option-content{
+  font-family: "Space Grotesk"!important;
+}
+.select {
+  div {
+    padding: 0 !important;
+    span {
+      top: 0 !important;
+      left: 10px;
+    }
+  }
 }

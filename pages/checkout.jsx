@@ -1,16 +1,60 @@
-import Inputs from "@/components/input";
+import User from "@/models/User";
 import styles from "@/styles/checkout.module.scss";
+import db from "@/utils/db";
 import { Checkbox, Form, Input, Radio, Select } from "antd";
-import Image from "next/image";
-import { useState } from "react";
+import axios from "axios";
+import { getSession } from "next-auth/react";
+import { useEffect, useState } from "react";
 import { RiCoupon3Line } from "react-icons/ri";
+import { useSelector } from "react-redux";
 
-export default function Checkout() {
+export default function Checkout({ user }) {
   const [coupontoggle, setCoupontoggle] = useState(false);
   const [diffaddrtoggle, setDiffaddrtoggle] = useState(false);
-  const [value, setValue] = useState(1);
-  const onChange = (e) => {
-    setValue(e.target.value);
+  const [ilce, setIlce] = useState();
+  const [payment, setPayment] = useState("");
+  const [countries, setCountries] = useState();
+  const [cities, setCities] = useState([]);
+  const cart = useSelector((state) => state.cartSlice.cart);
+  const activeAddress = user.addresses.find((addr) => addr.active);
+  useEffect(() => {
+    async function getData() {
+      setCountries(
+        await axios
+          .get(
+            "https://gist.githubusercontent.com/erhan/74771d87a9707cde94b13417c1460537/raw/e48de9e790182baa85de1c3f1a4d43770a2372b9/ulke.json"
+          )
+          .then(({ data }) => data)
+      );
+      setCities(
+        await axios
+          .get(
+            "https://raw.githubusercontent.com/snrylmz/il-ilce-json/master/js/il-ilce.json"
+          )
+          .then(({ data: { data } }) => data)
+      );
+    }
+    getData();
+  }, []);
+  const city = cities?.find((city) => city.alan_kodu == activeAddress.city);
+  const state = city?.ilceler.find((c) => c.ilce_kodu == activeAddress.state);
+  const cityHandle = (e) => {
+    setIlce(cities?.find((c) => c.alan_kodu == e));
+  };
+  const handlePayment = (e) => {
+    setPayment(e);
+  };
+
+  const initialValues = {
+    name: activeAddress ? activeAddress.firstName : "",
+    surname: activeAddress ? activeAddress.lastName : "",
+    country: activeAddress.country ? activeAddress.country : "TR",
+    street: activeAddress ? activeAddress.address1 : "",
+    province: activeAddress.city ? activeAddress.city : "",
+    ilce: activeAddress.state ? activeAddress.state : "",
+    postcode: activeAddress ? activeAddress.zipCode : "",
+    cellphone: activeAddress ? activeAddress.phoneNumber : "",
+    email: activeAddress ? user.email : "",
   };
   return (
     <div className={styles.checkout}>
@@ -28,7 +72,7 @@ export default function Checkout() {
               <p>Eğer kuponun varsa aşağıdan uygulayabilirsin.</p>
             </div>
             <div>
-              <Inputs placeholder={"Kupon Kod"} />
+              <Input placeholder={"Kupon Kod"} />
               <button className={styles.primary_button}>Kupon Uygula</button>
             </div>
           </div>
@@ -37,7 +81,7 @@ export default function Checkout() {
           <div className={styles.checkout__billing}>
             <h3>Fatura Detayları</h3>
             <div>
-              <Form layout="vertical">
+              <Form layout="vertical" initialValues={initialValues}>
                 <div>
                   <Form.Item
                     label="Adınız"
@@ -46,7 +90,7 @@ export default function Checkout() {
                       { required: true, message: "Lütfen adınızı giriniz." },
                     ]}
                   >
-                    <Inputs placeholder={"Adınız"} name="name" />
+                    <Input placeholder={"Adınız"} />
                   </Form.Item>
                   <Form.Item
                     label="Soyadınız"
@@ -55,11 +99,11 @@ export default function Checkout() {
                       { required: true, message: "Lütfen soyadınızı giriniz." },
                     ]}
                   >
-                    <Inputs placeholder={"Soyadınız"} name="surname" />
+                    <Input placeholder={"Soyadınız"} />
                   </Form.Item>
                 </div>
                 <Form.Item label="Şirket Adı" name={"company"}>
-                  <Inputs placeholder={"Şirket Adı"} name="company" />
+                  <Input placeholder={"Şirket Adı"} />
                 </Form.Item>
                 <Form.Item
                   label="Ülke"
@@ -71,28 +115,13 @@ export default function Checkout() {
                     },
                   ]}
                 >
-                  <Select>
-                    <Select.Option value="turkey">Türkiye</Select.Option>
+                  <Select className={styles.select}>
+                    {countries?.map((country, i) => (
+                      <Select.Option key={i} value={country?.code}>
+                        {country?.name}
+                      </Select.Option>
+                    ))}
                   </Select>
-                </Form.Item>
-                <Form.Item
-                  label="Cadde"
-                  name={"street"}
-                  rules={[{ required: true, message: "Caddenizi giriniz." }]}
-                >
-                  <Inputs
-                    style={{ marginTop: "20px" }}
-                    placeholder={"Cadde adı ve Kapı No"}
-                    name="street"
-                  />
-                  <Inputs placeholder={"Apartman adı"} name="apartment" />
-                </Form.Item>
-                <Form.Item
-                  label="Posta Kodu"
-                  name={"postcode"}
-                  rules={[{ required: true, message: "Posta Kodunu giriniz." }]}
-                >
-                  <Inputs placeholder={"Posta Kodu"} name="postcode" />
                 </Form.Item>
                 <Form.Item
                   label="Şehir"
@@ -104,10 +133,44 @@ export default function Checkout() {
                     },
                   ]}
                 >
-                  <Select>
-                    <Select.Option value="nevsehir">Nevşehir</Select.Option>
+                  <Select className={styles.select} onChange={cityHandle}>
+                    {cities.map((city, i) => (
+                      <Select.Option key={i} value={city?.alan_kodu}>
+                        {city?.il_adi}
+                      </Select.Option>
+                    ))}
                   </Select>
                 </Form.Item>
+                <Form.Item
+                  label="İlçe"
+                  name={"ilce"}
+                  rules={[
+                    {
+                      required: true,
+                      message: "Lütfen yaşadığınız ilce giriniz.",
+                    },
+                  ]}
+                >
+                  <Select className={styles.select}>
+                    {ilce?.ilceler.map((ilce, i) => (
+                      <Select.Option key={i} value={ilce?.ilce_kodu}>
+                        {ilce?.ilce_adi}
+                      </Select.Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+
+                <Form.Item
+                  label="Posta Kodu"
+                  name={"postcode"}
+                  rules={[{ required: true, message: "Posta Kodunu giriniz." }]}
+                >
+                  <Input placeholder={"Posta Kodu"} />
+                </Form.Item>
+                <Form.Item label="Apartman Adı" name={"apartman"}>
+                  <Input placeholder={"Apartman adı"} />
+                </Form.Item>
+
                 <Form.Item
                   label="Telefon No"
                   name={"cellphone"}
@@ -115,7 +178,7 @@ export default function Checkout() {
                     { required: true, message: "Telefon numaranızı giriniz." },
                   ]}
                 >
-                  <Inputs placeholder={"Telefon Numarası"} name="cellphone" />
+                  <Input placeholder={"Telefon Numarası"} />
                 </Form.Item>
                 <Form.Item
                   label="Email"
@@ -124,7 +187,7 @@ export default function Checkout() {
                     { required: true, message: "Email adresinizi giriniz." },
                   ]}
                 >
-                  <Inputs placeholder={"Email"} name="email" />
+                  <Input placeholder={"Email"} />
                 </Form.Item>
               </Form>
             </div>
@@ -151,7 +214,7 @@ export default function Checkout() {
                           },
                         ]}
                       >
-                        <Inputs placeholder={"Adınız"} name="addrname" />
+                        <Input placeholder={"Adınız"} name="addrname" />
                       </Form.Item>
                       <Form.Item
                         label="Soyadınız"
@@ -163,11 +226,11 @@ export default function Checkout() {
                           },
                         ]}
                       >
-                        <Inputs placeholder={"Soyadınız"} name="addrsurname" />
+                        <Input placeholder={"Soyadınız"} name="addrsurname" />
                       </Form.Item>
                     </div>
                     <Form.Item label="Şirket Adı" name={"addrcompany"}>
-                      <Inputs placeholder={"Şirket Adı"} name="addrcompany" />
+                      <Input placeholder={"Şirket Adı"} name="addrcompany" />
                     </Form.Item>
                     <Form.Item
                       label="Ülke"
@@ -179,7 +242,7 @@ export default function Checkout() {
                         },
                       ]}
                     >
-                      <Select>
+                      <Select className={styles.select}>
                         <Select.Option value="turkey">Türkiye</Select.Option>
                       </Select>
                     </Form.Item>
@@ -190,14 +253,14 @@ export default function Checkout() {
                         { required: true, message: "Caddenizi giriniz." },
                       ]}
                     >
-                      <Inputs
+                      <Input
                         style={{ marginTop: "20px" }}
                         placeholder={"Cadde adı ve Kapı No"}
                         name="street"
                       />
                     </Form.Item>
                     <Form.Item label="Apartman Adı">
-                      <Inputs
+                      <Input
                         placeholder={"Apartman adı"}
                         name="addrapartment"
                       />
@@ -209,7 +272,7 @@ export default function Checkout() {
                         { required: true, message: "Posta Kodunu giriniz." },
                       ]}
                     >
-                      <Inputs placeholder={"Posta Kodu"} name="addrpostcode" />
+                      <Input placeholder={"Posta Kodu"} name="addrpostcode" />
                     </Form.Item>
                     <Form.Item
                       label="Şehir"
@@ -221,7 +284,7 @@ export default function Checkout() {
                         },
                       ]}
                     >
-                      <Select>
+                      <Select className={styles.select}>
                         <Select.Option value="nevsehir">Nevşehir</Select.Option>
                       </Select>
                     </Form.Item>
@@ -235,7 +298,7 @@ export default function Checkout() {
                         },
                       ]}
                     >
-                      <Inputs
+                      <Input
                         placeholder={"Telefon Numarası"}
                         name="addrcellphone"
                       />
@@ -250,7 +313,7 @@ export default function Checkout() {
                         },
                       ]}
                     >
-                      <Inputs placeholder={"Email"} name="addremail" />
+                      <Input placeholder={"Email"} name="addremail" />
                     </Form.Item>
                   </Form>
                 </div>
@@ -273,14 +336,25 @@ export default function Checkout() {
           <table>
             <thead>
               <tr>
-                <th> Domatesler Domatesler 10 Numara Domatesler </th>
-                <td> 24.00 ₺ </td>
+                <th> {cart.map((item) => item.name + ",  ")} </th>
+                <td>
+                  {cart
+                    .reduce((prev, item) => prev + item.price * item.qty, 0)
+                    .toFixed(2)}
+                  ₺
+                </td>
               </tr>
             </thead>
             <tbody>
               <tr>
                 <th>Subtotal </th>
-                <td> 24.00 ₺ </td>
+                <td>
+                  {" "}
+                  {cart
+                    .reduce((prev, item) => prev + item.price * item.qty, 0)
+                    .toFixed(2)}{" "}
+                  ₺{" "}
+                </td>
               </tr>
               <tr>
                 <th> Kargolama </th>
@@ -290,23 +364,33 @@ export default function Checkout() {
               </tr>
               <tr>
                 <th> Total </th>
-                <td> 44.00 ₺ </td>
+                <td>
+                  {" "}
+                  {(
+                    cart.reduce(
+                      (prev, item) => prev + item.price * item.qty,
+                      0
+                    ) + 20.0
+                  ).toFixed(2)}{" "}
+                  ₺{" "}
+                </td>
               </tr>
             </tbody>
           </table>
         </div>
         <div className={styles.checkout__payment}>
-          <Radio.Group onChange={onChange} value={value}>
+          <Radio.Group
+            defaultValue={user.defaultPaymentMethod}
+            onChange={handlePayment}
+          >
             <div>
-              <Radio value={1}>Kredi Kartı ile Ödeme</Radio>
+              <Radio value={"credit card"}>Kredi Kartı ile Ödeme</Radio>
             </div>
             <div>
-              <Radio value={2}>Kapıda Ödeme</Radio>
+              <Radio value={"door"}>Kapıda Ödeme</Radio>
             </div>
             <div>
-              <Radio value={3}>
-                PayPal
-              </Radio>
+              <Radio value={"havale"}>Havale</Radio>
             </div>
           </Radio.Group>
           <button className={styles.primary_button}>Sipariş Ver</button>
@@ -314,4 +398,16 @@ export default function Checkout() {
       </div>
     </div>
   );
+}
+
+export async function getServerSideProps({ req }) {
+  const session = await getSession({ req });
+  await db.connectDb();
+  const user = await User.findById(session.user.id);
+  await db.disconnectDb();
+  return {
+    props: {
+      user: JSON.parse(JSON.stringify(user)),
+    },
+  };
 }

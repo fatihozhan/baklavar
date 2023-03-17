@@ -67,9 +67,27 @@
         width: 200px;
         padding: 10px;
       }
+      tr {
+        &:nth-child(2) {
+          td {
+            div {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              @media (max-width : 740px) {
+                flex-direction: column;
+                gap: 20px;
+              }
+            }
+            button{
+              padding: 8px;
+            }
+          }
+        }
+      }
     }
-    &_items{
-      &:not(:first-of-type){
+    &_items {
+      &:not(:first-of-type) {
         margin-top: 20px;
       }
     }

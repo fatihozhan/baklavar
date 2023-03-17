@@ -90,7 +90,9 @@ export default function Top() {
             <Link href="/cart">
               <button className={styles.primary_button}>Sepete Git</button>
             </Link>
-            <button className={styles.primary_button}>Sipariş Ver</button>
+            <Link href="/checkout">
+              <button className={styles.primary_button}>Sipariş Ver</button>
+            </Link>
           </div>
         </>
       )}
@@ -296,7 +298,7 @@ export default function Top() {
             </div>
             <div className={styles.top__user_infos}>
               {session ? (
-                session.user.name
+                <Link href={"/hesabim"}>{session.user.name}</Link>
               ) : (
                 <p
                   onClick={() => setIsModalOpen(true)}

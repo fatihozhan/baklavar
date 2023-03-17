@@ -8,7 +8,7 @@ export default function ProductModal({
   productId,
   isModalOpen,
   setIsModalOpen,
-  cart
+  cart,
 }) {
   const product = products.find((prod) => prod.id == productId);
 
@@ -34,10 +34,4 @@ export default function ProductModal({
       </div>
     </Modal>
   );
-}
-
-export async function getServerSideProps(ctx) {
-  return {
-    props: {},
-  };
 }

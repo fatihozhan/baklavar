@@ -1,4 +1,5 @@
 import styles from "./styles.module.scss";
+import BackToTop from 'react-back-to-top-button'
 import Link from "next/link";
 import {
   AiFillDashboard,
@@ -13,6 +14,7 @@ import {
 } from "react-icons/md";
 import { FaThList } from "react-icons/fa";
 import { ImUsers } from "react-icons/im";
+import { IoIosArrowUp } from "react-icons/io";
 import { FcSalesPerformance } from "react-icons/fc";
 import { IoReorderFour } from "react-icons/io5";
 import { Input } from "antd";
@@ -23,7 +25,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { change } from "@/store/expandSlice";
 
 export default function AdminLayout({ children }) {
-  const { pathname } = useRouter();
+  const { pathname, push } = useRouter();
   const isExpanded = useSelector((state) => state.expandSlice.value);
   const dispatch = useDispatch();
   return (
@@ -47,7 +49,7 @@ export default function AdminLayout({ children }) {
               width={"50"}
               alt="site logosu"
             />
-            <h5> RFC Bakliyat</h5>
+            <h5 onClick={()=> push("/")} > RFC Bakliyat</h5>
           </div>
           <div>
             <Image
@@ -189,6 +191,16 @@ export default function AdminLayout({ children }) {
       >
         {children}
       </main>
+      <BackToTop
+        showOnScrollUp
+        showAt={100}
+        speed={1500}
+        easing="easeInOutQuint"
+      >
+        <span className={styles.backToTop}>
+          <IoIosArrowUp />
+        </span>
+      </BackToTop>
     </div>
   );
 }
