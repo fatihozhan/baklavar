@@ -4,38 +4,24 @@ import db from "@/utils/db";
 import { Checkbox, Form, Input, Radio, Select } from "antd";
 import axios from "axios";
 import { getSession } from "next-auth/react";
-import { useEffect, useState } from "react";
+import {useState } from "react";
 import { RiCoupon3Line } from "react-icons/ri";
 import { useSelector } from "react-redux";
+import {turkeyCities} from '@/data/cities'
+import {countries as allCountries} from '@/data/countries'
+
 
 export default function Checkout({ user }) {
   const [coupontoggle, setCoupontoggle] = useState(false);
   const [diffaddrtoggle, setDiffaddrtoggle] = useState(false);
   const [ilce, setIlce] = useState();
   const [payment, setPayment] = useState("");
-  const [countries, setCountries] = useState();
-  const [cities, setCities] = useState([]);
+  const [countries, setCountries] = useState(allCountries);
+  const [cities, setCities] = useState(turkeyCities);
   const cart = useSelector((state) => state.cartSlice.cart);
   const activeAddress = user.addresses.find((addr) => addr.active);
-  useEffect(() => {
-    async function getData() {
-      setCountries(
-        await axios
-          .get(
-            "https://gist.githubusercontent.com/erhan/74771d87a9707cde94b13417c1460537/raw/e48de9e790182baa85de1c3f1a4d43770a2372b9/ulke.json"
-          )
-          .then(({ data }) => data)
-      );
-      setCities(
-        await axios
-          .get(
-            "https://raw.githubusercontent.com/snrylmz/il-ilce-json/master/js/il-ilce.json"
-          )
-          .then(({ data: { data } }) => data)
-      );
-    }
-    getData();
-  }, []);
+
+  
   const city = cities?.find((city) => city.alan_kodu == activeAddress.city);
   const state = city?.ilceler.find((c) => c.ilce_kodu == activeAddress.state);
   const cityHandle = (e) => {

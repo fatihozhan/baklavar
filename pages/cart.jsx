@@ -8,23 +8,13 @@ import { useSelector } from "react-redux";
 import db from "@/utils/db";
 import User from "@/models/User";
 import { getSession } from "next-auth/react";
-import { useEffect, useState } from "react";
+import {useState } from "react";
+import {turkeyCities} from '@/data/cities'
 import axios from "axios";
 
 export default function CartPage({ user }) {
   const cart = useSelector((state) => state.cartSlice.cart);
-  const [cities, setCities] = useState([]);
-  useEffect(() => {
-    async function getData() {
-      const cities = await axios
-        .get(
-          "https://raw.githubusercontent.com/snrylmz/il-ilce-json/master/js/il-ilce.json"
-        )
-        .then(({ data: { data } }) => data);
-      setCities(cities);
-    }
-    getData();
-  }, []);
+  const [cities, setCities] = useState(turkeyCities);
 
   const currentAddress = user?.addresses.find((addr) => addr.active == true);
   const city = cities?.find((city) => city.alan_kodu == currentAddress.city);

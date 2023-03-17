@@ -16,7 +16,7 @@ import { GiButterflyFlower, GiLindenLeaf, GiJellyBeans } from "react-icons/gi";
 import { CiUser } from "react-icons/ci";
 import styles from "./styles.module.scss";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import ProductModal from "../product/productModal";
 const { Option } = Select;
 const { Panel } = Collapse;

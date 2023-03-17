@@ -3,7 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import NavigatorBar from "@/components/navigatorBar";
 import styles from "@/styles/hesabim.module.scss";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { getSession, signOut, useSession } from "next-auth/react";
 import { Form, Input, message, Radio, Upload } from "antd";
 import axios from "axios";
@@ -24,6 +24,7 @@ import Loader from "@/components/loader";
 import AddressCard from "@/components/account/addressCard";
 import AddressModal from "@/components/account/addressModal";
 import { useRouter } from "next/router";
+import {turkeyCities} from '@/data/cities'
 
 export default function MyAccount({ user }) {
   const router = useRouter();
@@ -33,20 +34,9 @@ export default function MyAccount({ user }) {
   const [loading, setLoading] = useState(false);
   const [modalKey, setModalKey] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [cities, setCities] = useState([]);
+  const [cities, setCities] = useState(turkeyCities);
   const { data: session } = useSession();
 
-  useEffect(() => {
-    async function getData() {
-      const cities = await axios
-        .get(
-          "https://raw.githubusercontent.com/snrylmz/il-ilce-json/master/js/il-ilce.json"
-        )
-        .then(({ data: { data } }) => data);
-      setCities(cities);
-    }
-    getData();
-  }, []);
 
   const showModal = async (address) => {
     setLoading(true);
