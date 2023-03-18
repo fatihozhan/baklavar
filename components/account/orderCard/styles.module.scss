@@ -1,0 +1,29 @@
+.card {
+  border: 1px solid $silik_gri;
+  border-radius: 3px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  &__title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: $smoke_gri;
+    border-bottom: 1px solid $silik_gri;
+    padding: 20px;
+    div{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        h5{
+            font-weight: 500;
+            color: $silik_yazi_rengi;
+        }
+        &:last-of-type{
+            p{
+                color: $koyu_yesil;
+                font-weight: 500;
+            }
+        }
+    }
+  }
+}

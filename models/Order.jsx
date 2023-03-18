@@ -12,8 +12,8 @@ const orderSchema = new mongoose.Schema(
     products: [
       {
         product: {
-          type: ObjectId,
-          ref: "Product",
+          type: /* ObjectId */ Number,
+          // ref: "Product",
         },
         name: {
           type: String,
@@ -44,6 +44,12 @@ const orderSchema = new mongoose.Schema(
           type: String,
         },
         address1: {
+          type: String,
+        },
+        apartman: {
+          type: String,
+        },
+        mahalle: {
           type: String,
         },
         city: {
@@ -99,6 +105,9 @@ const orderSchema = new mongoose.Schema(
     },
     deliveredAt: {
       type: Date,
+    },
+    notes: {
+      type: String,
     },
   },
   {

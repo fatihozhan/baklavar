@@ -15,7 +15,6 @@ export default function AddressModal({
   modalKey,
 }) {
   const formRef = useRef(null);
-
   const [selectedCity, setSelectedCity] = useState("");
   const initialValues = {
     name: currentAddress ? currentAddress.firstName : "",
@@ -114,7 +113,7 @@ export default function AddressModal({
               name={"name"}
               label="Ad"
             >
-              <Input value={initialValues.name} />
+              <Input />
             </Form.Item>
             <Form.Item
               rules={[{ required: true, message: "Zorunlu Alan" }]}
@@ -142,13 +141,14 @@ export default function AddressModal({
             >
               <Select
                 className={styles.selects}
-                onChange={(e) =>
-                  setSelectedCity(cities.find((city) => city.alan_kodu == e))
+                onChange={(e) =>{
+                  setSelectedCity(cities.find((city) => city.il_adi == e))
+                }
                 }
               >
                 {cities &&
                   cities?.map((city) => (
-                    <Select.Option key={city.alan_kodu} value={city.alan_kodu}>
+                    <Select.Option key={city.alan_kodu} value={city.il_adi}>
                       {JSON.parse(JSON.stringify(city.il_adi))}
                     </Select.Option>
                   ))}
@@ -165,7 +165,7 @@ export default function AddressModal({
               <Select className={styles.selects} disabled={!selectedCity}>
                 {selectedCity.ilceler &&
                   selectedCity?.ilceler.map((ilce) => (
-                    <Select.Option key={ilce.ilce_kodu} value={ilce.ilce_kodu}>
+                    <Select.Option key={ilce.ilce_kodu} value={ilce.ilce_adi}>
                       {ilce.ilce_adi}
                     </Select.Option>
                   ))}

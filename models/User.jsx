@@ -54,10 +54,10 @@ const userSchema = new mongoose.Schema(
           type: String,
         },
         city: {
-          type: Number,
+          type: String,
         },
         state: {
-          type: Number,
+          type: String,
         },
         title: {
           type: String,

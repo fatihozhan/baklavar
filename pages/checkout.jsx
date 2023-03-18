@@ -1,51 +1,108 @@
 import User from "@/models/User";
 import styles from "@/styles/checkout.module.scss";
 import db from "@/utils/db";
-import { Checkbox, Form, Input, Radio, Select } from "antd";
-import axios from "axios";
-import { getSession } from "next-auth/react";
-import {useState } from "react";
+import { Form, Input, Radio, Select } from "antd";
+import { useState } from "react";
 import { RiCoupon3Line } from "react-icons/ri";
 import { useSelector } from "react-redux";
-import {turkeyCities} from '@/data/cities'
-import {countries as allCountries} from '@/data/countries'
+import { turkeyCities } from "@/data/cities";
+import { countries as allCountries } from "@/data/countries";
 import { getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]";
-
+import axios from "axios";
+import Loader from "@/components/loader";
+import { toast } from "react-toastify";
+import { useRouter } from "next/router";
+import { useDispatch } from "react-redux";
+import { emptyCart } from "@/store/cartSlice";
 
 export default function Checkout({ user }) {
   const [coupontoggle, setCoupontoggle] = useState(false);
-  const [diffaddrtoggle, setDiffaddrtoggle] = useState(false);
+  // const [diffaddrtoggle, setDiffaddrtoggle] = useState(false);
   const [ilce, setIlce] = useState();
-  const [payment, setPayment] = useState("");
-  const [countries, setCountries] = useState(allCountries);
-  const [cities, setCities] = useState(turkeyCities);
+  const [loading, setLoading] = useState(false);
+  const [payment, setPayment] = useState(user.defaultPaymentMethod);
   const cart = useSelector((state) => state.cartSlice.cart);
   const activeAddress = user.addresses.find((addr) => addr.active);
+  const router = useRouter();
+  const dispatch = useDispatch();
 
-  
-  const city = cities?.find((city) => city.alan_kodu == activeAddress.city);
-  const state = city?.ilceler.find((c) => c.ilce_kodu == activeAddress.state);
   const cityHandle = (e) => {
-    setIlce(cities?.find((c) => c.alan_kodu == e));
+    setIlce(turkeyCities?.find((c) => c.alan_kodu == e));
   };
   const handlePayment = (e) => {
-    setPayment(e);
+    setPayment(e.target.value);
   };
 
   const initialValues = {
-    name: activeAddress ? activeAddress.firstName : "",
-    surname: activeAddress ? activeAddress.lastName : "",
+    firstName: activeAddress ? activeAddress.firstName : "",
+    lastName: activeAddress ? activeAddress.lastName : "",
     country: activeAddress.country ? activeAddress.country : "TR",
-    street: activeAddress ? activeAddress.address1 : "",
-    province: activeAddress.city ? activeAddress.city : "",
-    ilce: activeAddress.state ? activeAddress.state : "",
-    postcode: activeAddress ? activeAddress.zipCode : "",
-    cellphone: activeAddress ? activeAddress.phoneNumber : "",
-    email: activeAddress ? user.email : "",
+    address1: activeAddress ? activeAddress.address1 : "",
+    city: activeAddress.city ? activeAddress.city : "",
+    state: activeAddress.state ? activeAddress.state : "",
+    zipCode: activeAddress ? activeAddress.zipCode : "",
+    phoneNumber: activeAddress ? activeAddress.phoneNumber : "",
+    mahalle: activeAddress ? activeAddress.mahalle : "",
+  };
+  const onFinish = async (degerler) => {
+    try {
+      let values = {};
+      values.user = user._id;
+      values.products = [];
+      values.notes = degerler.notes;
+      cart.map((p) =>
+        values.products.push({
+          product: p.id,
+          name: p.name,
+          image: p.images[0],
+          qty: p.qty,
+          price: p.price,
+        })
+      );
+      values.shippingAddress = [
+        {
+          firstName: degerler.firstName,
+          lastName: degerler.lastName,
+          phoneNumber: degerler.phoneNumber,
+          address1: degerler.address1,
+          apartman: degerler.apartman,
+          city: degerler.city,
+          state: degerler.state,
+          zipCode: degerler.zipCode,
+          country: degerler.country,
+          mahalle: degerler.mahalle,
+        },
+      ];
+      values.paymentMethod = payment;
+      values.total = cart.reduce(
+        (prev, item) => prev + item.price * item.qty,
+        0
+      );
+      values.isPaid = false;
+      setLoading(true);
+      await axios
+        .post("/api/orders/addOrder", { values })
+        .then((data) => {
+          if (data.data.success) {
+            toast.success(data.data.message);
+            dispatch(emptyCart());
+            data.data.success && router.push("/hesabim?orders=1");
+          }
+        })
+        .catch((data) => {
+          console.log(data.response.data);
+          toast.error(data.response.data);
+        });
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      console.log(error);
+    }
   };
   return (
     <div className={styles.checkout}>
+      {loading && <Loader />}
       <div className={styles.container}>
         <div className={styles.checkout__coupon}>
           <RiCoupon3Line />
@@ -65,15 +122,19 @@ export default function Checkout({ user }) {
             </div>
           </div>
         )}
-        <div className={styles.checkout__wrapper}>
-          <div className={styles.checkout__billing}>
-            <h3>Fatura Detayları</h3>
-            <div>
-              <Form layout="vertical" initialValues={initialValues}>
+        <Form
+          layout="vertical"
+          onFinish={onFinish}
+          initialValues={initialValues}
+        >
+          <div className={styles.checkout__wrapper}>
+            <div className={styles.checkout__billing}>
+              <h3>Fatura Detayları</h3>
+              <div>
                 <div>
                   <Form.Item
                     label="Adınız"
-                    name={"name"}
+                    name={"firstName"}
                     rules={[
                       { required: true, message: "Lütfen adınızı giriniz." },
                     ]}
@@ -82,7 +143,7 @@ export default function Checkout({ user }) {
                   </Form.Item>
                   <Form.Item
                     label="Soyadınız"
-                    name={"surname"}
+                    name={"lastName"}
                     rules={[
                       { required: true, message: "Lütfen soyadınızı giriniz." },
                     ]}
@@ -104,7 +165,7 @@ export default function Checkout({ user }) {
                   ]}
                 >
                   <Select className={styles.select}>
-                    {countries?.map((country, i) => (
+                    {allCountries?.map((country, i) => (
                       <Select.Option key={i} value={country?.code}>
                         {country?.name}
                       </Select.Option>
@@ -113,7 +174,7 @@ export default function Checkout({ user }) {
                 </Form.Item>
                 <Form.Item
                   label="Şehir"
-                  name={"province"}
+                  name={"city"}
                   rules={[
                     {
                       required: true,
@@ -122,7 +183,7 @@ export default function Checkout({ user }) {
                   ]}
                 >
                   <Select className={styles.select} onChange={cityHandle}>
-                    {cities.map((city, i) => (
+                    {turkeyCities.map((city, i) => (
                       <Select.Option key={i} value={city?.alan_kodu}>
                         {city?.il_adi}
                       </Select.Option>
@@ -131,7 +192,7 @@ export default function Checkout({ user }) {
                 </Form.Item>
                 <Form.Item
                   label="İlçe"
-                  name={"ilce"}
+                  name={"state"}
                   rules={[
                     {
                       required: true,
@@ -149,8 +210,27 @@ export default function Checkout({ user }) {
                 </Form.Item>
 
                 <Form.Item
+                  label="Mahalle"
+                  name={"mahalle"}
+                  rules={[{ required: true, message: "Mahallenizi Giriniz." }]}
+                >
+                  <Input placeholder={"Mahalle"} />
+                </Form.Item>
+                <Form.Item
+                  label="Cadde, Sokak, No:"
+                  name={"address1"}
+                  rules={[
+                    {
+                      required: true,
+                      message: "Cadde Sokak ve Kapı Numaranızı Giriniz.",
+                    },
+                  ]}
+                >
+                  <Input placeholder={"Cadde, Sokak, No:"} />
+                </Form.Item>
+                <Form.Item
                   label="Posta Kodu"
-                  name={"postcode"}
+                  name={"zipCode"}
                   rules={[{ required: true, message: "Posta Kodunu giriniz." }]}
                 >
                   <Input placeholder={"Posta Kodu"} />
@@ -161,33 +241,18 @@ export default function Checkout({ user }) {
 
                 <Form.Item
                   label="Telefon No"
-                  name={"cellphone"}
+                  name={"phoneNumber"}
                   rules={[
                     { required: true, message: "Telefon numaranızı giriniz." },
                   ]}
                 >
                   <Input placeholder={"Telefon Numarası"} />
                 </Form.Item>
-                <Form.Item
-                  label="Email"
-                  name={"email"}
-                  rules={[
-                    { required: true, message: "Email adresinizi giriniz." },
-                  ]}
-                >
-                  <Input placeholder={"Email"} />
-                </Form.Item>
-              </Form>
+              </div>
             </div>
-          </div>
-          <div className={styles.checkout__address}>
-            <Checkbox
-              className={styles.checkbox}
-              onClick={() => setDiffaddrtoggle(!diffaddrtoggle)}
-            >
-              <h3>Başka bir adrese gönder</h3>
-            </Checkbox>
-            {diffaddrtoggle && (
+            <div className={styles.checkout__address}>
+              <h3>Siparişiniz ile ilgili notlar</h3>
+              {/* {diffaddrtoggle && (
               <div className={styles.checkout__address_toggle}>
                 <div>
                   <Form layout="vertical">
@@ -306,98 +371,98 @@ export default function Checkout({ user }) {
                   </Form>
                 </div>
               </div>
-            )}
-            <div className={styles.checkout__address_notes}>
-              <Form layout="vertical">
-                <Form.Item label="Sipariş Notları">
+            )} */}
+              <div className={styles.checkout__address_notes}>
+                <Form.Item label="Sipariş Notları" name={"notes"}>
                   <Input.TextArea
                     rows={4}
                     placeholder={"Siparişiniz ile ilgili özel notlar"}
                   />
                 </Form.Item>
-              </Form>
+              </div>
             </div>
           </div>
-        </div>
-        <div className={styles.checkout__summary}>
-          <h3>Siparişiniz</h3>
-          <table>
-            <thead>
-              <tr>
-                <th> {cart.map((item) => item.name + ",  ")} </th>
-                <td>
-                  {cart
-                    .reduce((prev, item) => prev + item.price * item.qty, 0)
-                    .toFixed(2)}
-                  ₺
-                </td>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th>Subtotal </th>
-                <td>
-                  {" "}
-                  {cart
-                    .reduce((prev, item) => prev + item.price * item.qty, 0)
-                    .toFixed(2)}{" "}
-                  ₺{" "}
-                </td>
-              </tr>
-              <tr>
-                <th> Kargolama </th>
-                <td>
-                  Sabit Fiyat : <b> 20.00 ₺ </b>
-                </td>
-              </tr>
-              <tr>
-                <th> Total </th>
-                <td>
-                  {" "}
-                  {(
-                    cart.reduce(
-                      (prev, item) => prev + item.price * item.qty,
-                      0
-                    ) + 20.0
-                  ).toFixed(2)}{" "}
-                  ₺{" "}
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div className={styles.checkout__payment}>
-          <Radio.Group
-            defaultValue={user.defaultPaymentMethod}
-            onChange={handlePayment}
-          >
-            <div>
-              <Radio value={"credit card"}>Kredi Kartı ile Ödeme</Radio>
-            </div>
-            <div>
-              <Radio value={"door"}>Kapıda Ödeme</Radio>
-            </div>
-            <div>
-              <Radio value={"havale"}>Havale</Radio>
-            </div>
-          </Radio.Group>
-          <button className={styles.primary_button}>Sipariş Ver</button>
-        </div>
+
+          <div className={styles.checkout__summary}>
+            <h3>Siparişiniz</h3>
+            <table>
+              <thead>
+                <tr>
+                  <th> {cart.map((item) => item.name + ",  ")} </th>
+                  <td>
+                    {cart
+                      .reduce((prev, item) => prev + item.price * item.qty, 0)
+                      .toFixed(2)}
+                    ₺
+                  </td>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th>Subtotal </th>
+                  <td>
+                    {" "}
+                    {cart
+                      .reduce((prev, item) => prev + item.price * item.qty, 0)
+                      .toFixed(2)}{" "}
+                    ₺{" "}
+                  </td>
+                </tr>
+                <tr>
+                  <th> Kargolama </th>
+                  <td>
+                    Sabit Fiyat : <b> 20.00 ₺ </b>
+                  </td>
+                </tr>
+                <tr>
+                  <th> Total </th>
+                  <td>
+                    {" "}
+                    {(
+                      cart.reduce(
+                        (prev, item) => prev + item.price * item.qty,
+                        0
+                      ) + 20.0
+                    ).toFixed(2)}{" "}
+                    ₺{" "}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div className={styles.checkout__payment}>
+            <Radio.Group
+              defaultValue={user.defaultPaymentMethod}
+              onChange={handlePayment}
+            >
+              <div>
+                <Radio value={"credit card"}>Kredi Kartı ile Ödeme</Radio>
+              </div>
+              <div>
+                <Radio value={"door"}>Kapıda Ödeme</Radio>
+              </div>
+              <div>
+                <Radio value={"havale"}>Havale</Radio>
+              </div>
+            </Radio.Group>
+            <button className={styles.primary_button}>Sipariş Ver</button>
+          </div>
+        </Form>
       </div>
     </div>
   );
 }
 
 export async function getServerSideProps(context) {
-  const session = await getServerSession(context.req, context.res, authOptions)
+  const session = await getServerSession(context.req, context.res, authOptions);
 
   if (!session) {
     return {
       redirect: {
-        destination: '/',
+        destination: "/",
         permanent: false,
       },
-    }
+    };
   }
   await db.connectDb();
   const user = await User.findById(session.user.id);

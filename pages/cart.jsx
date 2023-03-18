@@ -71,15 +71,15 @@ export default function CartPage({ user }) {
                     <div>
                       <p>Sabit Fiyat : 20.00₺ </p>
                       <p>
-                        Adres :{" "}
+                        Adres :
                         <b>
-                          {" "}
+                          
                           {currentAddress
                             ? currentAddress.address1 +
                               " " +
-                              state?.ilce_adi +
+                              currentAddress?.state +
                               "/" +
-                              city?.il_adi
+                              currentAddress?.city
                             : "Türkiye"}
                         </b>
                       </p>
@@ -96,11 +96,11 @@ export default function CartPage({ user }) {
                   <th>Toplam</th>
                   <td>
                     <b>
-                      {" "}
+                      
                       {cart?.reduce(
                         (prev, item) => prev + item.price * item.qty,
                         0
-                      ) + 20.0}{" "}
+                      ) + 20.0}
                       ₺
                     </b>
                   </td>

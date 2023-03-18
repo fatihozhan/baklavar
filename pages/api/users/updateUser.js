@@ -165,7 +165,7 @@ const handler = nc({
           new: true,
         }
       );
-      if (!user.addresses.find((addr) => addr.active)) {
+      if (user.addresses.length > 0 && !user.addresses.find((addr) => addr.active)) {
         user.addresses[user.addresses.length - 1].active = true;
         await user.save();
       }

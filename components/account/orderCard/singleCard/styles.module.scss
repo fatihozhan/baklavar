@@ -1,0 +1,23 @@
+.singleCard {
+    display: flex;
+    flex-direction: column;
+  &__content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 15px;
+    border: 1px solid $silik_gri;
+    border-radius: 3px;
+    padding: 20px;
+    div{
+        &:nth-child(1){
+            display: flex;
+            gap: 10px;
+            color : red
+        }
+        &:nth-child(2){
+            border: 1px solid $silik_gri;
+        }
+    }
+  }
+}

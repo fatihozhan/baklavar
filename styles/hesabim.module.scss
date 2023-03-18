@@ -81,6 +81,14 @@
         }
       }
     }
+    &_orders{
+      h4{
+        text-align: center;
+        color: $koyu_yesil;
+        font-size: 2rem;
+        font-weight: 500;
+      }
+    }
   }
 }
 .selects {

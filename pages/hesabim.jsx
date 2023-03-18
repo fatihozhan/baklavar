@@ -1,4 +1,5 @@
 import { InboxOutlined } from "@ant-design/icons";
+import Order from "@/models/Order";
 import Link from "next/link";
 import Image from "next/image";
 import NavigatorBar from "@/components/navigatorBar";
@@ -24,13 +25,16 @@ import Loader from "@/components/loader";
 import AddressCard from "@/components/account/addressCard";
 import AddressModal from "@/components/account/addressModal";
 import { useRouter } from "next/router";
-import {turkeyCities} from '@/data/cities'
+import { turkeyCities } from "@/data/cities";
 import { getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]";
+import OrderCard from "@/components/account/orderCard";
 
-export default function MyAccount({ user }) {
+export default function MyAccount({ user, orders }) {
   const router = useRouter();
-  const [tab, setTab] = useState(router.query.address ? 2 : 1);
+  const [tab, setTab] = useState(
+    router.query.address ? 2 : router.query.orders ? 3 : 1
+  );
   const [currentUser, setCurrentUser] = useState(user ? user : "");
   const [currentAddress, setCurrentAddress] = useState();
   const [loading, setLoading] = useState(false);
@@ -38,7 +42,6 @@ export default function MyAccount({ user }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [cities, setCities] = useState(turkeyCities);
   const { data: session } = useSession();
-
 
   const showModal = async (address) => {
     setLoading(true);
@@ -379,15 +382,26 @@ export default function MyAccount({ user }) {
                     />
                   ))}
                 </div>
-                {
-                  router.query.address ? <Link href={"/cart"}>
-                  <button className={styles.primary_button}>Sepete Git</button>
-                </Link> : ""
-                }
-                
+                {router.query.address ? (
+                  <Link href={"/cart"}>
+                    <button className={styles.primary_button}>
+                      Sepete Git
+                    </button>
+                  </Link>
+                ) : (
+                  ""
+                )}
               </div>
             )}
-            {tab == 3 && <div className={styles.hesabim__content_orders}></div>}
+            {tab == 3 && (
+              <div className={styles.hesabim__content_orders}>
+                {orders.length > 0 ? (
+                  orders?.map((order, i) => <OrderCard key={i} order={order} />)
+                ) : (
+                  <h4>Henüz Siparişiniz Bulunmamaktadır</h4>
+                )}
+              </div>
+            )}
             {tab == 4 && (
               <div className={styles.hesabim__content_comments}></div>
             )}
@@ -402,22 +416,27 @@ export default function MyAccount({ user }) {
 }
 
 export async function getServerSideProps(context) {
-  const session = await getServerSession(context.req, context.res, authOptions)
+  const session = await getServerSession(context.req, context.res, authOptions);
 
   if (!session) {
     return {
       redirect: {
-        destination: '/',
+        destination: "/",
         permanent: false,
       },
-    }
+    };
   }
   await db.connectDb();
   const user = await User.findById(session?.user?.id).lean();
+  const orders = await Order.find({})
+    .populate({ path: "user", model: User })
+    .sort({ createdAt: -1 })
+    .lean();
   await db.disconnectDb();
   return {
     props: {
       user: JSON.parse(JSON.stringify(user)),
+      orders: JSON.parse(JSON.stringify(orders)),
     },
   };
 }
