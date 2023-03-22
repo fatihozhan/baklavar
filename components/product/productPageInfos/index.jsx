@@ -43,7 +43,6 @@ export default function ProductInfos({ product, cart, user }) {
           if (data.data.success) {
             toast.success(data.data.message);
             setCurrentUser(data.data.user);
-            console.log(currentUser);
           }
         })
         .catch((data) => {

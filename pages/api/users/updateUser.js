@@ -14,7 +14,8 @@ const handler = nc({
   onNoMatch: (req, res) => {
     res.status(404).end("Page is not found");
   },
-}).use(Auth)
+})
+  .use(Auth)
   .post(async (req, res) => {
     const {
       values: {
@@ -30,9 +31,18 @@ const handler = nc({
         addresses,
         addressUpdate,
         id,
+        isAdmin,
       },
     } = req.body;
     await db.connectDb();
+    if (isAdmin) {
+      const user = await User.findById(id);
+      user.role = user.role == "admin" ? "user" : "admin";
+      await user.save();
+      return res
+        .status(200)
+        .json({ success: true, message: "Kullancı güncellendi" });
+    }
     const user = await User.findOne({ email });
     if (wishlist) {
       if (user.wishlist.find((wish) => wish.product == id)) {
@@ -171,10 +181,19 @@ const handler = nc({
   })
   .delete(async (req, res) => {
     const session = await getSession({ req });
-    const { address, id } = req.body;
+    const { address, id, deleteUser } = req.body;
+    await db.connectDb();
 
+    if (deleteUser) {
+      const user = await User.findByIdAndDelete(id);
+      if (user) {
+        await db.disconnectDb();
+        return res
+          .status(200)
+          .json({ success: true, message: "Kullanıcı Silindi." });
+      }
+    }
     if (address == "silme") {
-      await db.connectDb();
       const user = await User.findByIdAndUpdate(
         session.user.id,
         {

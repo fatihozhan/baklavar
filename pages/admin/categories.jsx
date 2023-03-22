@@ -86,7 +86,6 @@ export default function Categories({ categories }) {
               data.data.categories.map((category) =>
                 newData.unshift({ key: category._id, name: category.name })
               );
-              console.log(newData);
               setData(newData);
               toast.success(data.data.message);
               setEditingKey("");

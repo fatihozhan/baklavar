@@ -93,7 +93,6 @@ export default function SubCategories() {
           ...row,
         });
         setData(newData);
-        console.log(newData);
         setEditingKey("");
       } else {
         newData.push(row);

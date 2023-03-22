@@ -1,9 +1,8 @@
 .contact {
   position: relative;
   padding: 70px;
-  @media (max-width : 800px) {
+  @media (max-width: 800px) {
     padding: 30px;
-    
   }
   &:after {
     content: " ";
@@ -11,7 +10,7 @@
     position: absolute;
     top: 0;
     bottom: 500px;
-    @media (max-width : 800px) {
+    @media (max-width: 800px) {
       height: 100vh;
     }
     right: 0;
@@ -35,7 +34,7 @@
     background: #fff;
     padding: 50px;
     &_top {
-      @media (max-width : 550px) {
+      @media (max-width: 550px) {
         flex-direction: column;
       }
       display: flex;
@@ -85,6 +84,20 @@
         font-size: 2rem;
         font-weight: 600;
       }
+    }
+  }
+}
+.customInput {
+  input {
+    background-color: $smoke_gri;
+    padding: 15px;
+    color: $silik_yazi_rengi !important;
+    &:focus {
+      border: 1px solid $silik_gri;
+      box-shadow: none;
+    }
+    &:hover {
+      border-color: $silik_gri;
     }
   }
 }

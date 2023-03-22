@@ -1,83 +1,20 @@
 import styles from "@/styles/users.module.scss";
 import Image from "next/image";
-import { Form, Input, InputNumber, Popconfirm, Table, Typography } from "antd";
+import { Form, Table } from "antd";
 import { useState } from "react";
+import db from "@/utils/db";
+import User from "@/models/User";
+import axios from "axios";
+import { toast } from "react-toastify";
+import Loader from "@/components/loader";
 
-const originData = [];
-for (let i = 0; i < 5; i++) {
-  originData.push({
-    key: i.toString(),
-    fotograf: (
-      <img
-        src="/images/customer/customer1.jpeg"
-        height={50}
-        width="50"
-        alt="User Resmi"
-      />
-    ),
-    adSoyad: "Fatih ÖZHAN",
-    email: "fatihozhan27@gmail.com",
-    dogrulama: (
-      <img
-        src={"/images/verified.png"}
-        height="50"
-        width={50}
-        alt="Doğrulanmış Hesap"
-      />
-    ),
-    admin: (
-      <img
-        src={"/images/unverified.png"}
-        height="50"
-        width={50}
-        alt="Doğrulanmış Hesap"
-      />
-    ),
-  });
-}
-const EditableCell = ({
-  editing,
-  dataIndex,
-  title,
-  inputType,
-  record,
-  index,
-  children,
-  ...restProps
-}) => {
-  const inputNode = inputType === "number" ? <InputNumber /> : <Input />;
-  return (
-    <td {...restProps}>
-      {editing ? (
-        <Form.Item
-          name={dataIndex}
-          style={{
-            margin: 0,
-          }}
-          rules={[
-            {
-              required: true,
-              message: `Lütfen ${title} Bilgisini Giriniz!`,
-            },
-          ]}
-        >
-          {inputNode}
-        </Form.Item>
-      ) : (
-        children
-      )}
-    </td>
-  );
-};
-
-export default function Users() {
+export default function Users({ users }) {
   const columns = [
     {
       title: "Fotoğraf",
       dataIndex: "fotograf",
       width: "10%",
-      editable: false,
-      responsive : ["lg"],
+      responsive: ["lg"],
     },
     {
       title: "Ad Soyad",
@@ -95,122 +32,121 @@ export default function Users() {
       title: "Doğrulama",
       dataIndex: "dogrulama",
       width: "20%",
-      editable: false,
     },
     {
       title: "Admin",
       dataIndex: "admin",
       width: "10%",
-      editable: false,
     },
     {
       title: "İşlemler",
       dataIndex: "operation",
-      render: (_, record) => {
-        const editable = isEditing(record);
-        return editable ? (
-          <span>
-            <Typography.Link
-              onClick={() => save(record.key)}
-              style={{
-                marginRight: 8,
-              }}
-            >
-              Save
-            </Typography.Link>
-            <Popconfirm
-              title="Çıkmak İstediğinize Emin Misiniz?"
-              onConfirm={cancel}
-            >
-              <a>Cancel</a>
-            </Popconfirm>
-          </span>
-        ) : (
-          <Typography.Link
-            disabled={editingKey !== ""}
-            onClick={() => edit(record)}
-          >
-            Edit
-          </Typography.Link>
-        );
-      },
     },
   ];
-
-  const mergedColumns = columns.map((col) => {
-    if (!col.editable) {
-      return col;
-    }
-    return {
-      ...col,
-      onCell: (record) => ({
-        record,
-        inputType: col.dataIndex === "age" ? "number" : "text",
-        dataIndex: col.dataIndex,
-        title: col.title,
-        editing: isEditing(record),
-      }),
-    };
-  });
-
-  const save = async (key) => {
-    try {
-      const row = await form.validateFields();
-      const newData = [...data];
-      const index = newData.findIndex((item) => key === item.key);
-      if (index > -1) {
-        const item = newData[index];
-        newData.splice(index, 1, {
-          ...item,
-          ...row,
-        });
-        setData(newData);
-        setEditingKey("");
-      } else {
-        newData.push(row);
-        setData(newData);
-        setEditingKey("");
-      }
-    } catch (errInfo) {
-      console.log("Validate Failed:", errInfo);
-    }
-  };
-
+  const originData = [];
+  users?.map((user) =>
+    originData.push({
+      key: user._id,
+      fotograf: (
+        <Image src={user.image} height={50} width="50" alt="User Resmi" />
+      ),
+      adSoyad: user.name,
+      email: user.email,
+      dogrulama: (
+        <Image
+          src={"/images/verified.png"}
+          height="50"
+          width={50}
+          alt="Doğrulanmış Hesap"
+        />
+      ),
+      admin: (
+        <Image
+          src={`${
+            user.role == "admin"
+              ? "/images/verified.png"
+              : "/images/unverified.png"
+          }`}
+          style={{ cursor: "pointer" }}
+          onClick={() => handleAdmin(user._id)}
+          height="50"
+          width={50}
+          alt="Doğrulanmış Hesap"
+        />
+      ),
+      operation: (
+        <a onClick={() => handleDelete(user._id)} style={{ color: "red" }}>
+          Sil
+        </a>
+      ),
+    })
+  );
   const [form] = Form.useForm();
   const [data, setData] = useState(originData);
-  const [editingKey, setEditingKey] = useState("");
-  const isEditing = (record) => record.key === editingKey;
-  const edit = (record) => {
-    form.setFieldsValue({
-      adSoyad: "",
-      email: "",
-      ...record,
-    });
-    setEditingKey(record.key);
+  const [loading, setLoading] = useState(false);
+  const handleAdmin = async (id) => {
+    try {
+      const values = { id, isAdmin: true };
+      setLoading(true);
+      await axios.post("/api/users/updateUser", { values }).then((data) => {
+        if (data.data.success) {
+          toast.success(data.data.message);
+          window.location.reload();
+        }
+      });
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
   };
-  const cancel = () => {
-    setEditingKey("");
+  const handleDelete = async (id) => {
+    try {
+      setLoading(true);
+      await axios
+        .delete("/api/users/updateUser", {
+          data: { id, deleteUser: true },
+        })
+        .then((data) => {
+          if (data.data.success) {
+            toast.success(data.data.message);
+            setData((prev) => prev.filter((user) => user.key != id));
+          }
+        })
+        .catch((data) => {
+          toast.error(data.response.data.message);
+          console.log(data);
+        });
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      console.log(error);
+    }
   };
 
   return (
     <div className={styles.users}>
+      {loading && <Loader />}
       <h3>Kullanıcılar</h3>
       <Form form={form} component={false}>
         <Table
-          components={{
-            body: {
-              cell: EditableCell,
-            },
-          }}
           bordered
           dataSource={data}
-          columns={mergedColumns}
+          columns={columns}
           rowClassName="editable-row"
-          pagination={{
-            onChange: cancel,
-          }}
         />
       </Form>
     </div>
   );
+}
+
+export async function getServerSideProps(context) {
+  await db.connectDb();
+  const users = await User.find({})?.sort({ createdAt: -1 });
+  await db.disconnectDb();
+  return {
+    props: {
+      users: JSON.parse(JSON.stringify(users)),
+    },
+  };
 }

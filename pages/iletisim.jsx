@@ -1,46 +1,69 @@
-import Inputs from "@/components/input";
 import { GiLetterBomb } from "react-icons/gi";
 import { BiHeadphone } from "react-icons/bi";
 import { HiOutlineMapPin } from "react-icons/hi2";
 import styles from "@/styles/contact.module.scss";
 import { Form, Input } from "antd";
+import { getServerSession } from "next-auth";
+import { authOptions } from "./api/auth/[...nextauth]";
+import Loader from "@/components/loader";
+import { useRef, useState } from "react";
+import axios from "axios";
+import { toast } from "react-toastify";
 
-export default function Contact() {
-  const onFinish = (values) => {
-    console.log("Success:", values);
-  };
-
-  const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
+export default function Contact({ currentSession }) {
+  const [loading, setLoading] = useState(false);
+  const formRef = useRef(null);
+  const onFinish = async (values) => {
+    try {
+      setLoading(true);
+      await axios
+        .post("/api/messages", { values })
+        .then((data) => {
+          if (data.data.success) {
+            toast.success(data.data.message);
+            formRef.current.resetFields();
+          }
+        })
+        .catch((data) => toast.error(data.response.data.message));
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
   };
   return (
     <div className={styles.contact}>
+      {loading && <Loader />}
       <div className={styles.background}></div>
 
       <div className={styles.container}>
         <div className={styles.contact__left}>
           <Form
+            ref={formRef}
             name="basic"
-            initialValues={{ remember: true }}
+            initialValues={{
+              name: currentSession?.name,
+              email: currentSession?.email,
+            }}
             onFinish={onFinish}
-            onFinishFailed={onFinishFailed}
             layout="vertical"
-            autoComplete="off"
           >
             <div className={styles.title}>Bize Mesaj Gönder</div>
             <div className={styles.contact__left_top}>
               <div className={styles.contact__left_top_first}>
                 <Form.Item
                   label="Ad Soyad"
-                  name="fullName"
+                  name="name"
+                  className={styles.customInput}
                   rules={[
                     { required: true, message: "Lütfen Adınızı Giriniz!" },
                   ]}
                 >
-                  <Inputs placeholder={"Ad Soyad"} name="fullName" />
+                  <Input placeholder={"Ad Soyad"} />
                 </Form.Item>
                 <Form.Item
                   label="Telefon Numarası"
+                  className={styles.customInput}
                   name="phone"
                   rules={[
                     {
@@ -49,30 +72,41 @@ export default function Contact() {
                     },
                   ]}
                 >
-                  <Inputs placeholder={"Telefon Numarası"} name="phone" />
+                  <Input
+                    type="number"
+                    maxLength={12}
+                    minLength={9}
+                    placeholder={"Telefon Numarası"}
+                  />
                 </Form.Item>
               </div>
               <div className={styles.contact__left_top_second}>
                 <Form.Item
                   label="Email"
+                  className={styles.customInput}
                   name="email"
                   rules={[
                     {
                       required: true,
                       message: "Lütfen E posta adresinizi giriniz!",
                     },
+                    {
+                      type: "email",
+                      message: "Lütfen E posta adresinizi giriniz!",
+                    },
                   ]}
                 >
-                  <Inputs placeholder={"Email"} name="email" />
+                  <Input placeholder={"Email"} />
                 </Form.Item>
                 <Form.Item
+                  className={styles.customInput}
                   label="Konu"
                   name="subject"
                   rules={[
                     { required: true, message: "Lütfen Konuyu Giriniz!" },
                   ]}
                 >
-                  <Inputs placeholder={"Konu..."} name="subject" />
+                  <Input placeholder={"Konu..."} />
                 </Form.Item>
               </div>
             </div>
@@ -91,7 +125,9 @@ export default function Contact() {
                   placeholder="Mesajınız..."
                 />
               </Form.Item>
-              <button className={styles.primary_button}>Gönder</button>
+              <button className={styles.primary_button} type="submit">
+                Gönder
+              </button>
             </div>
           </Form>
         </div>
@@ -117,4 +153,14 @@ export default function Contact() {
       </div>
     </div>
   );
+}
+
+export async function getServerSideProps(context) {
+  const session = await getServerSession(context.req, context.res, authOptions);
+
+  return {
+    props: {
+      currentSession: session.user,
+    },
+  };
 }

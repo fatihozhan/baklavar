@@ -8,7 +8,6 @@ const handler = nc().use(Auth);
 
 handler.post(async (req, res) => {
   await db.connectDb();
-  console.log(slugify(req.body.values).toLowerCase());
   const categories = await Category.find({
     slug: slugify(req.body.values).toLowerCase(),
   });

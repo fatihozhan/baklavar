@@ -22,7 +22,6 @@ export const authOptions = {
         // (i.e., the request IP address)
         const { email, password } = credentials;
         await db.connectDb();
-        console.log(email , password)
         const test =
           (await User.findOne({ email })) ||
           (await User.findOne({ username: email }));

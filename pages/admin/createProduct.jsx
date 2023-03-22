@@ -51,7 +51,6 @@ export default function CreateProduct({ categories, product }) {
   }, [inputVisible]);
   const handleClose = (removedTag) => {
     const newTags = tags.filter((tag) => tag !== removedTag);
-    console.log(newTags);
     setTags(newTags);
   };
   //-------------Picture--------------
@@ -380,7 +379,6 @@ const benefits = ["vitamina", "Vitamin B", "Vitamin C", "Vitamin D"];
 export async function getServerSideProps(context) {
   await db.connectDb();
   const { query } = context;
-  console.log(query.duzenle);
   let product;
   if (query.duzenle) {
     product = await Product.findById(query.duzenle);
