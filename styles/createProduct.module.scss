@@ -1,6 +1,15 @@
-.createProduct{
+.createProduct {
+  &__select {
+    span {
+      span {
+        position: absolute;
+        top: 15px !important;
+        left: -7px!important;
+      }
+    }
+  }
 }
 
-.ant-select-selector{
-    padding: 0!important;
+.ant-select-selector {
+  padding: 0 !important;
 }

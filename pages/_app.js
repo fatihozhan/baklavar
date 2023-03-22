@@ -35,7 +35,9 @@ export default function App({
 
   return (
     <>
-      <Head></Head>
+      <Head>
+        <title>RFC Bakliyat</title>
+      </Head>
       <SessionProvider session={session}>
         <Provider store={store}>
           <ToastContainer/>

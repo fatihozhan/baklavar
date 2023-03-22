@@ -1,13 +1,12 @@
 import { Form, InputNumber, Popconfirm, Table, Typography, Input } from "antd";
 import styles from "@/styles/categories.module.scss";
-import { useState } from "react";
-const originData = [];
-for (let i = 0; i < 10; i++) {
-  originData.push({
-    key: i.toString(),
-    name: "Fasulle",
-  });
-}
+import { useEffect, useState } from "react";
+import axios from "axios";
+import Loader from "@/components/loader";
+import { toast } from "react-toastify";
+import db from "@/utils/db";
+import Category from "@/models/Category";
+
 const EditableCell = ({
   editing,
   dataIndex,
@@ -42,10 +41,16 @@ const EditableCell = ({
     </td>
   );
 };
-export default function Categories() {
+
+export default function Categories({ categories }) {
+  let originData = [];
+  categories.map((category) =>
+    originData.push({ key: category._id, name: category.name })
+  );
   const [form] = Form.useForm();
   const [data, setData] = useState(originData);
   const [editingKey, setEditingKey] = useState("");
+  const [loading, setLoading] = useState(false);
   const isEditing = (record) => record.key === editingKey;
   const { Search } = Input;
   const edit = (record) => {
@@ -65,12 +70,33 @@ export default function Categories() {
       const index = newData.findIndex((item) => key === item.key);
       if (index > -1) {
         const item = newData[index];
-        newData.splice(index, 1, {
-          ...item,
-          ...row,
-        });
-        setData(newData);
-        setEditingKey("");
+        // newData.splice(index, 1, {
+        //   ...item,
+        //   ...row,
+        // });
+        try {
+          setLoading(true);
+          await axios
+            .post("/api/categories/updateCategory", {
+              key: item.key,
+              name: row.name,
+            })
+            .then((data) => {
+              let newData = [];
+              data.data.categories.map((category) =>
+                newData.unshift({ key: category._id, name: category.name })
+              );
+              console.log(newData);
+              setData(newData);
+              toast.success(data.data.message);
+              setEditingKey("");
+            })
+            .catch((data) => toast.error(data.response.data.message));
+          setLoading(false);
+        } catch (error) {
+          setLoading(false);
+          console.log(error);
+        }
       } else {
         newData.push(row);
         setData(newData);
@@ -78,6 +104,26 @@ export default function Categories() {
       }
     } catch (errInfo) {
       console.log("Validate Failed:", errInfo);
+    }
+  };
+  const handleDelete = async (key) => {
+    try {
+      setLoading(true);
+      await axios
+        .delete("/api/categories/updateCategory", { data: { key } })
+        .then((gelen) => {
+          let newData = [];
+          gelen.data.category.map((data) =>
+            newData.push({ key: data._id, name: data.name })
+          );
+          setData(newData);
+          toast.success(gelen.data.message);
+        })
+        .catch((data) => toast.error(data.response.data.message));
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      console.log(error);
     }
   };
   const columns = [
@@ -100,19 +146,44 @@ export default function Categories() {
                 marginRight: 8,
               }}
             >
-              Save
+              Kaydet
             </Typography.Link>
-            <Popconfirm title="Sure to cancel?" onConfirm={cancel}>
-              <a>Cancel</a>
+            <Popconfirm
+              style={{ fontFamily: "Space Grotesk" }}
+              title="Çıkmak İstediğinize Emin Misiniz?"
+              onConfirm={cancel}
+              okText="Evet"
+              cancelText="Hayır"
+            >
+              <a>Çık</a>
             </Popconfirm>
           </span>
         ) : (
-          <Typography.Link
-            disabled={editingKey !== ""}
-            onClick={() => edit(record)}
-          >
-            Edit
-          </Typography.Link>
+          <>
+            <Typography.Link
+              disabled={editingKey !== ""}
+              onClick={() => edit(record)}
+            >
+              Düzenle
+            </Typography.Link>
+            <Popconfirm
+              style={{ fontFamily: "Space Grotesk" }}
+              title="Silmek İstedinize Emin Misiniz?"
+              onConfirm={() => handleDelete(record.key)}
+              okText="Evet"
+              cancelText="Hayır"
+            >
+              <Typography.Link
+                disabled={editingKey !== ""}
+                style={{
+                  marginLeft: "10px",
+                  color: `${editingKey !== "" ? "" : "red"}`,
+                }}
+              >
+                Sil
+              </Typography.Link>
+            </Popconfirm>
+          </>
         );
       },
     },
@@ -132,19 +203,40 @@ export default function Categories() {
       }),
     };
   });
-
+  const onFinish = async (values) => {
+    try {
+      setLoading(true);
+      await axios
+        .post("/api/categories/addCategory", { values })
+        .then((gelen) => {
+          toast.success(gelen.data.message);
+          let newData = [];
+          gelen.data.category.map((data) =>
+            newData.unshift({ key: data._id, name: data.name })
+          );
+          setData(newData);
+        })
+        .catch((data) => toast.error(data.response.data.message));
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      console.log(error);
+    }
+  };
   return (
     <div className={styles.categories}>
+      {loading && <Loader />}
       <div className={styles.categories__top}>
         <h3>Kategoriler</h3>
         <Search
           placeholder="Kategori Ekle..."
-          style={{ marginBottom: "20px" }}
           enterButton="Kaydet"
+          style={{ marginBottom: "20px" }}
           size="large"
+          onSearch={onFinish}
         />
       </div>
-      <Form form={form} component={false}>
+      <Form form={form} onFinish={onFinish} component={false}>
         <Table
           components={{
             body: {
@@ -162,4 +254,15 @@ export default function Categories() {
       </Form>
     </div>
   );
+}
+
+export async function getServerSideProps(context) {
+  await db.connectDb();
+  const categories = await Category.find({})?.sort({ createdAt: -1 }).lean();
+  await db.disconnectDb();
+  return {
+    props: {
+      categories: JSON.parse(JSON.stringify(categories)),
+    },
+  };
 }

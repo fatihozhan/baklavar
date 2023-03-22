@@ -128,6 +128,11 @@
             font-size: 1.4rem;
             stroke: $koyu_yesil;
             color: $koyu_yesil;
+            cursor: pointer;
+            &:hover {
+              background-color: $koyu_yesil;
+              color: #fff;
+            }
           }
         }
       }
@@ -199,6 +204,7 @@
     }
     &_reviews {
       &_comment {
+        margin-top: 20px;
         display: flex;
         gap: 20px;
         &_info {
@@ -297,4 +303,24 @@
 
 .activeTab {
   color: $koyu-yesil !important;
+}
+
+.customInput {
+  input {
+    background-color: $smoke_gri !important;
+    padding: 15px !important;
+    color: $silik_yazi_rengi !important;
+    &:focus {
+      border: 1px solid $silik_gri !important;
+      box-shadow: none !important;
+    }
+    &:hover {
+      border-color: $silik_gri !important ;
+    }
+  }
+}
+
+.activeWish {
+  background-color: $koyu_yesil!important;
+  color: #fff!important;
 }

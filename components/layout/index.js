@@ -1,5 +1,4 @@
 // import Navbar from '../header/navbar'
-import styles from './styles.module.scss'
 import Footer from "../footer";
 import Top from "../header/top";
 

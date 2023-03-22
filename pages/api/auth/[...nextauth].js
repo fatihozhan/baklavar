@@ -22,6 +22,7 @@ export const authOptions = {
         // (i.e., the request IP address)
         const { email, password } = credentials;
         await db.connectDb();
+        console.log(email , password)
         const test =
           (await User.findOne({ email })) ||
           (await User.findOne({ username: email }));
@@ -48,7 +49,7 @@ export const authOptions = {
   ],
 
   callbacks: {
-    async session({ session, token }) {
+    async session({ session, token}) {
       await db.connectDb();
       const user = await User.findById(token.sub);
       session.user.id = token.sub;

@@ -12,7 +12,7 @@ import { authOptions } from "./api/auth/[...nextauth]";
 import axios from "axios";
 import Loader from "@/components/loader";
 import { toast } from "react-toastify";
-import { useRouter } from "next/router";
+import { Router, useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import { emptyCart } from "@/store/cartSlice";
 
@@ -53,7 +53,7 @@ export default function Checkout({ user }) {
       values.notes = degerler.notes;
       cart.map((p) =>
         values.products.push({
-          product: p.id,
+          product: p._id,
           name: p.name,
           image: p.images[0],
           qty: p.qty,
@@ -92,7 +92,10 @@ export default function Checkout({ user }) {
         })
         .catch((data) => {
           console.log(data.response.data);
-          toast.error(data.response.data);
+          if (data.response.data.error) {
+            router.push("/")
+          }
+          toast.error(data.response.data.message);
         });
       setLoading(false);
     } catch (error) {

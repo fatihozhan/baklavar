@@ -51,7 +51,8 @@ export default function CartPage({ user }) {
               </Link>
             </div>
           </div>
-          <div className={styles.cart__content_total}>
+          {
+            cart.length > 0 && <div className={styles.cart__content_total}>
             <h3>Sepet Tutarı</h3>
             <table>
               <tbody>
@@ -113,6 +114,8 @@ export default function CartPage({ user }) {
               </button>
             </Link>
           </div>
+          }
+          
         </div>
       </div>
     </div>
@@ -123,6 +126,7 @@ export async function getServerSideProps(context) {
   const session = await getServerSession(context.req, context.res, authOptions);
   await db.connectDb()
   const user = await User.findById(session?.user?.id).lean();
+  await db.disconnectDb()
   return {
     props: {
       user: JSON.parse(JSON.stringify(user)),

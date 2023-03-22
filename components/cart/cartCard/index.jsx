@@ -9,7 +9,7 @@ export default function CartCard({ product }) {
   return (
     <div className={styles.card}>
       <div className={styles.card__left}>
-        <GrClose onClick={() => dispatch(deleteItem(product.id))} />
+        <GrClose onClick={() => dispatch(deleteItem(product._id))} />
         <Image
           src={product.images[0]}
           height="90"
@@ -21,9 +21,9 @@ export default function CartCard({ product }) {
       <div className={styles.card__right}>
         <p> {product.price.toFixed(2)} ₺ / adet </p>
         <div>
-          <span onClick={() => dispatch(descreaseQty(product.id))}>-</span>
+          <span onClick={() => dispatch(descreaseQty(product._id))}>-</span>
           <span> {product.qty} </span>
-          <span onClick={() => dispatch(increaseQty(product.id))}>+</span>
+          <span onClick={() => product.stock > product.qty && dispatch(increaseQty(product._id))}>+</span>
         </div>
         <p> Total : {(product.price * product.qty).toFixed(2)} ₺ </p>
       </div>

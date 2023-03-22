@@ -2,7 +2,6 @@ import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
 import styles from "../styles/Home.module.scss";
-import { Inter } from "@next/font/google";
 import ProductCard from "@/components/product/productCart";
 import { useEffect, useState } from "react";
 import Countdown from "react-countdown";
@@ -17,10 +16,15 @@ import { FreeMode, Pagination } from "swiper";
 import FromPeopleCard from "@/components/frompeopleCard";
 import ProductModal from "@/components/product/productModal";
 import { useSelector } from "react-redux";
+import db from "@/utils/db";
+import Product from "@/models/Product";
+import { getServerSession } from "next-auth";
+import { authOptions } from "./api/auth/[...nextauth]";
+import User from "@/models/User";
 
-export default function Home() {
+export default function Home({ products, user }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [productId, setProductId] = useState("")
+  const [productId, setProductId] = useState("");
   const [load, setLoad] = useState(false);
   useEffect(() => {
     setLoad(true);
@@ -45,8 +49,8 @@ export default function Home() {
   };
 
   const handleModal = (id) => {
+    setProductId(id);
     setIsModalOpen(true);
-    setProductId(id)
   };
 
   return (
@@ -62,6 +66,8 @@ export default function Home() {
           isModalOpen={isModalOpen}
           setIsModalOpen={setIsModalOpen}
           cart={cart}
+          user={user}
+          products={products}
         />
         <div className={styles.containers}>
           <div className={styles.containers__left}>
@@ -152,10 +158,11 @@ export default function Home() {
           <h2>Ürünler</h2>
         </div>
         <div className={styles.topCategories__body}>
-          {products.map((product, i) => (
+          {products?.map((product) => (
             <ProductCard
-              key={i}
+              key={product._id}
               product={product}
+              user={user}
               cart={cart}
               handleModal={handleModal}
             />
@@ -204,16 +211,15 @@ export default function Home() {
             </div>
           </div>
           <div className={styles.bestSelling__body}>
-            {products.map((product, i) => {
-              return i > 4 ? (
+            {products?.map((product, i) => {
+              return (
                 <ProductCard
                   key={i}
                   cart={cart}
                   handleModal={handleModal}
                   product={product}
+                  user={user}
                 />
-              ) : (
-                ""
               );
             })}
           </div>
@@ -234,16 +240,15 @@ export default function Home() {
             </div>
           </div>
           <div className={styles.bestSelling__body}>
-            {products.map((product, i) => {
-              return i > 4 ? (
+            {products?.map((product, i) => {
+              return (
                 <ProductCard
                   key={i}
                   cart={cart}
+                  user={user}
                   handleModal={handleModal}
                   product={product}
                 />
-              ) : (
-                ""
               );
             })}
           </div>
@@ -331,7 +336,7 @@ export default function Home() {
   );
 }
 
-export const products = [
+/* export const products = [
   {
     id: 1,
     name: "Kuru Üzüm ve Karışık Mix",
@@ -413,7 +418,7 @@ export const products = [
     description: "Domatesler Domatesler 10 Numara domatesler",
     stock: 2,
   },
-];
+]; */
 
 const lifestyle = [
   {
@@ -489,3 +494,24 @@ export const frompeople = [
     img: "/images/frompeople/people4.jpg",
   },
 ];
+
+export async function getServerSideProps(context) {
+  const { req, res } = context;
+  const session = await getServerSession(req, res, authOptions);
+  await db.connectDb();
+  const products = await Product.find({})?.sort({ createdAt: 1 }).lean();
+  const user = await User.find({ email: session?.user.email })?.lean();
+  const userInfo = {
+    email: user[0]?.email,
+    name: user[0]?.name,
+    username: user[0]?.username,
+    wishlist: user[0]?.wishlist,
+  };
+  await db.disconnectDb();
+  return {
+    props: {
+      products: JSON.parse(JSON.stringify(products)),
+      user: JSON.parse(JSON.stringify(userInfo)),
+    },
+  };
+}

@@ -6,7 +6,7 @@ import NavigatorBar from "@/components/navigatorBar";
 import styles from "@/styles/hesabim.module.scss";
 import { useState } from "react";
 import { signOut, useSession } from "next-auth/react";
-import { Form, Input, message, Radio, Upload } from "antd";
+import { Form, Input, message, Radio, Rate, Upload } from "antd";
 import axios from "axios";
 import {
   AiOutlineComment,
@@ -29,8 +29,112 @@ import { turkeyCities } from "@/data/cities";
 import { getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]";
 import OrderCard from "@/components/account/orderCard";
+import Product from "@/models/Product";
+import { Table } from "antd";
 
-export default function MyAccount({ user, orders }) {
+export default function MyAccount({ user, orders, reviews }) {
+  const columns = [
+    {
+      title: "Ürün Adı",
+      dataIndex: "name",
+      key: "name",
+    },
+    {
+      title: "Ürün Fotoğrafı",
+      dataIndex: "photo",
+      key: "photo",
+    },
+    {
+      title: "Puanım",
+      dataIndex: "rating",
+      key: "rating",
+    },
+    {
+      title: "Onaylandı Mı?",
+      dataIndex: "approved",
+      key: "approved",
+    },
+    {
+      title: "İşlemler",
+      dataIndex: "operation",
+      key: "operation",
+    },
+  ];
+  //wishlist tablosuuuu
+  const columns1 = [
+    {
+      title: "Ürün Adı",
+      dataIndex: "name",
+      key: "name",
+    },
+    {
+      title: "Ürün Fotoğrafı",
+      dataIndex: "photo",
+      key: "photo",
+    },
+    {
+      title: "İşlemler",
+      dataIndex: "operation",
+      key: "operation",
+    },
+  ];
+  const originData = [];
+  const originData1 = [];
+  user?.wishlist.map((wish) =>
+    originData1.push({
+      key: wish.product._id,
+      name: wish.product.name,
+      photo: (
+        <img
+          src={wish.product.images[0]}
+          alt="wishlist"
+          height={70}
+          width="70"
+        />
+      ),
+      operation: (
+        <a
+          style={{ color: "red" }}
+          onClick={() => handleWishlist(wish.product._id)}
+        >
+          Sil
+        </a>
+      ),
+    })
+  );
+
+  reviews?.map((rev) =>
+    originData.push({
+      key: rev.review._id,
+      name: rev.product.name,
+      photo: (
+        <img src={rev.product.image} alt="Ürün Photo" height={70} width="70" />
+      ),
+      rating: <Rate defaultValue={rev.review.rating} disabled />,
+      approved: (
+        <img
+          src={
+            rev.review.approved
+              ? "/images/verified.png"
+              : "/images/unverified.png"
+          }
+          alt="isApproved "
+          height={60}
+          width="60"
+        />
+      ),
+      description: rev.review.review,
+      operation: (
+        <a
+          style={{ color: "red" }}
+          onClick={() => reviewDelete(rev.review._id)}
+        >
+          Sil
+        </a>
+      ),
+    })
+  );
+
   const router = useRouter();
   const [tab, setTab] = useState(
     router.query.address ? 2 : router.query.orders ? 3 : 1
@@ -41,8 +145,9 @@ export default function MyAccount({ user, orders }) {
   const [modalKey, setModalKey] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [cities, setCities] = useState(turkeyCities);
+  const [data, setData] = useState(originData);
+  const [data1, setData1] = useState(originData1);
   const { data: session } = useSession();
-
   const showModal = async (address) => {
     setLoading(true);
     setIsModalOpen(true);
@@ -107,6 +212,55 @@ export default function MyAccount({ user, orders }) {
     });
     return e;
   };
+  const reviewDelete = async (id) => {
+    try {
+      setLoading(true);
+      await axios
+        .put("/api/products", { id })
+        .then((data) => {
+          {
+            if (data.data.success) {
+              toast.success(data.data.message);
+              setData((prev) => prev.filter((data) => data.key != id));
+            }
+          }
+        })
+        .catch((data) => {
+          toast.error(data.response.data.message);
+          console.log(data);
+        });
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      console.log(error);
+    }
+  };
+  const handleWishlist = async (id) => {
+    try {
+      const values = {
+        id,
+        wishlist: true,
+        email: user?.email,
+      };
+      setLoading(true);
+      await axios
+        .post("/api/users/updateUser", { values })
+        .then((data) => {
+          if (data.data.success) {
+            toast.success(data.data.message);
+            setData1(prev => prev.filter(data => data.key != id));
+          }
+        })
+        .catch((data) => {
+          console.log(data);
+          toast.error(data.response.data.message);
+        });
+      setLoading(false);
+    } catch (error) {
+      console.log(error)
+      setLoading(false);
+    }
+  };
 
   return (
     <div className={styles.hesabim}>
@@ -148,13 +302,12 @@ export default function MyAccount({ user, orders }) {
               </li>
               <li
                 onClick={() => signOut()}
-                style={{ color: `${tab == 5 ? "#136450" : ""}` }}
               >
                 <MdOutlineExitToApp /> Çıkış Yap
               </li>
               {session?.user?.role == "admin" && (
                 <Link href="/admin/dashboard">
-                  <li style={{ color: `${tab == 5 ? "#136450" : ""}` }}>
+                  <li>
                     <GrUserAdmin /> Admin Dashboard
                   </li>
                 </Link>
@@ -403,10 +556,32 @@ export default function MyAccount({ user, orders }) {
               </div>
             )}
             {tab == 4 && (
-              <div className={styles.hesabim__content_comments}></div>
+              <div className={styles.hesabim__content_comments}>
+                <div className={styles.hesabim__content_comments_title}>
+                  <Table
+                    columns={columns}
+                    expandable={{
+                      expandedRowRender: (record) => (
+                        <p
+                          style={{
+                            margin: 0,
+                          }}
+                        >
+                          {record.description}
+                        </p>
+                      ),
+                      rowExpandable: (record) =>
+                        record.name !== "Not Expandable",
+                    }}
+                    dataSource={data}
+                  />
+                </div>
+              </div>
             )}
             {tab == 5 && (
-              <div className={styles.hesabim__content_wishlist}></div>
+              <div className={styles.hesabim__content_wishlist}>
+                <Table columns={columns1} dataSource={data1} />
+              </div>
             )}
           </div>
         </div>
@@ -421,22 +596,40 @@ export async function getServerSideProps(context) {
   if (!session) {
     return {
       redirect: {
-        destination: "/",
-        permanent: false,
+        destination: "/signIn",
       },
     };
   }
   await db.connectDb();
-  const user = await User.findById(session?.user?.id).lean();
+  const user = await User.findById(session?.user?.id)
+    .populate({ path: "wishlist.product", model: Product })
+    .lean();
   const orders = await Order.find({})
     .populate({ path: "user", model: User })
     .sort({ createdAt: -1 })
     .lean();
+  const reviews = [];
+  const products = await Product.find({
+    "reviews.email": session?.user.email,
+  }).lean();
+  products.map((prod) =>
+    prod.reviews?.map(
+      (rev) =>
+        rev.email == session?.user.email &&
+        reviews.push({
+          review: rev,
+          product: { name: prod.name, image: prod.images[0] },
+        })
+    )
+  );
+  delete user.password;
+  delete user.__v;
   await db.disconnectDb();
   return {
     props: {
       user: JSON.parse(JSON.stringify(user)),
       orders: JSON.parse(JSON.stringify(orders)),
+      reviews: JSON.parse(JSON.stringify(reviews)),
     },
   };
 }

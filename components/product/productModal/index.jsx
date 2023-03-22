@@ -1,16 +1,23 @@
 import styles from "./styles.module.scss";
 import Image from "next/image";
 import { Modal } from "antd";
-import { products } from "@/pages/index";
 import ProductInfos from "../productPageInfos";
+import { useEffect, useState } from "react";
 
 export default function ProductModal({
   productId,
   isModalOpen,
   setIsModalOpen,
   cart,
+  products,
+  user
 }) {
-  const product = products.find((prod) => prod.id == productId);
+  const [product, setProduct] = useState();
+  useEffect(() => {
+    setProduct(products?.find((prod) => prod._id == productId));
+  }, [productId]);
+
+
 
   return (
     <Modal
@@ -29,7 +36,7 @@ export default function ProductModal({
           />
         </div>
         <div className={styles.productModal__right}>
-          <ProductInfos product={product} cart={cart} />
+          <ProductInfos user={user} isModalOpen={isModalOpen} product={product} cart={cart} />
         </div>
       </div>
     </Modal>

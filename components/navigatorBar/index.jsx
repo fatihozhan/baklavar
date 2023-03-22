@@ -2,7 +2,7 @@ import styles from "./styles.module.scss";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
-export default function NavigatorBar() {
+export default function NavigatorBar({title}) {
   const router = useRouter();
   const capitalizeFirtLetters = (str) => {
     if (!str) return str;
@@ -22,7 +22,7 @@ export default function NavigatorBar() {
           {` ${router.pathname.split("/")[1]?.charAt(0).toUpperCase()}` +
             `${router.pathname.split("/")[1]?.substring(1)} `}
           /
-          {router.query["slug"]
+          {title ? title :router.query["slug"]
             ? ` ${ capitalizeFirtLetters(router.query["slug"][0].replaceAll("-", " ")) }`
             : router.pathname.split("/")[2]?.charAt(0).toUpperCase()
             ? router.pathname.split("/")[2]?.charAt(0).toUpperCase() +
@@ -37,7 +37,7 @@ export default function NavigatorBar() {
         </div>
         <div className={styles.bar__title}>
           <h2>
-            {router.query["slug"]
+            {title ? title : router.query["slug"]
               ? capitalizeFirtLetters(router.query["slug"][0].replaceAll("-", " "))
               : router.pathname.split("/")[3]
               ? router.pathname.split("/")[3].charAt(0).toUpperCase() +

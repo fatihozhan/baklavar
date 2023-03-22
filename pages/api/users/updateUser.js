@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 import User from "@/models/User";
 import nc from "next-connect";
 import { getSession } from "next-auth/react";
+import { Auth } from "@/middlewares/auth";
 
 const handler = nc({
   /*   onError: (err, req, res, next) => {
@@ -13,7 +14,7 @@ const handler = nc({
   onNoMatch: (req, res) => {
     res.status(404).end("Page is not found");
   },
-})
+}).use(Auth)
   .post(async (req, res) => {
     const {
       values: {
@@ -28,10 +29,25 @@ const handler = nc({
         wishlist,
         addresses,
         addressUpdate,
+        id,
       },
     } = req.body;
     await db.connectDb();
     const user = await User.findOne({ email });
+    if (wishlist) {
+      if (user.wishlist.find((wish) => wish.product == id)) {
+        const index = user.wishlist.indexOf(
+          user.wishlist.find((wish) => wish.product == id)
+        );
+        if (index > -1) {
+          user.wishlist.splice(index, 1);
+        }
+      } else {
+        user.wishlist.push({
+          product: id,
+        });
+      }
+    }
 
     let uzanti;
     if (picture) {
@@ -141,8 +157,11 @@ const handler = nc({
     user.username = username ? username : user.username;
     user.defaultPaymentMethod = payment ? payment : user.defaultPaymentMethod;
     user.role = role ? role : user.role;
-    user.wishlist = wishlist ? wishlist : user.wishlist;
     const newUser = await user.save();
+
+    delete newUser.password;
+    delete newUser.__v;
+    delete newUser.role;
     await db.disconnectDb();
     return res.status(200).json({
       success: true,
@@ -165,7 +184,10 @@ const handler = nc({
           new: true,
         }
       );
-      if (user.addresses.length > 0 && !user.addresses.find((addr) => addr.active)) {
+      if (
+        user.addresses.length > 0 &&
+        !user.addresses.find((addr) => addr.active)
+      ) {
         user.addresses[user.addresses.length - 1].active = true;
         await user.save();
       }
@@ -175,6 +197,7 @@ const handler = nc({
           .status(404)
           .json({ error: true, message: "Kullanıcı bulunamadı." });
       }
+      delete user.password;
       return res
         .status(200)
         .json({ user, success: true, message: "Adres Silindi." });

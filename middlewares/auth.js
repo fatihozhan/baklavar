@@ -11,6 +11,6 @@ export async function Auth(req, res, next) {
     req.user = token.sub;
     next();
   } else {
-    return res.status(401).json({ message: "Lütgen Giriş Yapınız." });
+    return res.status(401).json({error:true, message: "Lütgen Giriş Yapınız." });
   }
 }

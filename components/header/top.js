@@ -18,10 +18,11 @@ import styles from "./styles.module.scss";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import ProductModal from "../product/productModal";
+
 const { Option } = Select;
 const { Panel } = Collapse;
 
-export default function Top() {
+export default function Top({ products }) {
   const cart = useSelector((state) => state.cartSlice.cart);
   const { data: session } = useSession();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -57,7 +58,7 @@ export default function Top() {
             return (
               <div key={i} className={styles.popover__wrapper}>
                 <div>
-                  <FaRegEye onClick={() => handleModal(product.id)} />
+                  <FaRegEye onClick={() => handleModal(product._id)} />
                   <Image
                     src={product.images[0]}
                     width="100"
@@ -222,13 +223,21 @@ export default function Top() {
                 <li>
                   <Link href={"/about"}>Hakkımızda</Link>
                 </li>
+
+                <li>
+                  {session?.user ? (
+                    <Link href={"/hesabim"}>Hesabım</Link>
+                  ) : (
+                    <Link href={"/signIn"}>Hesabım</Link>
+                  )}
+                </li>
+
                 <li>
                   <Collapse onChange={onChange} bordered={false}>
                     <Panel showArrow={false} header="Alışveriş" key="1">
                       <li>
                         <Link href={"/shop"}>Alışveriş</Link>
                       </li>
-                      <li>Hesabım</li>
                       <Link href="/cart">
                         <li>Sepetim</li>
                       </Link>
@@ -265,6 +274,7 @@ export default function Top() {
           setIsModalOpen={setIsProductModalOpen}
           handleModal={handleModal}
           cart={cart}
+          products={products}
           productId={productId}
         />
         <div className={styles.top}>

@@ -1,60 +1,96 @@
 import NavigatorBar from "@/components/navigatorBar";
-import { products } from "../../pages/index";
 import { Rate } from "antd";
 import Image from "next/image";
 import styles from "../../styles/product.module.scss";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Input, Form } from "antd";
-import Inputs from "@/components/input";
 import ProductCard from "@/components/product/productCart";
 import ProductInfos from "@/components/product/productPageInfos";
+import db from "@/utils/db";
+import Product from "@/models/Product";
+import Category from "@/models/Category";
+import axios from "axios";
+import Loader from "@/components/loader";
+import { toast } from "react-toastify";
+import { getToken } from "next-auth/jwt";
+import User from "@/models/User";
+import ProductModal from "@/components/product/productModal";
+import { useSelector } from "react-redux";
 
-export default function Product() {
+export default function SingleProduct({
+  product,
+  products,
+  relatedProduct,
+  user,
+}) {
   const [tab, setTab] = useState(1);
+  const [currentImg, setCurrentImg] = useState(product.images[0]);
+  const [rate, setRate] = useState(4);
+  const formRef = useRef(null);
+  const [loading, setLoading] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [productId, setProductId] = useState("");
+  const cart = useSelector((state) => state.cartSlice.cart);
 
-  const onFinish = (values) => {
-    console.log("Success:", values);
+  const handleModal = (id) => {
+    setProductId(id);
+    setIsModalOpen(true);
   };
-  const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
+
+  const onFinish = async (values) => {
+    try {
+      setLoading(true);
+      values.rating = rate;
+      values.reviewBy = values.name;
+      values.id = product._id;
+      values.image = user.image;
+      delete values.name;
+      await axios
+        .patch("/api/products", { values })
+        .then((data) => {
+          toast.success(data.data.message);
+          formRef.current.resetFields();
+        })
+        .catch((data) => toast.error(data.response.data.message));
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      console.log(error);
+    }
   };
 
   return (
     <div className={styles.product}>
-      <NavigatorBar />
+      <NavigatorBar title={product.name} />
+      {loading && <Loader />}
+      <ProductModal
+        productId={productId}
+        isModalOpen={isModalOpen}
+        setIsModalOpen={setIsModalOpen}
+        cart={cart}
+        user={user}
+        products={products}
+      />
       <div className={styles.container}>
         <div className={styles.product__general}>
           <div className={styles.product__img}>
             <div className={styles.product__img_top}>
-              <Image
-                src={"/images/products/grape1.jpg"}
-                width="600"
-                height={"600"}
-                alt="grape"
-              />
+              <Image src={currentImg} width="600" height={"600"} alt="grape" />
             </div>
             <div className={styles.product__img_bottom}>
-              <Image
-                src={"/images/products/grape2.jpg"}
-                width="90"
-                height={"90"}
-                alt="grape"
-              />
-              <Image
-                src={"/images/products/grape3.jpg"}
-                width="90"
-                height={"90"}
-                alt="grape"
-              />
-              <Image
-                src={"/images/products/grape4.jpg"}
-                width="90"
-                height={"90"}
-                alt="grape"
-              />
+              {product.images?.map((img, i) => (
+                <Image
+                  key={i}
+                  onClick={() => setCurrentImg(img)}
+                  src={img}
+                  width="90"
+                  height={"90"}
+                  alt="grape"
+                />
+              ))}
             </div>
           </div>
-          <ProductInfos />
+          <ProductInfos user={user} product={product} />
         </div>
         <div className={styles.product__details}>
           <div className={styles.product__details_buttons}>
@@ -74,20 +110,12 @@ export default function Product() {
               className={`${tab == 3 ? styles.activeTab : ""}`}
               onClick={() => setTab(3)}
             >
-              Yorumlar (1)
+              Yorumlar ({product.reviews.filter((rev) => rev.approved).length})
             </button>
           </div>
           {tab == 1 && (
             <div className={styles.product__details_description}>
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-              Voluptatem adipisci, consequuntur nostrum totam quos eaque quas
-              amet? In provident fugiat, ipsum minima similique eos animi id ab
-              facilis cum nobis earum aut, eaque voluptatem aliquam ex molestias
-              doloremque amet excepturi! Et suscipit voluptas asperiores
-              voluptatum modi totam illum fugiat id officiis, eaque laboriosam
-              perspiciatis! Lorem ipsum dolor sit amet consectetur adipisicing
-              elit. Laboriosam a obcaecati pariatur quibusdam, sapiente eveniet
-              asperiores perspiciatis vitae esse velit itaque expedita tempore!
+              {product?.description}
             </div>
           )}
           {tab == 2 && (
@@ -108,22 +136,46 @@ export default function Product() {
           )}
           {tab == 3 && (
             <div className={styles.product__details_reviews}>
-              <div className={styles.product__details_reviews_comment}>
-                <Image
-                  src={"/images/customer/customer1.jpeg"}
-                  height="50"
-                  width={50}
-                  alt="customer resmi"
-                />
-                <div className={styles.product__details_reviews_comment_info}>
-                  <Rate disabled defaultValue={3.4} />
-                  <div>
-                    <h4>Resul ÖZTÜRK</h4>
-                    <span> - Salı 6, 2023 </span>
-                  </div>
-                  <p>Çok iyi ürün!</p>
-                </div>
-              </div>
+              {product.reviews.length > 0 ? (
+                product.reviews.map(
+                  (review) =>
+                    review.approved && (
+                      <div
+                        key={review._id}
+                        className={styles.product__details_reviews_comment}
+                      >
+                        <Image
+                          src={review.image}
+                          height="50"
+                          width={50}
+                          alt="customer resmi"
+                        />
+                        <div
+                          className={
+                            styles.product__details_reviews_comment_info
+                          }
+                        >
+                          <Rate disabled defaultValue={review.rating} />
+                          <div>
+                            <h4>{review.reviewBy}</h4>
+                            <span>
+                              -
+                              {review.createdAt
+                                ? review.createdAt.split("T")[0] +
+                                  " " +
+                                  review.createdAt.split("T")[1].slice(0, 5)
+                                : ""}
+                            </span>
+                          </div>
+                          <p>{review.review}</p>
+                        </div>
+                      </div>
+                    )
+                )
+              ) : (
+                <h4>Henüz hiç yorum yapılmamış</h4>
+              )}
+
               <div className={styles.product__details_reviews_form}>
                 <h4>Bir yorum da sen ekle!</h4>
                 <p>
@@ -131,21 +183,18 @@ export default function Product() {
                   işaretlenmiştir.
                 </p>
                 <h5>
-                  <b> * </b> Puanın :{" "}
+                  <b> * </b> Puanın :
                 </h5>
-                <Rate defaultValue={4.5} />
+                <Rate onChange={(value) => setRate(value)} defaultValue={4.5} />
                 <Form
+                  ref={formRef}
                   name="review"
-                  initialValues={{
-                    remember: true,
-                  }}
                   onFinish={onFinish}
-                  onFinishFailed={onFinishFailed}
-                  autoComplete="off"
+                  initialValues={{ name: user?.name, email: user?.email }}
                   layout="vertical"
                 >
                   <Form.Item
-                    label="Review"
+                    label="Yorumun"
                     name="review"
                     rules={[
                       {
@@ -158,7 +207,7 @@ export default function Product() {
                   </Form.Item>
 
                   <Form.Item
-                    label="Name"
+                    label="Ad Soyad"
                     name="name"
                     rules={[
                       {
@@ -167,7 +216,11 @@ export default function Product() {
                       },
                     ]}
                   >
-                    <Inputs type="text" name={"name"} />
+                    <Input
+                      className={styles.customInput}
+                      disabled={user?.name}
+                      type="text"
+                    />
                   </Form.Item>
                   <Form.Item
                     label="Email"
@@ -177,9 +230,18 @@ export default function Product() {
                         required: true,
                         message: "Lütfen Emailinizi giriniz!",
                       },
+                      {
+                        type: "email",
+                        message: "Lütfen geçerli bir email adresi giriniz.",
+                      },
                     ]}
                   >
-                    <Inputs type="text" name={"email"} />
+                    <Input
+                      className={styles.customInput}
+                      disabled={user?.email}
+                    />
+                    {/* <div className={styles.customInput}>
+                    </div> */}
                   </Form.Item>
 
                   <Form.Item
@@ -191,11 +253,7 @@ export default function Product() {
                     <div
                       className={styles.product__details_reviews_form_button}
                     >
-                      <button
-                        type="primary"
-                        className={styles.primary_button}
-                        htmlType="submit"
-                      >
+                      <button className={styles.primary_button} type="submit">
                         Gönder
                       </button>
                     </div>
@@ -210,12 +268,51 @@ export default function Product() {
             <h2>Benzer Ürünler</h2>
           </div>
           <div className={styles.product__related_content}>
-            {products.map((product, i) => (
-              <ProductCard key={i} product={product} />
+            {relatedProduct?.map((product) => (
+              <ProductCard
+                handleModal={handleModal}
+                key={product._id}
+                product={product}
+              />
             ))}
           </div>
         </div>
       </div>
     </div>
   );
+}
+
+export async function getServerSideProps(context) {
+  const { query, req } = context;
+  const token = await getToken({ req, secret: process.env.SECRET_KEY, secureCookie : process.env.NODE_ENV == "production" });
+  await db.connectDb();
+  const products = await Product.find({}).lean();
+  const product = await Product.findById(query.slug)
+    .populate({ path: "category", model: Category })
+    .lean();
+  const relatedProduct = await Product.find({
+    category: product.category._id,
+  }).lean();
+
+  let allowedUser = {};
+  if (token) {
+    const user = await User.findOne({ email: token?.email }).lean();
+
+    allowedUser = {
+      name: token?.name,
+      email: token?.email,
+      image: token?.picture,
+      wishlist: user?.wishlist,
+    };
+  }
+
+  await db.disconnectDb();
+  return {
+    props: {
+      product: JSON.parse(JSON.stringify(product)),
+      products: JSON.parse(JSON.stringify(products)),
+      relatedProduct: JSON.parse(JSON.stringify(relatedProduct)),
+      user: JSON.parse(JSON.stringify(allowedUser)),
+    },
+  };
 }
