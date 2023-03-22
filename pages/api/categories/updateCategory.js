@@ -44,6 +44,7 @@ handler.post(async (req, res) => {
       .json({ error: true, message: "Kategori Bulunamadı" });
   }
   const categories = await Category.find({});
+  await db.disconnectDb()
   return res.status(200).json({
     success: true,
     message: "Kategori güncelleme başarılı",

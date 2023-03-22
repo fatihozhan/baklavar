@@ -39,6 +39,7 @@ const handler = nc({
       const user = await User.findById(id);
       user.role = user.role == "admin" ? "user" : "admin";
       await user.save();
+      await db.disconnectDb();
       return res
         .status(200)
         .json({ success: true, message: "Kullancı güncellendi" });
@@ -103,6 +104,7 @@ const handler = nc({
     }
     if (addresses) {
       if (user.addresses.length > 3) {
+        await db.disconnectDb()
         return res
           .status(500)
           .json({ error: true, message: "Adres sayınız 6'ten fazla olamaz" });
@@ -212,15 +214,18 @@ const handler = nc({
       }
       await db.disconnectDb();
       if (!user) {
+        await db.disconnectDb();
         return res
-          .status(404)
-          .json({ error: true, message: "Kullanıcı bulunamadı." });
+        .status(404)
+        .json({ error: true, message: "Kullanıcı bulunamadı." });
       }
       delete user.password;
+      await db.disconnectDb();
       return res
-        .status(200)
-        .json({ user, success: true, message: "Adres Silindi." });
+      .status(200)
+      .json({ user, success: true, message: "Adres Silindi." });
     }
+    await db.disconnectDb();
     return res
       .status(500)
       .json({ error: true, message: "Bir hata meydana geldi" });
