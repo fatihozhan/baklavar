@@ -6,7 +6,7 @@ import NavigatorBar from "@/components/navigatorBar";
 import styles from "@/styles/hesabim.module.scss";
 import { useState } from "react";
 import { signOut, useSession } from "next-auth/react";
-import { Form, Input, message, Radio, Rate, Upload } from "antd";
+import { Pagination, Form, Input, message, Radio, Rate, Upload } from "antd";
 import axios from "axios";
 import {
   AiOutlineComment,
@@ -32,7 +32,7 @@ import OrderCard from "@/components/account/orderCard";
 import Product from "@/models/Product";
 import { Table } from "antd";
 
-export default function MyAccount({ user, orders, reviews }) {
+export default function MyAccount({ user, orders, reviews, ordersLength }) {
   const columns = [
     {
       title: "Ürün Adı",
@@ -248,7 +248,7 @@ export default function MyAccount({ user, orders, reviews }) {
         .then((data) => {
           if (data.data.success) {
             toast.success(data.data.message);
-            setData1(prev => prev.filter(data => data.key != id));
+            setData1((prev) => prev.filter((data) => data.key != id));
           }
         })
         .catch((data) => {
@@ -257,9 +257,14 @@ export default function MyAccount({ user, orders, reviews }) {
         });
       setLoading(false);
     } catch (error) {
-      console.log(error)
+      console.log(error);
       setLoading(false);
     }
+  };
+  const handlePagination = (e) => {
+    const {query} = router
+    if(e) query.page = e
+    router.push({pathname : "/hesabim", query})
   };
 
   return (
@@ -300,9 +305,7 @@ export default function MyAccount({ user, orders, reviews }) {
               >
                 <TbJewishStar /> İstek Listem
               </li>
-              <li
-                onClick={() => signOut()}
-              >
+              <li onClick={() => signOut()}>
                 <MdOutlineExitToApp /> Çıkış Yap
               </li>
               {session?.user?.role == "admin" && (
@@ -553,6 +556,12 @@ export default function MyAccount({ user, orders, reviews }) {
                 ) : (
                   <h4>Henüz Siparişiniz Bulunmamaktadır</h4>
                 )}
+                <Pagination
+                  defaultPageSize={5}
+                  style={{ textAlign: "right" }}
+                  onChange={handlePagination}
+                  total={ordersLength}
+                />
               </div>
             )}
             {tab == 4 && (
@@ -591,6 +600,7 @@ export default function MyAccount({ user, orders, reviews }) {
 }
 
 export async function getServerSideProps(context) {
+  const page = context.query?.page || 1;
   const session = await getServerSession(context.req, context.res, authOptions);
 
   if (!session) {
@@ -601,11 +611,14 @@ export async function getServerSideProps(context) {
     };
   }
   await db.connectDb();
+  const ordersLength = await Order.count();
   const user = await User.findById(session?.user?.id)
     .populate({ path: "wishlist.product", model: Product })
     .lean();
   const orders = await Order.find({})
-    .populate({ path: "user", model: User })
+    ?.populate({ path: "user", model: User })
+    ?.skip(5 * (page - 1))
+    ?.limit(5)
     .sort({ createdAt: -1 })
     .lean();
   const reviews = [];
@@ -630,6 +643,7 @@ export async function getServerSideProps(context) {
       user: JSON.parse(JSON.stringify(user)),
       orders: JSON.parse(JSON.stringify(orders)),
       reviews: JSON.parse(JSON.stringify(reviews)),
+      ordersLength: JSON.parse(JSON.stringify(ordersLength)),
     },
   };
 }

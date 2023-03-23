@@ -6,35 +6,34 @@ export async function middleware(req) {
   const session = await getToken({
     req,
     secret: process.env.SECRET_KEY,
-    secureCookie : process.env.NODE_ENV === "production",
+    secureCookie: process.env.NODE_ENV === "production",
   });
   if (pathname == "/checkout") {
     if (!session) {
-        return NextResponse.redirect(`${origin}`)
+      return NextResponse.rewrite(new URL("/signIn", req.url));
     }
   }
   if (pathname == "/hesabim") {
     if (!session) {
-        return NextResponse.redirect(`${origin}`)
+      return NextResponse.redirect(`${origin}`);
     }
   }
   if (pathname.startsWith("/order")) {
     if (!session) {
-        return NextResponse.redirect(`${origin}`)
+      return NextResponse.redirect(`${origin}`);
     }
   }
   if (pathname.startsWith("/profile")) {
     if (!session) {
-        return NextResponse.redirect(`${origin}`)
+      return NextResponse.redirect(`${origin}`);
     }
   }
   if (pathname.startsWith("/admin")) {
     if (!session) {
-        return NextResponse.redirect(`${origin}`)
+      return NextResponse.redirect(`${origin}`);
     }
     if (session.role !== "admin") {
-        return NextResponse.redirect(`${origin}`)
+      return NextResponse.redirect(`${origin}`);
     }
   }
- 
 }

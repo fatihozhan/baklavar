@@ -21,9 +21,9 @@ export default function Checkout({ user }) {
   // const [diffaddrtoggle, setDiffaddrtoggle] = useState(false);
   const [ilce, setIlce] = useState();
   const [loading, setLoading] = useState(false);
-  const [payment, setPayment] = useState(user.defaultPaymentMethod);
+  const [payment, setPayment] = useState(user?.defaultPaymentMethod);
   const cart = useSelector((state) => state.cartSlice.cart);
-  const activeAddress = user.addresses.find((addr) => addr.active);
+  const activeAddress = user?.addresses.find((addr) => addr.active);
   const router = useRouter();
   const dispatch = useDispatch();
 
@@ -37,10 +37,10 @@ export default function Checkout({ user }) {
   const initialValues = {
     firstName: activeAddress ? activeAddress.firstName : "",
     lastName: activeAddress ? activeAddress.lastName : "",
-    country: activeAddress.country ? activeAddress.country : "TR",
+    country: activeAddress?.country ? activeAddress.country : "TR",
     address1: activeAddress ? activeAddress.address1 : "",
-    city: activeAddress.city ? activeAddress.city : "",
-    state: activeAddress.state ? activeAddress.state : "",
+    city: activeAddress?.city ? activeAddress.city : "",
+    state: activeAddress?.state ? activeAddress.state : "",
     zipCode: activeAddress ? activeAddress.zipCode : "",
     phoneNumber: activeAddress ? activeAddress.phoneNumber : "",
     mahalle: activeAddress ? activeAddress.mahalle : "",
@@ -48,7 +48,7 @@ export default function Checkout({ user }) {
   const onFinish = async (degerler) => {
     try {
       let values = {};
-      values.user = user._id;
+      values.user = user?._id;
       values.products = [];
       values.notes = degerler.notes;
       cart.map((p) =>
@@ -85,17 +85,23 @@ export default function Checkout({ user }) {
         .post("/api/orders/addOrder", { values })
         .then((data) => {
           if (data.data.success) {
-            toast.success(data.data.message);
+            if (data.data.messages) {
+              data.data.messages.map((message) => {
+                toast.success(data.data.message);
+              });
+            } else {
+              toast.success(data.data.message);
+            }
             dispatch(emptyCart());
             data.data.success && router.push("/hesabim?orders=1");
           }
         })
         .catch((data) => {
-          console.log(data.response.data);
+          console.log(data);
           if (data.response.data.error) {
-            router.push("/")
+            toast.error(data.response.data.message);
+            router.push("/");
           }
-          toast.error(data.response.data.message);
         });
       setLoading(false);
     } catch (error) {
@@ -435,7 +441,7 @@ export default function Checkout({ user }) {
           </div>
           <div className={styles.checkout__payment}>
             <Radio.Group
-              defaultValue={user.defaultPaymentMethod}
+              defaultValue={user?.defaultPaymentMethod}
               onChange={handlePayment}
             >
               <div>
@@ -459,16 +465,8 @@ export default function Checkout({ user }) {
 export async function getServerSideProps(context) {
   const session = await getServerSession(context.req, context.res, authOptions);
 
-  if (!session) {
-    return {
-      redirect: {
-        destination: "/",
-        permanent: false,
-      },
-    };
-  }
   await db.connectDb();
-  const user = await User.findById(session.user.id);
+  const user = await User.findById(session?.user.id);
   await db.disconnectDb();
   return {
     props: {

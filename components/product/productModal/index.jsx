@@ -10,14 +10,12 @@ export default function ProductModal({
   setIsModalOpen,
   cart,
   products,
-  user
+  user,
 }) {
   const [product, setProduct] = useState();
   useEffect(() => {
     setProduct(products?.find((prod) => prod._id == productId));
   }, [productId]);
-
-
 
   return (
     <Modal
@@ -36,7 +34,12 @@ export default function ProductModal({
           />
         </div>
         <div className={styles.productModal__right}>
-          <ProductInfos user={user} isModalOpen={isModalOpen} product={product} cart={cart} />
+          <ProductInfos
+            user={user}
+            isModalOpen={isModalOpen}
+            product={product}
+            cart={cart}
+          />
         </div>
       </div>
     </Modal>

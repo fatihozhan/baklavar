@@ -39,6 +39,9 @@ export default function Top({ products }) {
     setProductId(id);
     setIsProductModalOpen(true);
   };
+  const handleSearch =(value)=>{
+    router.push(`/shop?search=${value}`)
+  }
 
   const onChange = (key) => {};
   useEffect(() => {
@@ -286,17 +289,10 @@ export default function Top({ products }) {
           </div>
           <div className={styles.top__search}>
             <Input.Group compact style={{ fontFamily: "Space Grotesk" }}>
-              <Select
-                bordered={false}
-                defaultValue="Kategori"
-                style={{ width: "30%", height: "25px" }}
-              >
-                <Option value="nohut">Nohut</Option>
-                <Option value="fasulye">Fasulye</Option>
-              </Select>
               <Input.Search
                 bordered={false}
-                style={{ width: "70%" }}
+                style={{ width: "100%" }}
+                onSearch={handleSearch}
                 placeholder="Ürün Ara.."
                 options={[{ value: "text 1" }, { value: "text 2" }]}
               />

@@ -1,5 +1,6 @@
 import { Auth } from "@/middlewares/auth";
 import Message from "@/models/Message";
+import Product from "@/models/Product";
 import db from "@/utils/db";
 import nc from "next-connect";
 
@@ -48,6 +49,21 @@ handler.use(Auth).patch(async (req, res) => {
       .status(500)
       .json({ error: true, message: "Bir hata meydana geldi" });
   }
+  await db.disconnectDb();
+  return res
+    .status(200)
+    .json({ success: true, message: "Güncelleme Başarılı" });
+});
+handler.put(async (req, res) => {
+  const { id } = req.body;
+  await db.connectDb();
+  const product = await Product.findOne({ "reviews._id": id });
+  product.reviews.map((review) => {
+    if (review._id == id) {
+      review.approved = review.approve ? false : true;
+    }
+  });
+  await product.save()
   await db.disconnectDb();
   return res
     .status(200)

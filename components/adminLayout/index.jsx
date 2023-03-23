@@ -12,7 +12,7 @@ import {
   MdArrowBackIosNew,
   MdArrowForwardIos,
 } from "react-icons/md";
-import { FaThList } from "react-icons/fa";
+import { FaThList, FaComments } from "react-icons/fa";
 import { ImUsers } from "react-icons/im";
 import { IoIosArrowUp } from "react-icons/io";
 import { FcSalesPerformance } from "react-icons/fc";
@@ -118,6 +118,17 @@ export default function AdminLayout({ children }) {
               className={styles.adminLayout__sidebar_menu_item}
             >
               <AiFillMessage /> <b> Mesajlar</b>
+            </div>
+          </Link>
+          <Link
+            href={"/admin/comments"}
+            className={`${pathname.includes("comments") ? styles.active : ""}`}
+          >
+            <div
+              title="Yorumlar"
+              className={styles.adminLayout__sidebar_menu_item}
+            >
+              <FaComments /> <b> Yorumlar</b>
             </div>
           </Link>
           <h5>Ürünler</h5>
