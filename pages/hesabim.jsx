@@ -48,6 +48,7 @@ export default function MyAccount({ user, orders, reviews, ordersLength }) {
       title: "Puanım",
       dataIndex: "rating",
       key: "rating",
+      responsive : ["md"]
     },
     {
       title: "Onaylandı Mı?",
@@ -137,7 +138,7 @@ export default function MyAccount({ user, orders, reviews, ordersLength }) {
 
   const router = useRouter();
   const [tab, setTab] = useState(
-    router.query.address ? 2 : router.query.orders ? 3 : 1
+    router.query.address ? 2 : router.query.orders ? 3 : router.query.tab
   );
   const [currentUser, setCurrentUser] = useState(user ? user : "");
   const [currentAddress, setCurrentAddress] = useState();

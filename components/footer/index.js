@@ -19,11 +19,15 @@ export default function Footer() {
         <div className={`${styles.footer__top}`}>
           <div className={styles.footer__top_left}>
             <ul>
-              <li>Hesabım</li>
+              <Link href="/hesabim">
+                <li>Hesabım</li>
+              </Link>
               <Link href={"/cart"}>
                 <li>Sepetim</li>
               </Link>
-              <li>Kişisel Bilgiler</li>
+              <Link href="/hesabim?tab=1">
+                <li>Kişisel Bilgiler</li>
+              </Link>
               <Link href={"/wishlist"}>
                 <li>Wishlist</li>
               </Link>

@@ -1,8 +1,9 @@
 import styles from "./styles.module.scss";
 import Image from "next/image";
 import { GrClose } from "react-icons/gr";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { increaseQty, descreaseQty, deleteItem } from "@/store/cartSlice";
+import { toast } from "react-toastify";
 
 export default function CartCard({ product }) {
   const dispatch = useDispatch();
@@ -23,7 +24,17 @@ export default function CartCard({ product }) {
         <div>
           <span onClick={() => dispatch(descreaseQty(product._id))}>-</span>
           <span> {product.qty} </span>
-          <span onClick={() => product.stock > product.qty && dispatch(increaseQty(product._id))}>+</span>
+          <span
+            onClick={() => {
+              if (product.stock > product.qty) {
+                dispatch(increaseQty(product._id));
+              } else {
+                toast.error("Ürün stoğu yetersiz");
+              }
+            }}
+          >
+            +
+          </span>
         </div>
         <p> Total : {(product.price * product.qty).toFixed(2)} ₺ </p>
       </div>

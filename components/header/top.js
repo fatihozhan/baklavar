@@ -39,9 +39,9 @@ export default function Top({ products }) {
     setProductId(id);
     setIsProductModalOpen(true);
   };
-  const handleSearch =(value)=>{
-    router.push(`/shop?search=${value}`)
-  }
+  const handleSearch = (value) => {
+    router.push(`/shop?search=${value}`);
+  };
 
   const onChange = (key) => {};
   useEffect(() => {
@@ -175,9 +175,8 @@ export default function Top({ products }) {
     <div className={styles.navbar__left_popover}>
       <ul>
         <li>
-          <Link href={"/shop"}>Ana Alışveriş</Link>
+          <Link href={"/shop"}>Alışveriş</Link>
         </li>
-        <li>Tekli Ürün</li>
         <li>Hesabım</li>
         <Link href="/cart">
           <li>Sepetim</li>
@@ -244,7 +243,9 @@ export default function Top({ products }) {
                       <Link href="/cart">
                         <li>Sepetim</li>
                       </Link>
-                      <li>Siparişlerim</li>
+                      <Link href="/hesabim?tab=4">
+                        <li>Siparişlerim</li>
+                      </Link>
                     </Panel>
                   </Collapse>
                 </li>

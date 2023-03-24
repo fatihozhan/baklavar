@@ -10,19 +10,18 @@
     padding: 30px;
     &__left {
       position: relative;
-      gap: 10px!important;
+      gap: 10px !important;
       svg {
         top: -15px;
         right: 15px;
         position: absolute;
-        font-size: 0.9rem!important;
+        font-size: 0.9rem !important;
       }
     }
   }
   @media (max-width: 380px) {
-
     &__left {
-    flex-direction: column; 
+      flex-direction: column;
     }
   }
   &__left {
@@ -40,17 +39,22 @@
     h4 {
       font-weight: 500;
       width: 250px;
+      text-align: center;
     }
   }
   &__right {
     display: flex;
     gap: 30px;
+    @media (max-width: 500px) {
+      flex-direction: column;
+    }
     p {
       &:last-of-type {
         font-weight: 500;
       }
     }
     div {
+      width: 150px;
       span {
         background-color: $smoke_gri;
         padding: 10px;

@@ -32,6 +32,10 @@
   }
   &__infos {
     padding: 30px;
+    @media (max-width : 600px) {
+      padding: 10px!important;
+      
+    }
     &_title {
       margin-bottom: 20px;
       border-bottom: 1px solid $silik_gri;

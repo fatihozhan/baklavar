@@ -79,7 +79,7 @@ export default function ProductCard({ product, handleModal, cart, user }) {
         )}
 
         <Tooltip title="İstek Listesine Ekle">
-          <FiHeart
+          <FiHeart 
             className={styles.card__img_svg1}
             style={{ color: `${isWish ? "red" : ""}` }}
             onClick={() => handleWishlist(product._id)}

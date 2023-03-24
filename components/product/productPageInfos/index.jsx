@@ -124,7 +124,14 @@ export default function ProductInfos({ product, cart, user }) {
               <span> {qty} </span>
               <span
                 onClick={() => {
-                  setQty((prev) => (product?.stock > prev ? prev + 1 : prev));
+                  setQty((prev) => {
+                    if (product?.stock > prev) {
+                      return prev + 1
+                    }else{
+                      toast.error("Sipariş miktarı ürün stok sayısını geçemez")
+                      return prev
+                    }
+                  });
                 }}
               >
                 +

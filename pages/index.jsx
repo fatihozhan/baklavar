@@ -267,7 +267,7 @@ export default function Home({ products, user }) {
         </div>
       </div>
       <div className={styles.services}>
-        <div className={styles.container}>
+        <div style={{padding : "20px"}} className={styles.container}>
           {services.map((service, i) => (
             <div key={i} className={styles.services__service}>
               <Image
@@ -283,7 +283,7 @@ export default function Home({ products, user }) {
         </div>
       </div>
       <div className={styles.frompeople}>
-        <div className={styles.container}>
+        <div style={{width : "300px"}} className={styles.container}>
           <div className={styles.frompeople__title}>
             <h5>Sizden Gelenler</h5>
           </div>
@@ -299,6 +299,10 @@ export default function Home({ products, user }) {
                 clickable: true,
               }}
               breakpoints={{
+                200: {
+                  slidesPerView: 1,
+                  spaceBetween: 10,
+                },
                 400: {
                   slidesPerView: 1,
                   spaceBetween: 20,
@@ -438,7 +442,7 @@ const lifestyle = [
     img: "/images/lifestyle/keto.svg",
   },
   {
-    name: "Pesketeryan",
+    name: "Pesketer",
     img: "/images/lifestyle/flexitarian.svg",
   },
   {

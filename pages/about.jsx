@@ -146,6 +146,10 @@ export default function About() {
                 clickable: true,
               }}
               breakpoints={{
+                200: {
+                  slidesPerView: 1,
+                  spaceBetween: 20,
+                },
                 400: {
                   slidesPerView: 1,
                   spaceBetween: 20,
