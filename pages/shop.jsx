@@ -350,7 +350,7 @@ export async function getServerSideProps(ctx) {
   return {
     props: {
       products: JSON.parse(JSON.stringify(products)),
-      user: user ? JSON.parse(JSON.stringify(session?.user)) : null,
+      user: session?.user ? JSON.parse(JSON.stringify(session?.user)) : null,
       categories: JSON.parse(JSON.stringify(categories)),
       countProducts,
     },
