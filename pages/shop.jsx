@@ -335,8 +335,8 @@ export async function getServerSideProps(ctx) {
     ...colorFilter,
   })
     ?.populate({ path: "category", model: Category })
-    .skip(10 * (page - 1))
-    .limit(10)
+    ?.skip(10 * (page - 1))
+    ?.limit(10)
     .sort(order)
     .lean();
   const countProducts = await Product.countDocuments({
@@ -345,12 +345,12 @@ export async function getServerSideProps(ctx) {
     ...queryFilter,
     ...colorFilter,
   });
-  const categories = await Category.find({}).sort({ createdAt: -1 }).lean();
+  const categories = await Category.find({})?.sort({ createdAt: -1 }).lean();
   await db.disconnectDb();
   return {
     props: {
       products: JSON.parse(JSON.stringify(products)),
-      user: JSON.parse(JSON.stringify(session?.user)),
+      user: user ? JSON.parse(JSON.stringify(session?.user)) : null,
       categories: JSON.parse(JSON.stringify(categories)),
       countProducts,
     },
