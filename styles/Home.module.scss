@@ -279,6 +279,11 @@
   background-repeat: no-repeat;
   background-size: cover;
   height: 514px;
+  .container{
+    @media (max-width : 600px) {
+      width: 300px!important;
+    }
+  }
   &__title {
     display: flex;
     align-items: center;

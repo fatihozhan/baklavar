@@ -283,7 +283,7 @@ export default function Home({ products, user }) {
         </div>
       </div>
       <div className={styles.frompeople}>
-        <div style={{width : "300px"}} className={styles.container}>
+        <div className={styles.container}>
           <div className={styles.frompeople__title}>
             <h5>Sizden Gelenler</h5>
           </div>

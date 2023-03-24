@@ -138,7 +138,7 @@ export default function MyAccount({ user, orders, reviews, ordersLength }) {
 
   const router = useRouter();
   const [tab, setTab] = useState(
-    router.query.address ? 2 : router.query.orders ? 3 : router.query.tab
+    router.query.address ? 2 : router.query.orders ? 3 : router.query.tab ? router.query.tab : 1
   );
   const [currentUser, setCurrentUser] = useState(user ? user : "");
   const [currentAddress, setCurrentAddress] = useState();

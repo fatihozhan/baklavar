@@ -15,7 +15,7 @@ export async function middleware(req) {
   }
   if (pathname == "/hesabim") {
     if (!session) {
-      return NextResponse.redirect(`${origin}`);
+      return NextResponse.rewrite(new URL("/signIn", req.url));
     }
   }
   if (pathname.startsWith("/order")) {
