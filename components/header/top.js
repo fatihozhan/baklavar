@@ -59,23 +59,24 @@ export default function Top({ products }) {
         <>
           {cart?.map((product, i) => {
             return (
-              <div key={i} className={styles.popover__wrapper}>
-                <div>
-                  <FaRegEye onClick={() => handleModal(product._id)} />
-                  <Image
-                    src={product.images[0]}
-                    width="100"
-                    height={100}
-                    alt="domatesi resmi"
-                  />
+              <Link key={i} href={`/product/${product._id}`}>
+                <div className={styles.popover__wrapper}>
+                  <div>
+                    <Image
+                      src={product.images[0]}
+                      width="100"
+                      height={100}
+                      alt="domatesi resmi"
+                    />
+                  </div>
+                  <div>
+                    <p>{product.name}</p>
+                    <p>
+                      {product.qty} x <b> ₺{product.price} </b>
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <p>{product.name}</p>
-                  <p>
-                    {product.qty} x <b> ₺{product.price} </b>
-                  </p>
-                </div>
-              </div>
+              </Link>
             );
           })}
         </>
